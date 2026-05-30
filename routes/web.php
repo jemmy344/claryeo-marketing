@@ -4,12 +4,16 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\GetStartedController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\TaxCalculatorController;
 use App\Http\Controllers\WaitlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('pricing', PricingController::class)->name('pricing');
 
 Route::get('get-started', GetStartedController::class)->name('get-started');
+
+Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
+Route::post('tax-calculator/report', [TaxCalculatorController::class, 'report'])->middleware('throttle:6,1')->name('taxCalculator.report.store');
 
 Route::get('contact', [ContactController::class, 'show'])->name('contact');
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
