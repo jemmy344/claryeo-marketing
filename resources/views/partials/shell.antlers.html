@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="{{ site:short_locale }}" class="h-full">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ title ?? site:name }}</title>
+        <meta name="csrf-token" content="{{ csrf_token }}">
+        {{ if meta_description }}<meta name="description" content="{{ meta_description }}">{{ /if }}
+        {{ if canonical_url }}<link rel="canonical" href="{{ canonical_url }}">{{ /if }}
+        {{ vite src="resources/js/site.js|resources/js/islands.tsx|resources/css/site.css" }}
+    </head>
+    <body class="min-h-full bg-white font-sans text-zinc-800 antialiased flex flex-col">
+        <header class="border-b border-zinc-100">
+            <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+                <a href="/" class="text-lg font-semibold tracking-tight text-zinc-900">Claryeo</a>
+                <div class="hidden items-center gap-8 text-sm font-medium text-zinc-600 md:flex">
+                    <a href="/pricing" class="hover:text-zinc-900">Pricing</a>
+                    <a href="/blog" class="hover:text-zinc-900">Blog</a>
+                    <a href="/contact" class="hover:text-zinc-900">Contact</a>
+                </div>
+                <div class="flex items-center gap-4 text-sm font-medium">
+                    <a href="{{ claryeo_app_url }}/login" class="text-zinc-600 hover:text-zinc-900">Log in</a>
+                    <a href="/get-started" class="rounded-lg bg-zinc-900 px-4 py-2 text-white hover:bg-zinc-700">Get started</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="flex-1">
+            {{ slot }}
+        </main>
+
+        <footer class="border-t border-zinc-100 bg-zinc-50">
+            <div class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between">
+                <p>&copy; {{ now format="Y" }} Claryeo. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="/privacy" class="hover:text-zinc-900">Privacy</a>
+                    <a href="/terms" class="hover:text-zinc-900">Terms</a>
+                    <a href="/cookies" class="hover:text-zinc-900">Cookies</a>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
