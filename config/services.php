@@ -35,4 +35,23 @@ return [
         ],
     ],
 
+    /*
+    | The main Claryeo Laravel app's internal API. The marketing site reaches it
+    | over Railway private networking (web.railway.internal) and authenticates
+    | with a shared secret. All dynamic data (pricing, legal, lead capture) flows
+    | through this — the marketing app has no database of its own for app data.
+    */
+    'main_api' => [
+        'url' => env('MAIN_API_URL', 'http://web.railway.internal:8080'),
+        'token' => env('INTERNAL_API_TOKEN'),
+    ],
+
+    /*
+    | Public URL of the authenticated Claryeo app (app.claryeo.com). Used for
+    | log-in / dashboard links and the get-started plan handoff.
+    */
+    'claryeo_app' => [
+        'url' => env('CLARYEO_APP_URL', 'https://app.claryeo.com'),
+    ],
+
 ];
