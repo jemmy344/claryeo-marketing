@@ -1,4 +1,56 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @source "../views";
+@source "../js";
 @source "../../content";
+
+/*
+ * Brand design tokens ported from the main Claryeo app (resources/css/app.css)
+ * so the marketing site stays visually consistent. Light palette only — the
+ * marketing site does not offer a dark mode.
+ */
+@theme {
+    --font-sans:
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+    --radius: 0.625rem;
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: #fcfcfd;
+    --color-foreground: #09090b;
+    --color-card: #ffffff;
+    --color-card-foreground: #09090b;
+    --color-primary: #6d28d9;
+    --color-primary-foreground: #ffffff;
+    --color-secondary: #f3f0ff;
+    --color-secondary-foreground: #3b1a7e;
+    --color-muted: #f4f4f5;
+    --color-muted-foreground: #71717a;
+    --color-accent: #f3f0ff;
+    --color-accent-foreground: #6d28d9;
+    --color-destructive: #e11d48;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #e4e4e7;
+    --color-ring: #6d28d9;
+    --color-primary-surface: #f3f0ff;
+    --color-primary-surface-foreground: #6d28d9;
+
+    --gradient-primary-from: #25b7ff;
+    --gradient-primary-to: #722bc0;
+}
+
+@layer base {
+    .brand-gradient {
+        background-image: linear-gradient(135deg, var(--gradient-primary-from), var(--gradient-primary-to));
+    }
+    .brand-gradient-text {
+        background-image: linear-gradient(135deg, var(--gradient-primary-from), var(--gradient-primary-to));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+}
