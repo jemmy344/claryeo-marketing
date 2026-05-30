@@ -2,6 +2,7 @@ import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import ContactForm from './islands/ContactForm';
 import Pricing from './islands/Pricing';
+import TaxCalculator from './islands/TaxCalculator';
 import WaitlistForm from './islands/WaitlistForm';
 
 /**
@@ -16,6 +17,7 @@ const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     pricing: Pricing as ComponentType<Record<string, unknown>>,
     'contact-form': ContactForm as ComponentType<Record<string, unknown>>,
     'waitlist-form': WaitlistForm as ComponentType<Record<string, unknown>>,
+    'tax-calculator': TaxCalculator as ComponentType<Record<string, unknown>>,
 };
 
 function mountIslands(): void {
