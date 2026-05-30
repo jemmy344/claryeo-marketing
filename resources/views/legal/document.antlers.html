@@ -1,0 +1,14 @@
+{{ partial:shell }}
+    <article class="mx-auto max-w-3xl px-6 py-16">
+        <header class="mb-10 border-b border-zinc-100 pb-6">
+            <h1 class="text-3xl font-semibold tracking-tight text-zinc-900">{{ title }}</h1>
+            {{ if meta:effective_date }}
+                <p class="mt-2 text-sm text-zinc-500">Effective {{ meta:effective_date }}{{ if version }} &middot; v{{ version }}{{ /if }}</p>
+            {{ /if }}
+            <p class="mt-4 text-sm"><a href="/{{ slug }}/versions" class="text-zinc-500 underline hover:text-zinc-900">View version history</a></p>
+        </header>
+        <div class="prose prose-zinc max-w-none">
+            {{{ body_html }}}
+        </div>
+    </article>
+{{ /partial:shell }}
