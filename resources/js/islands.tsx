@@ -6,6 +6,10 @@ import ContactForm from './islands/contact/page';
 import FeaturePage from './islands/feature/page';
 import Features from './islands/features/page';
 import GetStarted from './islands/get-started/page';
+import GuideFreelancer from './islands/guides/freelancer-tax-nigeria';
+import GuideInvoice from './islands/guides/invoice-guide-nigeria';
+import GuidePaye from './islands/guides/paye-tax-nigeria';
+import GuideSmallBusiness from './islands/guides/small-business-tax-nigeria';
 import Landing from './islands/landing/page';
 import LegalDocumentPage from './islands/legal/document';
 import LegalVersionsPage from './islands/legal/versions';
@@ -36,6 +40,18 @@ const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     landing: Landing as ComponentType<Record<string, unknown>>,
     features: Features as ComponentType<Record<string, unknown>>,
     feature: FeaturePage as ComponentType<Record<string, unknown>>,
+    'guide-paye-tax-nigeria': GuidePaye as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-small-business-tax-nigeria': GuideSmallBusiness as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-freelancer-tax-nigeria': GuideFreelancer as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-invoice-guide-nigeria': GuideInvoice as ComponentType<
+        Record<string, unknown>
+    >,
     'get-started': GetStarted as ComponentType<Record<string, unknown>>,
     'legal-document': LegalDocumentPage as ComponentType<
         Record<string, unknown>

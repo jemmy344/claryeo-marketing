@@ -3,6 +3,7 @@
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
+use App\Http\Controllers\GuideController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
@@ -16,6 +17,8 @@ Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')
 
 Route::get('features', [FeatureController::class, 'index'])->name('features');
 Route::get('features/{slug}', [FeatureController::class, 'show'])->name('features.show');
+
+Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 
 Route::view('about', 'about', [
     'title' => 'About — Claryeo',
