@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\MainApi;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 
 class GetStartedController extends Controller
 {
@@ -30,7 +31,7 @@ class GetStartedController extends Controller
             'island_props' => htmlspecialchars(
                 (string) json_encode([
                     'plans' => $pricing['plans'] ?? [],
-                    'appUrl' => rtrim((string) config('services.claryeo_app.url'), '/'),
+                    'appUrl' => rtrim(Config::string('services.claryeo_app.url'), '/'),
                     'contactUrl' => '/contact',
                     'initialPlan' => $initialPlan !== '' ? $initialPlan : null,
                     'initialInterval' => $initialInterval !== '' ? $initialInterval : null,

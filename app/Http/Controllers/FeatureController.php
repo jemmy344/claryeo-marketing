@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
 class FeatureController extends Controller
@@ -12,7 +13,10 @@ class FeatureController extends Controller
      */
     public function index(): View
     {
-        $features = collect(config('feature_pages', []))
+        /** @var array<string, array{slug: string, title: mixed, eyebrow: mixed, tagline: mixed, badge?: mixed, icon?: mixed}> $featurePages */
+        $featurePages = Config::array('feature_pages', []);
+
+        $features = collect($featurePages)
             ->map(fn (array $f): array => [
                 'slug' => $f['slug'],
                 'title' => $f['title'],
@@ -45,7 +49,7 @@ class FeatureController extends Controller
         $feature = config("feature_pages.{$slug}");
 
         abort_if(! is_array($feature), Response::HTTP_NOT_FOUND);
-
+        /** @var array{title: string, heroParagraph: string, slug: string} $feature */
         $waitlistMode = (bool) config('marketing.waitlist_mode');
         $cta = $waitlistMode
             ? ['label' => 'Join the waitlist', 'href' => '/waitlist']

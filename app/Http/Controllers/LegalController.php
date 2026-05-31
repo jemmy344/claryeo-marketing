@@ -72,7 +72,10 @@ class LegalController extends Controller
 
         $current = $data['currentVersion'] ?? null;
 
-        $versions = collect($data['versions'] ?? [])
+        /** @var array<int, array{version?: string}&array<string, mixed>> $versionData */
+        $versionData = $data['versions'] ?? [];
+
+        $versions = collect($versionData)
             ->map(function (array $entry) use ($slug, $current): array {
                 $entry['url'] = ($entry['version'] ?? null) === $current
                     ? "/{$slug}"

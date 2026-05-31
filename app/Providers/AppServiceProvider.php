@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\MainApi;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,8 +29,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $appUrl = (string) config('services.claryeo_app.url');
-        $nav = config('marketing_nav');
+        $appUrl = Config::string('services.claryeo_app.url');
+        /** @var array{
+         *     primary?: list<array{label: string, href: string}>,
+         *     resources?: mixed,
+         *     footer?: array<int, array{group: string, items: array<int, array{title: string, href: string}>}>,
+         *     social?: mixed,
+         * } $nav
+         */
+        $nav = Config::array('marketing_nav');
         $waitlistMode = (bool) config('marketing.waitlist_mode');
 
         $primaryCta = $waitlistMode
@@ -40,11 +48,13 @@ class AppServiceProvider extends ServiceProvider
         $hidden = $waitlistMode ? ['/pricing', '/get-started'] : [];
         $primaryLinks = array_values(array_filter(
             $nav['primary'] ?? [],
-            static fn (array $link): bool => ! in_array($link['href'] ?? '', $hidden, true),
+            static fn (array $link): bool => ! in_array($link['href'], $hidden, true),
         ));
 
         // Features mega-menu, built from the individual feature pages.
-        $featureItems = collect(config('feature_pages', []))
+        /** @var array<string, array{slug: string, title: mixed, tagline: mixed, badge?: mixed, icon?: mixed}> $featurePages */
+        $featurePages = Config::array('feature_pages', []);
+        $featureItems = collect($featurePages)
             ->map(fn (array $f): array => [
                 'title' => $f['title'],
                 'tagline' => $f['tagline'],

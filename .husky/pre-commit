@@ -1,0 +1,6 @@
+# Format changed PHP files, then re-stage Pint's fixes.
+vendor/bin/pint --dirty
+git update-index --again
+
+# Static analysis (Larastan, level 9).
+php -d memory_limit=512M vendor/bin/phpstan analyse
