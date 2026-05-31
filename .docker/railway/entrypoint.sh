@@ -29,6 +29,16 @@ chown -R www-data:www-data /var/www/html/storage /var/www/html/content /var/www/
 # the first request isn't slow.
 
 if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "staging" ]; then
+    # Statamic ships its Control Panel as pre-built Vite assets inside the
+    # statamic/cms package; they must live at public/vendor/statamic/cp. These
+    # are git-ignored and only published at image-build time, so a stale build
+    # — or a volume mounted over public/ — leaves the CP without its manifest
+    # (ViteManifestNotFoundException on /cp). Re-publish at boot: idempotent,
+    # fast, and always matches the deployed Statamic version.
+    log "Publishing Statamic Control Panel assets ..."
+    php artisan vendor:publish --tag=statamic-cp --force --quiet \
+        || log "Warning: CP asset publish failed (continuing)."
+
     log "Caching config, routes and views ..."
     php artisan config:cache
     php artisan route:cache
