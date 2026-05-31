@@ -494,7 +494,7 @@ const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
             </div>
 
             <div className="hidden md:block">
-                <div className="sticky top-14 z-10 grid grid-cols-[minmax(240px,280px)_repeat(4,minmax(140px,1fr))] border-b border-border bg-background">
+                <div className="sticky top-0 z-10 grid grid-cols-[minmax(240px,280px)_repeat(4,minmax(140px,1fr))] border-b border-border bg-background">
                     <div className="flex items-end justify-start py-5 pr-6 pl-4">
                         {onBillingChange && (
                             <BillingIntervalToggle
