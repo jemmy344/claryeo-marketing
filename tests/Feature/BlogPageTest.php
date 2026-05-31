@@ -22,6 +22,15 @@ class BlogPageTest extends TestCase
             ->assertSee('5 invoicing mistakes that delay your payments');
     }
 
+    public function test_index_renders_category_filter_chips(): void
+    {
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('/blog/category/invoicing', false)
+            ->assertSee('Invoicing')
+            ->assertSee('/blog/category/tax', false);
+    }
+
     public function test_category_filters_to_matching_posts(): void
     {
         $response = $this->get('/blog/category/invoicing');
