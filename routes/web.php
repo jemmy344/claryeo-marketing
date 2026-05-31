@@ -81,3 +81,47 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
         ->defaults('slug', $slug)
         ->name($slug.'.version');
 }
+
+/*
+| SEO: an XML sitemap of the public marketing surface (static slugs from config
+| + published blog posts via the Statamic collection tag) and a host-aware
+| robots.txt that only invites crawlers in production.
+*/
+Route::get('sitemap.xml', function () {
+    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog'];
+
+    foreach (array_keys((array) config('feature_pages', [])) as $slug) {
+        $urls[] = '/features/'.$slug;
+    }
+
+    foreach (array_keys((array) config('marketing.blog_categories', [])) as $category) {
+        $urls[] = '/blog/category/'.$category;
+    }
+
+    foreach (array_keys((array) config('guides', [])) as $slug) {
+        $urls[] = '/guides/'.$slug;
+    }
+
+    foreach (['privacy', 'terms', 'cookies'] as $slug) {
+        $urls[] = '/'.$slug;
+    }
+
+    if (config('marketing.waitlist_mode')) {
+        $urls[] = '/waitlist';
+    } else {
+        $urls[] = '/pricing';
+        $urls[] = '/get-started';
+    }
+
+    return response()
+        ->view('sitemap', ['urls' => array_map(fn (string $path): string => url($path), $urls)])
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
+Route::get('robots.txt', function () {
+    $lines = app()->environment('production')
+        ? ['User-agent: *', 'Allow: /', '', 'Sitemap: '.url('/sitemap.xml')]
+        : ['User-agent: *', 'Disallow: /'];
+
+    return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain');
+})->name('robots');
