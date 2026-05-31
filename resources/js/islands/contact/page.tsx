@@ -168,7 +168,7 @@ const Contact: FC<ContactProps> = ({
                                     name="first_name"
                                     placeholder="Jane"
                                     autoComplete="given-name"
-                                    className="h-11 rounded-xl"
+                                    className="h-11 rounded-xl border-border bg-background"
                                 />
                                 <InputError message={errors.first_name?.[0]} />
                             </div>
@@ -184,7 +184,7 @@ const Contact: FC<ContactProps> = ({
                                     name="last_name"
                                     placeholder="Doe"
                                     autoComplete="family-name"
-                                    className="h-11 rounded-xl"
+                                    className="h-11 rounded-xl border-border bg-background"
                                 />
                                 <InputError message={errors.last_name?.[0]} />
                             </div>
@@ -204,7 +204,7 @@ const Contact: FC<ContactProps> = ({
                                 placeholder="jane@company.com"
                                 autoComplete="email"
                                 required
-                                className="h-11 rounded-xl"
+                                className="h-11 rounded-xl border-border bg-background"
                             />
                             <InputError message={errors.email?.[0]} />
                         </div>
@@ -221,7 +221,7 @@ const Contact: FC<ContactProps> = ({
                                 name="message"
                                 placeholder="How can we help?"
                                 required
-                                className="min-h-36 resize-none rounded-xl"
+                                className="min-h-36 resize-none rounded-xl border-border bg-background"
                             />
                             <InputError message={errors.message?.[0]} />
                         </div>
