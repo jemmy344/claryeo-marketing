@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('pricing', PricingController::class)->name('pricing');
 
+Route::view('about', 'about', [
+    'title' => 'About — Claryeo',
+    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
+])->name('about');
+
 Route::get('get-started', GetStartedController::class)->name('get-started');
 
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');

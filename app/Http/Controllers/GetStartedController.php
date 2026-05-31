@@ -2,29 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
+use App\Services\MainApi;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class GetStartedController extends Controller
 {
+    public function __construct(private readonly MainApi $api) {}
+
     /**
-     * Cross-domain plan handoff: forward the chosen plan to the main app's
-     * /start endpoint, which validates it, stores it (PlanMemoryService), and
-     * routes the user into registration/billing. Marketing keeps no plan state.
+     * Plan-selection page. Plans come from the main app's internal API; the
+     * island lets the visitor pick a plan/interval and then hands off to the
+     * app's /start endpoint (cross-domain), which validates the choice, stores
+     * it (PlanMemoryService), and routes into registration/billing. Marketing
+     * keeps no plan state of its own.
      */
-    public function __invoke(Request $request): RedirectResponse
+    public function __invoke(Request $request): View
     {
-        $params = array_filter([
-            'plan' => $request->string('plan')->value(),
-            'billing_interval' => $request->string('billing_interval')->value(),
-        ], static fn (string $value): bool => $value !== '');
+        $pricing = $this->api->pricing();
 
-        $url = rtrim((string) config('services.claryeo_app.url'), '/').'/start';
+        $initialPlan = $request->string('plan')->value();
+        $initialInterval = $request->string('billing_interval')->value();
 
-        if ($params !== []) {
-            $url .= '?'.http_build_query($params);
-        }
-
-        return redirect()->away($url);
+        return view('get-started', [
+            'title' => 'Get Started — Claryeo',
+            'meta_description' => 'Choose a plan and start managing your invoices, expenses, and taxes with Claryeo. Free and Pro plans available.',
+            'island_props' => htmlspecialchars(
+                (string) json_encode([
+                    'plans' => $pricing['plans'] ?? [],
+                    'appUrl' => rtrim((string) config('services.claryeo_app.url'), '/'),
+                    'contactUrl' => '/contact',
+                    'initialPlan' => $initialPlan !== '' ? $initialPlan : null,
+                    'initialInterval' => $initialInterval !== '' ? $initialInterval : null,
+                ]),
+                ENT_QUOTES,
+                'UTF-8'
+            ),
+        ]);
     }
 }

@@ -1,7 +1,11 @@
 import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
+import About from './islands/about/page';
 import AppearanceToggle from './islands/appearance-toggle';
 import ContactForm from './islands/contact/page';
+import GetStarted from './islands/get-started/page';
+import LegalDocumentPage from './islands/legal/document';
+import LegalVersionsPage from './islands/legal/versions';
 import Pricing from './islands/pricing/page';
 import TaxCalculator from './islands/tax-calculator/page';
 import Waitlist from './islands/waitlist/page';
@@ -21,6 +25,14 @@ const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     'waitlist-form': Waitlist as ComponentType<Record<string, unknown>>,
     'tax-calculator': TaxCalculator as ComponentType<Record<string, unknown>>,
     'appearance-toggle': AppearanceToggle as ComponentType<
+        Record<string, unknown>
+    >,
+    about: About as ComponentType<Record<string, unknown>>,
+    'get-started': GetStarted as ComponentType<Record<string, unknown>>,
+    'legal-document': LegalDocumentPage as ComponentType<
+        Record<string, unknown>
+    >,
+    'legal-versions': LegalVersionsPage as ComponentType<
         Record<string, unknown>
     >,
 };

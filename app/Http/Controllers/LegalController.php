@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\MainApi;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class LegalController extends Controller
@@ -22,7 +21,8 @@ class LegalController extends Controller
 
     /**
      * Render the current (or a specific archived) version of a legal document.
-     * Content is authored on, and versioned by, the main Claryeo app.
+     * Content is authored on, and versioned by, the main Claryeo app; the
+     * island renders the raw markdown and derives its own table of contents.
      */
     public function show(string $slug, ?string $version = null): View
     {
@@ -37,12 +37,25 @@ class LegalController extends Controller
         $resolvedVersion = is_string($document['version'] ?? null) ? $document['version'] : '';
         $body = is_string($document['body'] ?? null) ? $document['body'] : '';
 
+        $versionData = $this->api->legalVersions($slug);
+        $currentVersion = is_array($versionData) && is_string($versionData['currentVersion'] ?? null)
+            ? $versionData['currentVersion']
+            : null;
+
         return view('legal.document', [
-            'slug' => $slug,
-            'title' => self::TITLES[$slug].($version ? " (v{$resolvedVersion})" : ''),
-            'body_html' => Str::markdown($body),
-            'meta' => $document['meta'] ?? [],
-            'version' => $resolvedVersion,
+            'title' => self::TITLES[$slug],
+            'island_props' => htmlspecialchars(
+                (string) json_encode([
+                    'slug' => $slug,
+                    'title' => self::TITLES[$slug],
+                    'body' => $body,
+                    'meta' => $document['meta'] ?? [],
+                    'version' => $resolvedVersion,
+                    'currentVersion' => $currentVersion,
+                ]),
+                ENT_QUOTES,
+                'UTF-8'
+            ),
         ]);
     }
 
@@ -67,13 +80,21 @@ class LegalController extends Controller
 
                 return $entry;
             })
+            ->values()
             ->all();
 
         return view('legal.versions', [
-            'slug' => $slug,
             'title' => self::TITLES[$slug],
-            'versions' => $versions,
-            'current_version' => $current,
+            'island_props' => htmlspecialchars(
+                (string) json_encode([
+                    'slug' => $slug,
+                    'title' => self::TITLES[$slug],
+                    'versions' => $versions,
+                    'currentVersion' => $current,
+                ]),
+                ENT_QUOTES,
+                'UTF-8'
+            ),
         ]);
     }
 }
