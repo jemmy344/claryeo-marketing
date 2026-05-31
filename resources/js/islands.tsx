@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import About from './islands/about/page';
 import AppearanceToggle from './islands/appearance-toggle';
 import ContactForm from './islands/contact/page';
+import FeaturePage from './islands/feature/page';
 import Features from './islands/features/page';
 import GetStarted from './islands/get-started/page';
 import Landing from './islands/landing/page';
@@ -34,6 +35,7 @@ const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     about: About as ComponentType<Record<string, unknown>>,
     landing: Landing as ComponentType<Record<string, unknown>>,
     features: Features as ComponentType<Record<string, unknown>>,
+    feature: FeaturePage as ComponentType<Record<string, unknown>>,
     'get-started': GetStarted as ComponentType<Record<string, unknown>>,
     'legal-document': LegalDocumentPage as ComponentType<
         Record<string, unknown>

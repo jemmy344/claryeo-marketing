@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
@@ -13,10 +14,8 @@ Route::get('/', LandingController::class)->name('home');
 
 Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')->name('pricing');
 
-Route::view('features', 'features', [
-    'title' => 'Features — Claryeo',
-    'meta_description' => 'Invoicing, expense tracking, tax calculations, client management, and financial reports — all the tools freelancers need in one place.',
-])->name('features');
+Route::get('features', [FeatureController::class, 'index'])->name('features');
+Route::get('features/{slug}', [FeatureController::class, 'show'])->name('features.show');
 
 Route::view('about', 'about', [
     'title' => 'About — Claryeo',
