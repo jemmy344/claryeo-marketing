@@ -39,5 +39,16 @@ fi
 
 php artisan storage:link --quiet 2>/dev/null || true
 
+# ─── Final ownership pass ────────────────────────────────────────────────────
+# The artisan commands above run as root and create files in storage/ and
+# bootstrap/cache (config cache, warmed Stache indexes). php-fpm serves as
+# www-data and must be able to rewrite them — otherwise the first content page
+# hits "Permission denied" on storage/framework/cache/.../stache. Re-chown last.
+chown -R www-data:www-data \
+    /var/www/html/storage \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/content \
+    /var/www/html/users 2>/dev/null || true
+
 log "Starting services ..."
 exec "$@"
