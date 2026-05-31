@@ -143,60 +143,93 @@ const Contact: FC<ContactProps> = ({
                 </div>
 
                 <div className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm md:p-8">
-                    <h2 className="text-3xl font-semibold tracking-tight">
+                    <h2 className="text-2xl font-semibold tracking-tight">
                         Get in Touch
                     </h2>
-                    <p className="mt-2 text-muted-foreground">
+                    <p className="mt-1.5 text-sm text-muted-foreground">
                         You can reach us any time.
                     </p>
 
                     <form
                         onSubmit={onSubmit}
-                        className="mt-6 flex flex-col gap-4"
+                        className="mt-8 flex flex-col gap-5"
                         noValidate
                     >
-                        <div className="grid gap-3 sm:grid-cols-2">
-                            <div className="flex flex-col gap-2">
+                        <div className="grid gap-5 sm:grid-cols-2">
+                            <div className="flex flex-col gap-1.5">
+                                <label
+                                    htmlFor="first_name"
+                                    className="text-sm font-medium text-foreground"
+                                >
+                                    First name
+                                </label>
                                 <Input
+                                    id="first_name"
                                     name="first_name"
-                                    placeholder="First name"
-                                    aria-label="First name"
+                                    placeholder="Jane"
+                                    autoComplete="given-name"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.first_name?.[0]} />
                             </div>
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col gap-1.5">
+                                <label
+                                    htmlFor="last_name"
+                                    className="text-sm font-medium text-foreground"
+                                >
+                                    Last name
+                                </label>
                                 <Input
+                                    id="last_name"
                                     name="last_name"
-                                    placeholder="Last name"
-                                    aria-label="Last name"
+                                    placeholder="Doe"
+                                    autoComplete="family-name"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.last_name?.[0]} />
                             </div>
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-1.5">
+                            <label
+                                htmlFor="email"
+                                className="text-sm font-medium text-foreground"
+                            >
+                                Email
+                                <span className="text-primary"> *</span>
+                            </label>
                             <Input
+                                id="email"
                                 name="email"
                                 type="email"
-                                placeholder="Your email"
-                                aria-label="Email address"
+                                placeholder="jane@company.com"
+                                autoComplete="email"
                                 required
+                                className="h-11 rounded-xl"
                             />
                             <InputError message={errors.email?.[0]} />
                         </div>
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-1.5">
+                            <label
+                                htmlFor="message"
+                                className="text-sm font-medium text-foreground"
+                            >
+                                Message
+                                <span className="text-primary"> *</span>
+                            </label>
                             <Textarea
+                                id="message"
                                 name="message"
                                 placeholder="How can we help?"
-                                aria-label="Message"
                                 required
-                                className="min-h-32 resize-none"
+                                className="min-h-36 resize-none rounded-xl"
                             />
                             <InputError message={errors.message?.[0]} />
                         </div>
                         <Button
                             type="submit"
                             disabled={processing}
-                            className="bg-gradient-primary w-full text-primary-foreground hover:opacity-90"
+                            size="lg"
+                            className="bg-gradient-primary mt-1 h-11 w-full rounded-xl text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                         >
                             {processing ? (
                                 <Spinner />
