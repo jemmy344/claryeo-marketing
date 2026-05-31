@@ -11,9 +11,8 @@
 */
 
 return [
-    // Top-level header links (shown left of the Resources mega-menu).
+    // Top-level header links (between the Features and Resources mega-menus).
     'primary' => [
-        ['label' => 'Features', 'href' => '/features'],
         ['label' => 'Pricing', 'href' => '/pricing'],
         ['label' => 'Tax calculator', 'href' => '/tax-calculator'],
     ],

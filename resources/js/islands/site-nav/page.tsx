@@ -1,4 +1,14 @@
-import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
+import {
+    ArrowUpRight,
+    BarChart3,
+    ChevronDown,
+    FileText,
+    Menu,
+    RefreshCw,
+    Sparkles,
+    X,
+    type LucideIcon,
+} from 'lucide-react';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -8,10 +18,18 @@ import { cn } from '@/lib/utils';
 type NavLink = { label: string; href: string };
 type ResourceColumn = { title: string; links: NavLink[] };
 type SupportLink = { label: string; href: string; desc?: string };
+type FeatureItem = {
+    title: string;
+    tagline: string;
+    href: string;
+    icon: string;
+    badge?: string | null;
+};
 
 type SiteNavProps = {
     appUrl?: string;
     primary?: NavLink[];
+    features?: { lead?: NavLink; items?: FeatureItem[] };
     resources?: {
         lead?: NavLink;
         columns?: ResourceColumn[];
@@ -21,17 +39,27 @@ type SiteNavProps = {
     cta?: { label: string; href: string };
 };
 
+type MenuKey = 'features' | 'resources';
+
+const ICONS: Record<string, LucideIcon> = {
+    FileText,
+    RefreshCw,
+    BarChart3,
+    Sparkles,
+};
+
 const linkClass =
     'text-sm text-muted-foreground transition-colors hover:text-foreground';
 
 const SiteNav: FC<SiteNavProps> = ({
     appUrl = '',
     primary = [],
+    features = {},
     resources = {},
     waitlistMode = false,
     cta = { label: 'Get started', href: '/get-started' },
 }) => {
-    const [resourcesOpen, setResourcesOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -39,19 +67,21 @@ const SiteNav: FC<SiteNavProps> = ({
     const hidden = waitlistMode ? ['/pricing', '/get-started'] : [];
     const visible = (href: string): boolean => !hidden.includes(href);
 
+    const featureItems = features.items ?? [];
+    const featureLead = features.lead;
     const columns = (resources.columns ?? []).map((col) => ({
         ...col,
         links: col.links.filter((l) => visible(l.href)),
     }));
     const support = (resources.support ?? []).filter((s) => visible(s.href));
-    const lead = resources.lead;
+    const resourcesLead = resources.lead;
     const loginHref = `${appUrl}/login`;
 
-    // Close the mega-menu on Escape; close the mobile sheet when crossing to md.
+    // Close any open menu on Escape; close the mobile sheet when crossing to md.
     useEffect(() => {
         const onKey = (e: KeyboardEvent): void => {
             if (e.key === 'Escape') {
-                setResourcesOpen(false);
+                setOpenMenu(null);
                 setMobileOpen(false);
             }
         };
@@ -79,19 +109,47 @@ const SiteNav: FC<SiteNavProps> = ({
         };
     }, [mobileOpen]);
 
-    const openResources = (): void => {
+    const open = (key: MenuKey): void => {
         if (closeTimer.current) {
             clearTimeout(closeTimer.current);
         }
-        setResourcesOpen(true);
+        setOpenMenu(key);
     };
 
-    const scheduleCloseResources = (): void => {
+    const scheduleClose = (): void => {
         if (closeTimer.current) {
             clearTimeout(closeTimer.current);
         }
-        closeTimer.current = setTimeout(() => setResourcesOpen(false), 120);
+        closeTimer.current = setTimeout(() => setOpenMenu(null), 120);
     };
+
+    const trigger = (key: MenuKey, label: string) => (
+        <div
+            className="flex items-center"
+            onMouseEnter={() => open(key)}
+            onMouseLeave={scheduleClose}
+        >
+            <button
+                type="button"
+                aria-expanded={openMenu === key}
+                onClick={() => setOpenMenu((v) => (v === key ? null : key))}
+                className={cn(
+                    'flex items-center gap-1 text-sm transition-colors',
+                    openMenu === key
+                        ? 'text-foreground'
+                        : 'text-muted-foreground hover:text-foreground',
+                )}
+            >
+                {label}
+                <ChevronDown
+                    className={cn(
+                        'size-4 transition-transform',
+                        openMenu === key && 'rotate-180',
+                    )}
+                />
+            </button>
+        </div>
+    );
 
     return (
         <div className="w-full">
@@ -111,39 +169,13 @@ const SiteNav: FC<SiteNavProps> = ({
                 </a>
 
                 <div className="hidden items-center gap-8 md:flex">
+                    {featureItems.length > 0 && trigger('features', 'Features')}
                     {primary.map((item) => (
                         <a key={item.label} href={item.href} className={linkClass}>
                             {item.label}
                         </a>
                     ))}
-
-                    {columns.length > 0 && (
-                        <div
-                            className="flex items-center"
-                            onMouseEnter={openResources}
-                            onMouseLeave={scheduleCloseResources}
-                        >
-                            <button
-                                type="button"
-                                aria-expanded={resourcesOpen}
-                                onClick={() => setResourcesOpen((v) => !v)}
-                                className={cn(
-                                    'flex items-center gap-1 text-sm transition-colors',
-                                    resourcesOpen
-                                        ? 'text-foreground'
-                                        : 'text-muted-foreground hover:text-foreground',
-                                )}
-                            >
-                                Resources
-                                <ChevronDown
-                                    className={cn(
-                                        'size-4 transition-transform',
-                                        resourcesOpen && 'rotate-180',
-                                    )}
-                                />
-                            </button>
-                        </div>
-                    )}
+                    {columns.length > 0 && trigger('resources', 'Resources')}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -180,20 +212,73 @@ const SiteNav: FC<SiteNavProps> = ({
                 </div>
             </nav>
 
-            {/* Desktop mega-menu */}
-            {resourcesOpen && columns.length > 0 && (
+            {/* Features mega-menu */}
+            {openMenu === 'features' && featureItems.length > 0 && (
                 <div
                     className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
-                    onMouseEnter={openResources}
-                    onMouseLeave={scheduleCloseResources}
+                    onMouseEnter={() => open('features')}
+                    onMouseLeave={scheduleClose}
                 >
                     <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
-                        {lead && (
+                        {featureLead && (
                             <a
-                                href={lead.href}
+                                href={featureLead.href}
                                 className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
                             >
-                                {lead.label}
+                                {featureLead.label}
+                                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
+                            </a>
+                        )}
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                            {featureItems.map((item) => {
+                                const Icon = ICONS[item.icon] ?? Sparkles;
+
+                                return (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        className="group flex items-start gap-4 rounded-2xl border border-transparent p-4 transition-colors hover:border-border hover:bg-accent"
+                                    >
+                                        <div className="bg-gradient-primary flex size-10 shrink-0 items-center justify-center rounded-xl text-primary-foreground shadow-sm">
+                                            <Icon className="size-5" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-semibold text-foreground">
+                                                    {item.title}
+                                                </p>
+                                                {item.badge && (
+                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {item.tagline}
+                                            </p>
+                                        </div>
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Resources mega-menu */}
+            {openMenu === 'resources' && columns.length > 0 && (
+                <div
+                    className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
+                    onMouseEnter={() => open('resources')}
+                    onMouseLeave={scheduleClose}
+                >
+                    <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
+                        {resourcesLead && (
+                            <a
+                                href={resourcesLead.href}
+                                className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
+                            >
+                                {resourcesLead.label}
                                 <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
                             </a>
                         )}
@@ -269,6 +354,31 @@ const SiteNav: FC<SiteNavProps> = ({
                                 </a>
                             ))}
                         </div>
+
+                        {featureItems.length > 0 && (
+                            <div>
+                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                    Features
+                                </p>
+                                <ul className="mt-3 flex flex-col gap-3">
+                                    {featureItems.map((item) => (
+                                        <li key={item.href}>
+                                            <a
+                                                href={item.href}
+                                                className="flex items-center gap-2 text-sm text-muted-foreground"
+                                            >
+                                                {item.title}
+                                                {item.badge && (
+                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
 
                         {columns.map((col) => (
                             <div key={col.title}>

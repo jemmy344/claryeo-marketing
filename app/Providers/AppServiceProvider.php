@@ -43,15 +43,32 @@ class AppServiceProvider extends ServiceProvider
             static fn (array $link): bool => ! in_array($link['href'] ?? '', $hidden, true),
         ));
 
+        // Features mega-menu, built from the individual feature pages.
+        $featureItems = collect(config('feature_pages', []))
+            ->map(fn (array $f): array => [
+                'title' => $f['title'],
+                'tagline' => $f['tagline'],
+                'href' => '/features/'.$f['slug'],
+                'icon' => $f['icon'] ?? 'Sparkles',
+                'badge' => $f['badge'] ?? null,
+            ])
+            ->values()
+            ->all();
+        $features = [
+            'lead' => ['label' => 'All features', 'href' => '/features'],
+            'items' => $featureItems,
+        ];
+
         View::share('claryeo_app_url', $appUrl);
         View::share('waitlist_mode', $waitlistMode);
         View::share('primary_cta', $primaryCta);
 
-        // JSON props for the header island (primary links + Resources mega-menu).
+        // JSON props for the header island (Features + Resources mega-menus).
         View::share('nav_props', htmlspecialchars(
             (string) json_encode([
                 'appUrl' => $appUrl,
                 'primary' => $primaryLinks,
+                'features' => $features,
                 'resources' => $nav['resources'] ?? [],
                 'waitlistMode' => $waitlistMode,
                 'cta' => $primaryCta,
