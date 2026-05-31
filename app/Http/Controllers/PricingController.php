@@ -28,6 +28,8 @@ class PricingController extends Controller
             'island_props' => htmlspecialchars(
                 (string) json_encode([
                     'plans' => $pricing['plans'] ?? [],
+                    'comparisonMatrix' => $pricing['comparisonMatrix'] ?? [],
+                    'comparisonAddOns' => $pricing['comparisonAddOns'] ?? [],
                     'getStartedUrl' => '/get-started',
                     'contactUrl' => '/contact',
                 ]),

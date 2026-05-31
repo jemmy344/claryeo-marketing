@@ -24,8 +24,14 @@ class PricingPageTest extends TestCase
                     ['key' => 'free', 'name' => 'Free', 'priceLabel' => 'NGN 0', 'entitlementBullets' => ['10 invoices']],
                     ['key' => 'growth', 'name' => 'Growth', 'monthlyPriceLabel' => 'NGN 5,000 / mo', 'badgeLabel' => 'Popular'],
                 ],
-                'comparisonMatrix' => [],
-                'comparisonAddOns' => [],
+                'comparisonMatrix' => [
+                    ['title' => 'Core', 'rows' => [
+                        ['key' => 'invoices', 'label' => 'Invoices', 'description' => '', 'free' => ['kind' => 'text', 'value' => '10'], 'growth' => ['kind' => 'included'], 'pro' => ['kind' => 'included'], 'enterprise' => ['kind' => 'included']],
+                    ]],
+                ],
+                'comparisonAddOns' => [
+                    ['key' => 'single_bank_link', 'label' => 'Bank link', 'free' => ['kind' => 'text', 'value' => 'N3,500'], 'growth' => ['kind' => 'text', 'value' => 'N3,500'], 'pro' => ['kind' => 'included'], 'enterprise' => ['kind' => 'included']],
+                ],
             ]]),
         ]);
 
@@ -50,6 +56,9 @@ class PricingPageTest extends TestCase
         $this->assertIsArray($decoded);
         $this->assertCount(2, $decoded['plans']);
         $this->assertSame('Growth', $decoded['plans'][1]['name']);
+        $this->assertSame('Core', $decoded['comparisonMatrix'][0]['title']);
+        $this->assertSame('single_bank_link', $decoded['comparisonAddOns'][0]['key']);
+        $this->assertSame('/get-started', $decoded['getStartedUrl']);
     }
 
     public function test_pricing_page_renders_when_api_unavailable(): void
