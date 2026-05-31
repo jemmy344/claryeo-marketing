@@ -20,6 +20,31 @@ Route::get('features/{slug}', [FeatureController::class, 'show'])->name('feature
 
 Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 
+// Blog index + category filter. Individual posts (/blog/{slug}) are served
+// natively by the Statamic `blog` collection route (template: blog/show).
+Route::view('blog', 'blog.index', [
+    'title' => 'Blog — Claryeo',
+    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses.',
+    'heading' => 'The Claryeo blog',
+    'intro' => 'Practical, plain-English guidance on invoicing, expenses, bank sync, and tax — built for Nigerian freelancers and small businesses.',
+    'activeCategory' => null,
+])->name('blog');
+
+Route::get('blog/category/{category}', function (string $category) {
+    /** @var array<string, string> $categories */
+    $categories = (array) config('marketing.blog_categories', []);
+
+    abort_unless(array_key_exists($category, $categories), 404);
+
+    return view('blog.index', [
+        'title' => $categories[$category].' — Claryeo blog',
+        'meta_description' => 'Claryeo blog posts on '.$categories[$category].'.',
+        'heading' => $categories[$category],
+        'intro' => 'Posts filed under '.$categories[$category].'.',
+        'activeCategory' => $category,
+    ]);
+})->name('blog.category');
+
 Route::view('about', 'about', [
     'title' => 'About — Claryeo',
     'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",

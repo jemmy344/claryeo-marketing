@@ -91,6 +91,9 @@ class AppServiceProvider extends ServiceProvider
         View::share('nav_primary', $primaryLinks);
         View::share('footer_groups', $this->footerGroups($nav['footer'] ?? [], $waitlistMode));
         View::share('footer_socials', $nav['social'] ?? []);
+
+        // Blog category chips (slug => title).
+        View::share('blog_categories', Config::array('marketing.blog_categories', []));
     }
 
     /**
