@@ -1,0 +1,38 @@
+# Version control
+.git
+.github
+.gitignore
+
+# Dependencies (installed inside the image; never copy the local dev vendor)
+node_modules
+/vendor
+
+# Laravel/Statamic runtime + generated files
+storage/logs/*.log
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*.php
+public/hot
+
+# Built assets (re-built inside Docker by the assets stage)
+public/build
+
+# Environment files (never bake secrets into images)
+.env
+.env.*
+!.env.example
+
+# Dev tooling (the image doesn't need these; .docker/ IS needed for COPYs)
+docker-compose*.yml
+Dockerfile
+
+# IDE / OS
+.idea
+.vscode
+*.DS_Store
+Thumbs.db
+
+# Test artifacts
+.phpunit.result.cache
+coverage
