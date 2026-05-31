@@ -5,6 +5,33 @@
 </picture>
 </p>
 
+## Code quality & git hooks
+
+This project enforces formatting, static analysis, and commit conventions both
+locally (via git hooks) and in CI.
+
+| Check | Tool | Command |
+|-------|------|---------|
+| PHP formatting | [Laravel Pint](https://laravel.com/docs/pint) | `composer lint` (fix) / `composer lint:test` (check) |
+| Static analysis | PHPStan + [Larastan](https://github.com/larastan/larastan), level 9 | `composer stan` |
+| Commit messages | [commitlint](https://commitlint.js.org) (Conventional Commits) | runs on commit |
+
+**Hooks** (managed by [Husky](https://typicode.github.io/husky/)):
+
+- `pre-commit` — formats changed PHP files with Pint, then runs PHPStan.
+- `commit-msg` — validates the message against Conventional Commits.
+
+Because `.npmrc` sets `ignore-scripts=true`, Husky is **not** installed
+automatically by `pnpm install`. After cloning, enable the hooks once with:
+
+```sh
+pnpm install
+pnpm run prepare
+```
+
+CI (`.github/workflows/ci.yml`) runs the same Pint + PHPStan checks and
+validates every commit in a pull request.
+
 ## About Statamic
 
 Statamic is the flat-first, Laravel + Git powered CMS designed for building beautiful, easy to manage websites.

@@ -1,56 +1,176 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
-@source "../views";
-@source "../js";
-@source "../../content";
+
+@source '../views';
+@source '../js';
+@source '../../content';
+
+@custom-variant dark (&:is(.dark *));
 
 /*
- * Brand design tokens ported from the main Claryeo app (resources/css/app.css)
- * so the marketing site stays visually consistent. Light palette only — the
- * marketing site does not offer a dark mode.
+ * Design tokens ported verbatim from the main Claryeo app
+ * (resources/css/app.css) so the marketing site is visually identical and
+ * supports the same light/dark themes. Colour tokens are CSS variables on
+ * :root / .dark; Tailwind utilities reference them through @theme.
  */
 @theme {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
-    --radius: 0.625rem;
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
 
-    --color-background: #fcfcfd;
-    --color-foreground: #09090b;
-    --color-card: #ffffff;
-    --color-card-foreground: #09090b;
-    --color-primary: #6d28d9;
-    --color-primary-foreground: #ffffff;
-    --color-secondary: #f3f0ff;
-    --color-secondary-foreground: #3b1a7e;
-    --color-muted: #f4f4f5;
-    --color-muted-foreground: #71717a;
-    --color-accent: #f3f0ff;
-    --color-accent-foreground: #6d28d9;
-    --color-destructive: #e11d48;
-    --color-destructive-foreground: #ffffff;
-    --color-border: #e4e4e7;
-    --color-ring: #6d28d9;
-    --color-primary-surface: #f3f0ff;
-    --color-primary-surface-foreground: #6d28d9;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
 
-    --gradient-primary-from: #25b7ff;
-    --gradient-primary-to: #722bc0;
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-primary-surface: var(--primary-surface);
+    --color-primary-surface-foreground: var(--primary-surface-foreground);
+
+    --gradient-primary-from: var(--gradient-primary-from-color);
+    --gradient-primary-to: var(--gradient-primary-to-color);
+}
+
+:root {
+    --background: #fcfcfd;
+    --foreground: #09090b;
+
+    --card: #ffffff;
+    --card-foreground: #09090b;
+
+    --popover: #ffffff;
+    --popover-foreground: #09090b;
+
+    --primary: #6d28d9;
+    --primary-foreground: #ffffff;
+
+    --secondary: #f3f0ff;
+    --secondary-foreground: #3b1a7e;
+
+    --muted: #f4f4f5;
+    --muted-foreground: #71717a;
+
+    --accent: #f3f0ff;
+    --accent-foreground: #6d28d9;
+
+    --destructive: #e11d48;
+    --destructive-foreground: #ffffff;
+
+    --border: #e4e4e7;
+    --input: #e4e4e7;
+    --ring: #6d28d9;
+
+    --primary-surface: #f3f0ff;
+    --primary-surface-foreground: #6d28d9;
+
+    --gradient-primary-from-color: #25b7ff;
+    --gradient-primary-to-color: #722bc0;
+
+    --radius: 0.625rem;
+}
+
+.dark {
+    --background: #212029;
+    --foreground: #ffffff;
+    --card: #2d2c34;
+    --card-foreground: #ffffff;
+    --popover: #2d2c34;
+    --popover-foreground: #ffffff;
+    --primary: #a78bfa;
+    --primary-foreground: #1a0a2e;
+    --secondary: #2d2c34;
+    --secondary-foreground: #ffffff;
+    --muted: #2d2c34;
+    --muted-foreground: #84848a;
+    --accent: #2d2c34;
+    --accent-foreground: #ffffff;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #3d3d45;
+    --input: #2d2c34;
+    --ring: #a78bfa;
+
+    --primary-surface: #2d2640;
+    --primary-surface-foreground: #a78bfa;
+
+    --gradient-primary-from-color: #25b7ff;
+    --gradient-primary-to-color: #722bc0;
 }
 
 @layer base {
-    .brand-gradient {
-        background-image: linear-gradient(135deg, var(--gradient-primary-from), var(--gradient-primary-to));
+    * {
+        @apply border-border;
     }
-    .brand-gradient-text {
-        background-image: linear-gradient(135deg, var(--gradient-primary-from), var(--gradient-primary-to));
+
+    html {
+        @apply bg-background;
+        min-height: 100%;
+    }
+
+    body {
+        @apply min-h-dvh bg-background text-foreground antialiased;
+    }
+}
+
+@layer utilities {
+    /* Gradient utilities ported from the main app so copied React islands
+       resolve the same class names. */
+    .bg-gradient-primary {
+        background: linear-gradient(
+            135deg,
+            var(--gradient-primary-from),
+            var(--gradient-primary-to)
+        );
+    }
+
+    .text-gradient-primary {
+        background: linear-gradient(
+            135deg,
+            var(--gradient-primary-from),
+            var(--gradient-primary-to)
+        );
         -webkit-background-clip: text;
         background-clip: text;
+        -webkit-text-fill-color: transparent;
         color: transparent;
+    }
+
+    .border-gradient-primary {
+        border-color: var(--gradient-primary-from);
+        border-image: linear-gradient(
+                135deg,
+                var(--gradient-primary-from),
+                var(--gradient-primary-to)
+            )
+            1;
     }
 }

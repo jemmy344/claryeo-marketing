@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{{ urls }}
+    <url><loc>{{ value }}</loc></url>
+{{ /urls }}
+{{ collection:blog }}
+    <url><loc>{{ permalink }}</loc>{{ if updated_at }}<lastmod>{{ updated_at format="Y-m-d" }}</lastmod>{{ /if }}</url>
+{{ /collection:blog }}
+</urlset>

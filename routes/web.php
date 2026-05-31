@@ -1,16 +1,56 @@
 <?php
 
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
+use App\Http\Controllers\GuideController;
+use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TaxCalculatorController;
 use App\Http\Controllers\WaitlistController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('pricing', PricingController::class)->name('pricing');
+Route::get('/', LandingController::class)->name('home');
 
-Route::get('get-started', GetStartedController::class)->name('get-started');
+Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')->name('pricing');
+
+Route::get('features', [FeatureController::class, 'index'])->name('features');
+Route::get('features/{slug}', [FeatureController::class, 'show'])->name('features.show');
+
+Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
+
+// Blog index + category filter. Individual posts (/blog/{slug}) are served
+// natively by the Statamic `blog` collection route (template: blog/show).
+Route::view('blog', 'blog.index', [
+    'title' => 'Blog — Claryeo',
+    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses.',
+    'heading' => 'The Claryeo blog',
+    'intro' => 'Practical, plain-English guidance on invoicing, expenses, bank sync, and tax — built for Nigerian freelancers and small businesses.',
+    'activeCategory' => null,
+])->name('blog');
+
+Route::get('blog/category/{category}', function (string $category) {
+    /** @var array<string, string> $categories */
+    $categories = (array) config('marketing.blog_categories', []);
+
+    abort_unless(array_key_exists($category, $categories), 404);
+
+    return view('blog.index', [
+        'title' => $categories[$category].' — Claryeo blog',
+        'meta_description' => 'Claryeo blog posts on '.$categories[$category].'.',
+        'heading' => $categories[$category],
+        'intro' => 'Posts filed under '.$categories[$category].'.',
+        'activeCategory' => $category,
+    ]);
+})->name('blog.category');
+
+Route::view('about', 'about', [
+    'title' => 'About — Claryeo',
+    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
+])->name('about');
+
+Route::get('get-started', GetStartedController::class)->middleware('waitlist.redirect')->name('get-started');
 
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
 Route::post('tax-calculator/report', [TaxCalculatorController::class, 'report'])->middleware('throttle:6,1')->name('taxCalculator.report.store');
@@ -41,3 +81,47 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
         ->defaults('slug', $slug)
         ->name($slug.'.version');
 }
+
+/*
+| SEO: an XML sitemap of the public marketing surface (static slugs from config
+| + published blog posts via the Statamic collection tag) and a host-aware
+| robots.txt that only invites crawlers in production.
+*/
+Route::get('sitemap.xml', function () {
+    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog'];
+
+    foreach (array_keys((array) config('feature_pages', [])) as $slug) {
+        $urls[] = '/features/'.$slug;
+    }
+
+    foreach (array_keys((array) config('marketing.blog_categories', [])) as $category) {
+        $urls[] = '/blog/category/'.$category;
+    }
+
+    foreach (array_keys((array) config('guides', [])) as $slug) {
+        $urls[] = '/guides/'.$slug;
+    }
+
+    foreach (['privacy', 'terms', 'cookies'] as $slug) {
+        $urls[] = '/'.$slug;
+    }
+
+    if (config('marketing.waitlist_mode')) {
+        $urls[] = '/waitlist';
+    } else {
+        $urls[] = '/pricing';
+        $urls[] = '/get-started';
+    }
+
+    return response()
+        ->view('sitemap', ['urls' => array_map(fn (string $path): string => url($path), $urls)])
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
+Route::get('robots.txt', function () {
+    $lines = app()->environment('production')
+        ? ['User-agent: *', 'Allow: /', '', 'Sitemap: '.url('/sitemap.xml')]
+        : ['User-agent: *', 'Disallow: /'];
+
+    return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain');
+})->name('robots');

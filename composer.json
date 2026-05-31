@@ -18,6 +18,7 @@
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "fruitcake/laravel-debugbar": "^4.0",
+        "larastan/larastan": "^3.0",
         "laravel/pail": "^1.2.5",
         "laravel/pint": "^1.27",
         "laravel/sail": "^1.41",
@@ -54,6 +55,15 @@
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",
             "@php artisan test"
+        ],
+        "stan": [
+            "@php -d memory_limit=512M vendor/bin/phpstan analyse"
+        ],
+        "lint": [
+            "vendor/bin/pint"
+        ],
+        "lint:test": [
+            "vendor/bin/pint --test"
         ],
         "pre-update-cmd": [
             "Statamic\\Console\\Composer\\Scripts::preUpdateCmd"

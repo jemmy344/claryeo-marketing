@@ -1,0 +1,33 @@
+{{ partial:shell }}
+    <section class="border-b border-border bg-muted/20">
+        <div class="mx-auto max-w-3xl px-4 py-16 text-center md:px-6 md:py-20">
+            <span class="text-sm font-medium tracking-[0.18em] text-primary uppercase">Blog</span>
+            <h1 class="mt-4 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">{{ heading }}</h1>
+            <p class="mt-4 text-lg text-muted-foreground">{{ intro }}</p>
+        </div>
+    </section>
+
+    <div class="mx-auto max-w-[1180px] px-4 py-12 md:px-0 md:py-16">
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="/blog" class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors {{ if activeCategory }}border-border text-muted-foreground hover:text-foreground{{ else }}border-primary bg-primary text-primary-foreground{{ /if }}">All</a>
+            {{ blog_categories }}
+                <a href="/blog/category/{{ key }}" class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors {{ if key == activeCategory }}border-primary bg-primary text-primary-foreground{{ else }}border-border text-muted-foreground hover:text-foreground{{ /if }}">{{ value }}</a>
+            {{ /blog_categories }}
+        </div>
+
+        {{ if activeCategory }}
+            <div class="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {{ collection:blog sort="date:desc" taxonomy:categories="{activeCategory}" }}
+                    {{ partial:blog/card }}
+                {{ /collection:blog }}
+            </div>
+            {{ collection:blog taxonomy:categories="{activeCategory}" }}{{ if no_results }}<p class="mt-10 rounded-xl border border-border bg-muted/30 p-8 text-center text-muted-foreground">No posts here yet — check back soon.</p>{{ /if }}{{ /collection:blog }}
+        {{ else }}
+            <div class="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {{ collection:blog sort="date:desc" }}
+                    {{ partial:blog/card }}
+                {{ /collection:blog }}
+            </div>
+        {{ /if }}
+    </div>
+{{ /partial:shell }}

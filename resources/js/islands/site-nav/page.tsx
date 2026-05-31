@@ -1,0 +1,426 @@
+import {
+    ArrowUpRight,
+    BarChart3,
+    ChevronDown,
+    FileText,
+    Menu,
+    RefreshCw,
+    Sparkles,
+    X,
+    type LucideIcon,
+} from 'lucide-react';
+import type { FC } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+import AppearanceToggle from '@/islands/appearance-toggle';
+import { cn } from '@/lib/utils';
+
+type NavLink = { label: string; href: string };
+type ResourceColumn = { title: string; links: NavLink[] };
+type SupportLink = { label: string; href: string; desc?: string };
+type FeatureItem = {
+    title: string;
+    tagline: string;
+    href: string;
+    icon: string;
+    badge?: string | null;
+};
+
+type SiteNavProps = {
+    appUrl?: string;
+    primary?: NavLink[];
+    features?: { lead?: NavLink; items?: FeatureItem[] };
+    resources?: {
+        lead?: NavLink;
+        columns?: ResourceColumn[];
+        support?: SupportLink[];
+    };
+    waitlistMode?: boolean;
+    cta?: { label: string; href: string };
+};
+
+type MenuKey = 'features' | 'resources';
+
+const ICONS: Record<string, LucideIcon> = {
+    FileText,
+    RefreshCw,
+    BarChart3,
+    Sparkles,
+};
+
+const linkClass =
+    'text-sm text-muted-foreground transition-colors hover:text-foreground';
+
+const SiteNav: FC<SiteNavProps> = ({
+    appUrl = '',
+    primary = [],
+    features = {},
+    resources = {},
+    waitlistMode = false,
+    cta = { label: 'Get started', href: '/get-started' },
+}) => {
+    const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    // In waitlist mode, pricing/get-started links are removed from the menus.
+    const hidden = waitlistMode ? ['/pricing', '/get-started'] : [];
+    const visible = (href: string): boolean => !hidden.includes(href);
+
+    const featureItems = features.items ?? [];
+    const featureLead = features.lead;
+    const columns = (resources.columns ?? []).map((col) => ({
+        ...col,
+        links: col.links.filter((l) => visible(l.href)),
+    }));
+    const support = (resources.support ?? []).filter((s) => visible(s.href));
+    const resourcesLead = resources.lead;
+    const loginHref = `${appUrl}/login`;
+
+    // Close any open menu on Escape; close the mobile sheet when crossing to md.
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent): void => {
+            if (e.key === 'Escape') {
+                setOpenMenu(null);
+                setMobileOpen(false);
+            }
+        };
+        document.addEventListener('keydown', onKey);
+
+        const mq = window.matchMedia('(min-width: 768px)');
+        const onChange = (): void => {
+            if (mq.matches) {
+                setMobileOpen(false);
+            }
+        };
+        mq.addEventListener('change', onChange);
+
+        return () => {
+            document.removeEventListener('keydown', onKey);
+            mq.removeEventListener('change', onChange);
+        };
+    }, []);
+
+    // Lock body scroll while the mobile sheet is open.
+    useEffect(() => {
+        document.body.style.overflow = mobileOpen ? 'hidden' : '';
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [mobileOpen]);
+
+    const open = (key: MenuKey): void => {
+        if (closeTimer.current) {
+            clearTimeout(closeTimer.current);
+        }
+        setOpenMenu(key);
+    };
+
+    const scheduleClose = (): void => {
+        if (closeTimer.current) {
+            clearTimeout(closeTimer.current);
+        }
+        closeTimer.current = setTimeout(() => setOpenMenu(null), 120);
+    };
+
+    const trigger = (key: MenuKey, label: string) => (
+        <div
+            className="flex items-center"
+            onMouseEnter={() => open(key)}
+            onMouseLeave={scheduleClose}
+        >
+            <button
+                type="button"
+                aria-expanded={openMenu === key}
+                onClick={() => setOpenMenu((v) => (v === key ? null : key))}
+                className={cn(
+                    'flex items-center gap-1 text-sm transition-colors',
+                    openMenu === key
+                        ? 'text-foreground'
+                        : 'text-muted-foreground hover:text-foreground',
+                )}
+            >
+                {label}
+                <ChevronDown
+                    className={cn(
+                        'size-4 transition-transform',
+                        openMenu === key && 'rotate-180',
+                    )}
+                />
+            </button>
+        </div>
+    );
+
+    return (
+        <div className="w-full">
+            <nav className="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
+                <a
+                    href="/"
+                    className="flex items-center gap-3 transition-opacity hover:opacity-90"
+                >
+                    <img
+                        src="/favicon.svg"
+                        alt="Claryeo"
+                        className="h-7 w-auto dark:invert"
+                    />
+                    <span className="text-lg font-semibold tracking-tight text-foreground">
+                        Claryeo
+                    </span>
+                </a>
+
+                <div className="hidden items-center gap-8 md:flex">
+                    {featureItems.length > 0 && trigger('features', 'Features')}
+                    {primary.map((item) => (
+                        <a key={item.label} href={item.href} className={linkClass}>
+                            {item.label}
+                        </a>
+                    ))}
+                    {columns.length > 0 && trigger('resources', 'Resources')}
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <AppearanceToggle className="shrink-0" />
+                    <div className="hidden items-center gap-2 md:flex">
+                        {!waitlistMode && (
+                            <a
+                                href={loginHref}
+                                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            >
+                                Log in
+                            </a>
+                        )}
+                        <a
+                            href={cta.href}
+                            className="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+                        >
+                            {cta.label}
+                        </a>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={() => setMobileOpen((v) => !v)}
+                        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                        className="inline-flex items-center justify-center rounded-full border border-border/60 bg-muted/40 p-2.5 text-foreground transition-colors hover:bg-muted/70 md:hidden"
+                    >
+                        {mobileOpen ? (
+                            <X className="size-5" />
+                        ) : (
+                            <Menu className="size-5" />
+                        )}
+                    </button>
+                </div>
+            </nav>
+
+            {/* Features mega-menu */}
+            {openMenu === 'features' && featureItems.length > 0 && (
+                <div
+                    className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
+                    onMouseEnter={() => open('features')}
+                    onMouseLeave={scheduleClose}
+                >
+                    <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
+                        {featureLead && (
+                            <a
+                                href={featureLead.href}
+                                className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
+                            >
+                                {featureLead.label}
+                                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
+                            </a>
+                        )}
+                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                            {featureItems.map((item) => {
+                                const Icon = ICONS[item.icon] ?? Sparkles;
+
+                                return (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        className="group flex items-start gap-4 rounded-2xl border border-transparent p-4 transition-colors hover:border-border hover:bg-accent"
+                                    >
+                                        <div className="bg-gradient-primary flex size-10 shrink-0 items-center justify-center rounded-xl text-primary-foreground shadow-sm">
+                                            <Icon className="size-5" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="text-sm font-semibold text-foreground">
+                                                    {item.title}
+                                                </p>
+                                                {item.badge && (
+                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {item.tagline}
+                                            </p>
+                                        </div>
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Resources mega-menu */}
+            {openMenu === 'resources' && columns.length > 0 && (
+                <div
+                    className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
+                    onMouseEnter={() => open('resources')}
+                    onMouseLeave={scheduleClose}
+                >
+                    <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
+                        {resourcesLead && (
+                            <a
+                                href={resourcesLead.href}
+                                className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
+                            >
+                                {resourcesLead.label}
+                                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
+                            </a>
+                        )}
+
+                        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                            {columns.map((col) => (
+                                <div key={col.title}>
+                                    <p className="text-sm font-semibold text-foreground">
+                                        {col.title}
+                                    </p>
+                                    <ul className="mt-3 flex flex-col gap-2.5">
+                                        {col.links.map((link) => (
+                                            <li key={link.label}>
+                                                <a
+                                                    href={link.href}
+                                                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                                                >
+                                                    {link.label}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                        {support.length > 0 && (
+                            <div className="mt-8 border-t border-border pt-6">
+                                <p className="text-sm font-semibold text-foreground">
+                                    Support
+                                </p>
+                                <div className="mt-3 flex flex-wrap gap-3">
+                                    {support.map((item) => (
+                                        <a
+                                            key={item.label}
+                                            href={item.href}
+                                            className="flex min-w-52 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/40 hover:bg-accent"
+                                        >
+                                            <div className="flex size-9 items-center justify-center rounded-lg bg-primary-surface text-primary-surface-foreground">
+                                                <ArrowUpRight className="size-4" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm font-medium text-foreground">
+                                                    {item.label}
+                                                </p>
+                                                {item.desc && (
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {item.desc}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Mobile sheet */}
+            {mobileOpen && (
+                <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-border bg-background px-4 pb-8 shadow-2xl md:hidden">
+                    <div className="flex flex-col gap-6 py-6">
+                        <div className="flex flex-col gap-4">
+                            {primary.map((item) => (
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    className="text-base font-medium text-foreground"
+                                >
+                                    {item.label}
+                                </a>
+                            ))}
+                        </div>
+
+                        {featureItems.length > 0 && (
+                            <div>
+                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                    Features
+                                </p>
+                                <ul className="mt-3 flex flex-col gap-3">
+                                    {featureItems.map((item) => (
+                                        <li key={item.href}>
+                                            <a
+                                                href={item.href}
+                                                className="flex items-center gap-2 text-sm text-muted-foreground"
+                                            >
+                                                {item.title}
+                                                {item.badge && (
+                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
+                                                        {item.badge}
+                                                    </span>
+                                                )}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {columns.map((col) => (
+                            <div key={col.title}>
+                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                    {col.title}
+                                </p>
+                                <ul className="mt-3 flex flex-col gap-3">
+                                    {col.links.map((link) => (
+                                        <li key={link.label}>
+                                            <a
+                                                href={link.href}
+                                                className="text-sm text-muted-foreground"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+
+                        <div className="flex flex-col gap-3 border-t border-border pt-6">
+                            {!waitlistMode && (
+                                <a
+                                    href={loginHref}
+                                    className="text-center text-base font-medium text-foreground"
+                                >
+                                    Log in
+                                </a>
+                            )}
+                            <a
+                                href={cta.href}
+                                className="bg-gradient-primary rounded-xl px-6 py-3 text-center text-sm font-medium text-primary-foreground shadow-sm"
+                            >
+                                {cta.label}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default SiteNav;
