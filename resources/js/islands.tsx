@@ -1,9 +1,11 @@
 import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
+import AppearanceToggle from './islands/appearance-toggle';
 import ContactForm from './islands/ContactForm';
 import Pricing from './islands/pricing/page';
 import TaxCalculator from './islands/tax-calculator/page';
-import WaitlistForm from './islands/WaitlistForm';
+import Waitlist from './islands/waitlist/page';
+import { initializeTheme } from '@/hooks/use-appearance';
 
 /**
  * Registry of engineer-owned interactive React "islands" mounted into
@@ -16,8 +18,11 @@ import WaitlistForm from './islands/WaitlistForm';
 const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     pricing: Pricing as ComponentType<Record<string, unknown>>,
     'contact-form': ContactForm as ComponentType<Record<string, unknown>>,
-    'waitlist-form': WaitlistForm as ComponentType<Record<string, unknown>>,
+    'waitlist-form': Waitlist as ComponentType<Record<string, unknown>>,
     'tax-calculator': TaxCalculator as ComponentType<Record<string, unknown>>,
+    'appearance-toggle': AppearanceToggle as ComponentType<
+        Record<string, unknown>
+    >,
 };
 
 function mountIslands(): void {
@@ -53,6 +58,11 @@ function mountIslands(): void {
         );
     });
 }
+
+// Sync the stored light/dark/system preference (and listen for OS changes).
+// A blocking inline script in the shell <head> already applied the initial
+// class to avoid a flash; this wires up reactivity for the toggle.
+initializeTheme();
 
 if (document.readyState !== 'loading') {
     mountIslands();

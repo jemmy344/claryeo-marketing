@@ -8,20 +8,31 @@
         <meta name="csrf-token" content="{{ csrf_token }}">
         {{ if meta_description }}<meta name="description" content="{{ meta_description }}">{{ /if }}
         {{ if canonical_url }}<link rel="canonical" href="{{ canonical_url }}">{{ /if }}
+        {{# Apply the saved light/dark/system theme before first paint to avoid a flash. #}}
+        <script src="/theme-init.js"></script>
         {{ vite src="resources/js/site.js|resources/js/islands.tsx|resources/css/site.css" }}
     </head>
-    <body class="min-h-full bg-white font-sans text-zinc-800 antialiased flex flex-col">
-        <header class="border-b border-zinc-100">
-            <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-                <a href="/" class="text-lg font-semibold tracking-tight text-zinc-900">Claryeo</a>
-                <div class="hidden items-center gap-8 text-sm font-medium text-zinc-600 md:flex">
-                    <a href="/pricing" class="hover:text-zinc-900">Pricing</a>
-                    <a href="/blog" class="hover:text-zinc-900">Blog</a>
-                    <a href="/contact" class="hover:text-zinc-900">Contact</a>
+    <body class="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
+        <header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur transition-colors duration-300 supports-backdrop-filter:bg-background/60">
+            <nav class="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
+                <a href="/" class="flex items-center gap-3 transition-opacity hover:opacity-90">
+                    <img src="/favicon.svg" alt="Claryeo" class="h-7 w-auto dark:invert">
+                    <span class="text-lg font-semibold tracking-tight text-foreground">Claryeo</span>
+                </a>
+
+                <div class="hidden items-center gap-8 md:flex">
+                    <a href="/pricing" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Pricing</a>
+                    <a href="/blog" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Blog</a>
+                    <a href="/tax-calculator" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Tax calculator</a>
+                    <a href="/contact" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Contact</a>
                 </div>
-                <div class="flex items-center gap-4 text-sm font-medium">
-                    <a href="{{ claryeo_app_url }}/login" class="text-zinc-600 hover:text-zinc-900">Log in</a>
-                    <a href="/get-started" class="rounded-lg bg-zinc-900 px-4 py-2 text-white hover:bg-zinc-700">Get started</a>
+
+                <div class="flex items-center gap-2">
+                    <div data-island="appearance-toggle" class="shrink-0"></div>
+                    <div class="hidden gap-2 md:flex">
+                        <a href="{{ claryeo_app_url }}/login" class="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">Log in</a>
+                        <a href="/get-started" class="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">Get started</a>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -30,13 +41,13 @@
             {{ slot }}
         </main>
 
-        <footer class="border-t border-zinc-100 bg-zinc-50">
-            <div class="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between">
+        <footer class="border-t border-border bg-background transition-colors duration-300">
+            <div class="mx-auto flex max-w-[1180px] flex-col gap-4 px-4 py-10 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-0">
                 <p>&copy; {{ now format="Y" }} Claryeo. All rights reserved.</p>
                 <div class="flex gap-6">
-                    <a href="/privacy" class="hover:text-zinc-900">Privacy</a>
-                    <a href="/terms" class="hover:text-zinc-900">Terms</a>
-                    <a href="/cookies" class="hover:text-zinc-900">Cookies</a>
+                    <a href="/privacy" class="transition-colors hover:text-foreground">Privacy</a>
+                    <a href="/terms" class="transition-colors hover:text-foreground">Terms</a>
+                    <a href="/cookies" class="transition-colors hover:text-foreground">Cookies</a>
                 </div>
             </div>
         </footer>
