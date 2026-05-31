@@ -2,7 +2,7 @@ import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
 import ContactForm from './islands/ContactForm';
 import Pricing from './islands/Pricing';
-import TaxCalculator from './islands/TaxCalculator';
+import TaxCalculator from './islands/tax-calculator/page';
 import WaitlistForm from './islands/WaitlistForm';
 
 /**
