@@ -79,7 +79,7 @@ class FormProxyTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-island="get-started"', false);
 
-        $props = $this->decodeIslandProps($response->getContent());
+        $props = $this->decodeIslandProps($response->getContent(), 'get-started');
         $this->assertSame('https://app-staging.claryeo.com', $props['appUrl']);
         $this->assertSame('growth', $props['initialPlan']);
         $this->assertSame('annual', $props['initialInterval']);
@@ -95,20 +95,21 @@ class FormProxyTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-island="get-started"', false);
 
-        $props = $this->decodeIslandProps($response->getContent());
+        $props = $this->decodeIslandProps($response->getContent(), 'get-started');
         $this->assertSame([], $props['plans']);
         $this->assertNull($props['initialPlan']);
     }
 
     /**
-     * Decode the HTML-escaped JSON from a single island's data-props attribute.
+     * Decode the HTML-escaped JSON from a named island's data-props attribute.
      *
      * @return array<string, mixed>
      */
-    private function decodeIslandProps(string $html): array
+    private function decodeIslandProps(string $html, string $island): array
     {
-        $this->assertMatchesRegularExpression('/data-props="([^"]*)"/', $html);
-        preg_match('/data-props="([^"]*)"/', $html, $matches);
+        $pattern = '/data-island="'.preg_quote($island, '/').'"\s+data-props="([^"]*)"/';
+        $this->assertMatchesRegularExpression($pattern, $html);
+        preg_match($pattern, $html, $matches);
 
         return json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
     }

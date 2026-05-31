@@ -14,40 +14,65 @@
     </head>
     <body class="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
         <header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur transition-colors duration-300 supports-backdrop-filter:bg-background/60">
-            <nav class="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
-                <a href="/" class="flex items-center gap-3 transition-opacity hover:opacity-90">
-                    <img src="/favicon.svg" alt="Claryeo" class="h-7 w-auto dark:invert">
-                    <span class="text-lg font-semibold tracking-tight text-foreground">Claryeo</span>
-                </a>
-
-                <div class="hidden items-center gap-8 md:flex">
-                    <a href="/pricing" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Pricing</a>
-                    <a href="/blog" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Blog</a>
-                    <a href="/tax-calculator" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Tax calculator</a>
-                    <a href="/contact" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Contact</a>
-                </div>
-
-                <div class="flex items-center gap-2">
-                    <div data-island="appearance-toggle" class="shrink-0"></div>
-                    <div class="hidden gap-2 md:flex">
-                        <a href="{{ claryeo_app_url }}/login" class="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">Log in</a>
+            {{# Interactive header (logo, nav, Resources mega-menu, theme toggle). A
+                server-rendered fallback below keeps nav usable without JS / for SEO;
+                the island replaces it on hydration. #}}
+            <div data-island="site-nav" data-props="{{ nav_props }}">
+                <nav class="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
+                    <a href="/" class="flex items-center gap-3">
+                        <img src="/favicon.svg" alt="Claryeo" class="h-7 w-auto dark:invert">
+                        <span class="text-lg font-semibold tracking-tight text-foreground">Claryeo</span>
+                    </a>
+                    <div class="hidden items-center gap-8 md:flex">
+                        {{ nav_primary }}
+                            <a href="{{ href }}" class="text-sm text-muted-foreground transition-colors hover:text-foreground">{{ label }}</a>
+                        {{ /nav_primary }}
+                        <a href="/blog" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Resources</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <a href="{{ claryeo_app_url }}/login" class="hidden rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:inline-block">Log in</a>
                         <a href="/get-started" class="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">Get started</a>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </header>
 
         <main class="flex-1">
             {{ slot }}
         </main>
 
-        <footer class="border-t border-border bg-background transition-colors duration-300">
-            <div class="mx-auto flex max-w-[1180px] flex-col gap-4 px-4 py-10 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between md:px-0">
-                <p>&copy; {{ now format="Y" }} Claryeo. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="/privacy" class="transition-colors hover:text-foreground">Privacy</a>
-                    <a href="/terms" class="transition-colors hover:text-foreground">Terms</a>
-                    <a href="/cookies" class="transition-colors hover:text-foreground">Cookies</a>
+        <footer class="border-t border-border bg-background pt-16 transition-colors duration-300">
+            <div class="mx-auto max-w-[1180px] px-4 md:px-0">
+                <div class="grid gap-12 md:grid-cols-5">
+                    <div class="md:col-span-2">
+                        <a href="/" class="flex w-fit items-center gap-3">
+                            <img src="/favicon.svg" alt="Claryeo" class="h-8 w-auto dark:invert">
+                            <span class="text-lg font-semibold tracking-tight text-foreground">Claryeo</span>
+                        </a>
+                        <p class="mt-4 max-w-xs text-sm text-muted-foreground">Invoicing, expenses & tax for freelancers and small businesses. Rolling out in Nigeria first.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 sm:grid-cols-4 md:col-span-3">
+                        {{ footer_groups }}
+                            <div class="space-y-4 text-sm">
+                                <span class="block font-medium text-foreground">{{ group }}</span>
+                                {{ items }}
+                                    <a href="{{ href }}" class="block text-muted-foreground transition-colors duration-150 hover:text-foreground">{{ title }}</a>
+                                {{ /items }}
+                            </div>
+                        {{ /footer_groups }}
+                    </div>
+                </div>
+
+                <div class="mt-12 flex flex-wrap items-end justify-between gap-6 border-t border-border py-6">
+                    <span class="order-last block text-center text-sm text-muted-foreground md:order-first">&copy; {{ now format="Y" }} Claryeo. All rights reserved.</span>
+                    <div class="order-first flex flex-wrap justify-center gap-6 md:order-last">
+                        {{ footer_socials }}
+                            <a href="{{ href }}" target="_blank" rel="noopener noreferrer" aria-label="Claryeo on {{ label }}" class="text-muted-foreground transition-colors hover:text-foreground">
+                                <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="{{ path }}"></path></svg>
+                            </a>
+                        {{ /footer_socials }}
+                    </div>
                 </div>
             </div>
         </footer>

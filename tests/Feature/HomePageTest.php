@@ -34,7 +34,7 @@ class HomePageTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-island="landing"', false);
 
-        preg_match('/data-props="([^"]*)"/', $response->getContent(), $matches);
+        preg_match('/data-island="landing"\s+data-props="([^"]*)"/', $response->getContent(), $matches);
         $props = json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
         $this->assertCount(2, $props['plans']);
         $this->assertFalse($props['waitlistMode']);

@@ -35,7 +35,7 @@ class LegalPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-island="legal-document"', false);
 
-        $props = $this->decodeIslandProps($response->getContent());
+        $props = $this->decodeIslandProps($response->getContent(), 'legal-document');
         $this->assertSame('privacy', $props['slug']);
         $this->assertSame('Privacy Policy', $props['title']);
         $this->assertStringContainsString('Hello from the policy.', $props['body']);
@@ -60,7 +60,7 @@ class LegalPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('data-island="legal-versions"', false);
 
-        $props = $this->decodeIslandProps($response->getContent());
+        $props = $this->decodeIslandProps($response->getContent(), 'legal-versions');
         $this->assertSame('2.0.0', $props['currentVersion']);
         $this->assertCount(2, $props['versions']);
         $this->assertSame('/terms', $props['versions'][0]['url']);
@@ -72,10 +72,11 @@ class LegalPageTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function decodeIslandProps(string $html): array
+    private function decodeIslandProps(string $html, string $island): array
     {
-        $this->assertMatchesRegularExpression('/data-props="([^"]*)"/', $html);
-        preg_match('/data-props="([^"]*)"/', $html, $matches);
+        $pattern = '/data-island="'.preg_quote($island, '/').'"\s+data-props="([^"]*)"/';
+        $this->assertMatchesRegularExpression($pattern, $html);
+        preg_match($pattern, $html, $matches);
 
         return json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
     }

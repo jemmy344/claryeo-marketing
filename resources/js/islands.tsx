@@ -9,6 +9,7 @@ import Landing from './islands/landing/page';
 import LegalDocumentPage from './islands/legal/document';
 import LegalVersionsPage from './islands/legal/versions';
 import Pricing from './islands/pricing/page';
+import SiteNav from './islands/site-nav/page';
 import TaxCalculator from './islands/tax-calculator/page';
 import Waitlist from './islands/waitlist/page';
 import { initializeTheme } from '@/hooks/use-appearance';
@@ -29,6 +30,7 @@ const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     'appearance-toggle': AppearanceToggle as ComponentType<
         Record<string, unknown>
     >,
+    'site-nav': SiteNav as ComponentType<Record<string, unknown>>,
     about: About as ComponentType<Record<string, unknown>>,
     landing: Landing as ComponentType<Record<string, unknown>>,
     features: Features as ComponentType<Record<string, unknown>>,

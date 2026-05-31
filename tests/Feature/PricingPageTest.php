@@ -51,7 +51,7 @@ class PricingPageTest extends TestCase
             '/data-island="pricing"\s+data-props="([^"]*)"/',
             $html
         );
-        preg_match('/data-props="([^"]*)"/', $html, $matches);
+        preg_match('/data-island="pricing"\s+data-props="([^"]*)"/', $html, $matches);
         $decoded = json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
         $this->assertIsArray($decoded);
         $this->assertCount(2, $decoded['plans']);
