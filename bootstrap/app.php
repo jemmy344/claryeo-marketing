@@ -13,6 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Railway terminates TLS at its edge and forwards to the container over
+        // HTTP with X-Forwarded-Proto: https. Trust the proxy so Laravel detects
+        // the original HTTPS scheme and generates https:// URLs — otherwise the
+        // CP (and other absolute URLs) emit http://, which browsers block as
+        // mixed content. Railway's proxy IPs are dynamic, hence trusting all.
+        $middleware->trustProxies(at: '*');
+
         $middleware->web(append: [
             CaptureUtmParameters::class,
         ]);
