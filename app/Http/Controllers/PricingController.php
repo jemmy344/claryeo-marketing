@@ -21,11 +21,19 @@ class PricingController extends Controller
         return view('pricing', [
             'title' => 'Pricing — Claryeo',
             'meta_description' => 'Simple, transparent pricing for Claryeo. Choose the plan that fits your business.',
-            'island_props' => json_encode([
-                'plans' => $pricing['plans'] ?? [],
-                'getStartedUrl' => '/get-started',
-                'contactUrl' => '/contact',
-            ]),
+            // HTML-escape the JSON so its structural double quotes become
+            // &quot; and survive embedding in a double-quoted HTML attribute
+            // (Antlers does not escape interpolated values here). The browser
+            // un-escapes the attribute before the island's JSON.parse runs.
+            'island_props' => htmlspecialchars(
+                (string) json_encode([
+                    'plans' => $pricing['plans'] ?? [],
+                    'getStartedUrl' => '/get-started',
+                    'contactUrl' => '/contact',
+                ]),
+                ENT_QUOTES,
+                'UTF-8'
+            ),
         ]);
     }
 }

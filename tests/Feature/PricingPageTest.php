@@ -35,6 +35,21 @@ class PricingPageTest extends TestCase
         $response->assertSee('Simple, transparent pricing', false);
         $response->assertSee('data-island="pricing"', false);
         $response->assertSee('growth', false);
+
+        // The props must be HTML-escaped so the attribute is not broken by the
+        // JSON's own double quotes — extract it and confirm it decodes to the
+        // plan catalog the island expects. (Regression: raw quotes truncated
+        // the attribute and the island hydrated with empty props.)
+        $html = $response->getContent();
+        $this->assertMatchesRegularExpression(
+            '/data-island="pricing"\s+data-props="([^"]*)"/',
+            $html
+        );
+        preg_match('/data-props="([^"]*)"/', $html, $matches);
+        $decoded = json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
+        $this->assertIsArray($decoded);
+        $this->assertCount(2, $decoded['plans']);
+        $this->assertSame('Growth', $decoded['plans'][1]['name']);
     }
 
     public function test_pricing_page_renders_when_api_unavailable(): void
