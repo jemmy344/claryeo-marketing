@@ -92,8 +92,13 @@ class AppServiceProvider extends ServiceProvider
         View::share('footer_groups', $this->footerGroups($nav['footer'] ?? [], $waitlistMode));
         View::share('footer_socials', $nav['social'] ?? []);
 
-        // Blog category chips (slug => title).
-        View::share('blog_categories', Config::array('marketing.blog_categories', []));
+        // Blog category chips. Antlers can't iterate an associative array as
+        // key/value pairs, so expose a list of {key, value} entries.
+        $blogCategories = [];
+        foreach (Config::array('marketing.blog_categories', []) as $slug => $title) {
+            $blogCategories[] = ['key' => $slug, 'value' => $title];
+        }
+        View::share('blog_categories', $blogCategories);
     }
 
     /**
