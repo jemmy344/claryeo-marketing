@@ -24,7 +24,7 @@ class LandingController extends Controller
                 (string) json_encode([
                     'plans' => $pricing['plans'] ?? [],
                     'showLogoCloud' => false,
-                    'waitlistMode' => false,
+                    'waitlistMode' => (bool) config('marketing.waitlist_mode'),
                 ]),
                 ENT_QUOTES,
                 'UTF-8'

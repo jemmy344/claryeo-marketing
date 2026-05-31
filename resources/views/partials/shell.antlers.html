@@ -30,8 +30,8 @@
                         <a href="/blog" class="text-sm text-muted-foreground transition-colors hover:text-foreground">Resources</a>
                     </div>
                     <div class="flex items-center gap-2">
-                        <a href="{{ claryeo_app_url }}/login" class="hidden rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:inline-block">Log in</a>
-                        <a href="/get-started" class="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">Get started</a>
+                        {{ unless waitlist_mode }}<a href="{{ claryeo_app_url }}/login" class="hidden rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:inline-block">Log in</a>{{ /unless }}
+                        <a href="{{ primary_cta:href }}" class="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">{{ primary_cta:label }}</a>
                     </div>
                 </nav>
             </div>

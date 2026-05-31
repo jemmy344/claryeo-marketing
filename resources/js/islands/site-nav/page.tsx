@@ -17,6 +17,8 @@ type SiteNavProps = {
         columns?: ResourceColumn[];
         support?: SupportLink[];
     };
+    waitlistMode?: boolean;
+    cta?: { label: string; href: string };
 };
 
 const linkClass =
@@ -26,15 +28,23 @@ const SiteNav: FC<SiteNavProps> = ({
     appUrl = '',
     primary = [],
     resources = {},
+    waitlistMode = false,
+    cta = { label: 'Get started', href: '/get-started' },
 }) => {
     const [resourcesOpen, setResourcesOpen] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const columns = resources.columns ?? [];
-    const support = resources.support ?? [];
+    // In waitlist mode, pricing/get-started links are removed from the menus.
+    const hidden = waitlistMode ? ['/pricing', '/get-started'] : [];
+    const visible = (href: string): boolean => !hidden.includes(href);
+
+    const columns = (resources.columns ?? []).map((col) => ({
+        ...col,
+        links: col.links.filter((l) => visible(l.href)),
+    }));
+    const support = (resources.support ?? []).filter((s) => visible(s.href));
     const lead = resources.lead;
-    const getStartedHref = '/get-started';
     const loginHref = `${appUrl}/login`;
 
     // Close the mega-menu on Escape; close the mobile sheet when crossing to md.
@@ -139,17 +149,19 @@ const SiteNav: FC<SiteNavProps> = ({
                 <div className="flex items-center gap-2">
                     <AppearanceToggle className="shrink-0" />
                     <div className="hidden items-center gap-2 md:flex">
+                        {!waitlistMode && (
+                            <a
+                                href={loginHref}
+                                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            >
+                                Log in
+                            </a>
+                        )}
                         <a
-                            href={loginHref}
-                            className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                        >
-                            Log in
-                        </a>
-                        <a
-                            href={getStartedHref}
+                            href={cta.href}
                             className="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                         >
-                            Get started
+                            {cta.label}
                         </a>
                     </div>
 
@@ -279,17 +291,19 @@ const SiteNav: FC<SiteNavProps> = ({
                         ))}
 
                         <div className="flex flex-col gap-3 border-t border-border pt-6">
+                            {!waitlistMode && (
+                                <a
+                                    href={loginHref}
+                                    className="text-center text-base font-medium text-foreground"
+                                >
+                                    Log in
+                                </a>
+                            )}
                             <a
-                                href={loginHref}
-                                className="text-center text-base font-medium text-foreground"
-                            >
-                                Log in
-                            </a>
-                            <a
-                                href={getStartedHref}
+                                href={cta.href}
                                 className="bg-gradient-primary rounded-xl px-6 py-3 text-center text-sm font-medium text-primary-foreground shadow-sm"
                             >
-                                Get started
+                                {cta.label}
                             </a>
                         </div>
                     </div>

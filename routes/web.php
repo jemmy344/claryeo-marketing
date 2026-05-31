@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', LandingController::class)->name('home');
 
-Route::get('pricing', PricingController::class)->name('pricing');
+Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')->name('pricing');
 
 Route::view('features', 'features', [
     'title' => 'Features — Claryeo',
@@ -23,7 +23,7 @@ Route::view('about', 'about', [
     'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
 ])->name('about');
 
-Route::get('get-started', GetStartedController::class)->name('get-started');
+Route::get('get-started', GetStartedController::class)->middleware('waitlist.redirect')->name('get-started');
 
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
 Route::post('tax-calculator/report', [TaxCalculatorController::class, 'report'])->middleware('throttle:6,1')->name('taxCalculator.report.store');
