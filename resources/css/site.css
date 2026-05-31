@@ -54,3 +54,40 @@
         color: transparent;
     }
 }
+
+/*
+ * Gradient utilities ported verbatim from the main app (resources/css/app.css)
+ * so React islands copied from there resolve the same class names — without
+ * these, `bg-gradient-primary` buttons render transparent (invisible text).
+ */
+@layer utilities {
+    .bg-gradient-primary {
+        background: linear-gradient(
+            135deg,
+            var(--gradient-primary-from),
+            var(--gradient-primary-to)
+        );
+    }
+
+    .text-gradient-primary {
+        background: linear-gradient(
+            135deg,
+            var(--gradient-primary-from),
+            var(--gradient-primary-to)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+    }
+
+    .border-gradient-primary {
+        border-color: var(--gradient-primary-from);
+        border-image: linear-gradient(
+                135deg,
+                var(--gradient-primary-from),
+                var(--gradient-primary-to)
+            )
+            1;
+    }
+}
