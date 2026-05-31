@@ -61,14 +61,56 @@ class FormProxyTest extends TestCase
             && $request->hasHeader('X-Internal-Token', 'secret'));
     }
 
-    public function test_get_started_redirects_to_app_with_plan(): void
+    public function test_get_started_renders_island_with_plans_and_app_handoff(): void
     {
-        $this->get('/get-started?plan=growth&billing_interval=annual')
-            ->assertRedirect('https://app-staging.claryeo.com/start?plan=growth&billing_interval=annual');
+        Http::fake([
+            'web.test/api/internal/pricing' => Http::response(['data' => [
+                'plans' => [
+                    ['key' => 'free', 'name' => 'Free', 'priceLabel' => 'NGN 0'],
+                    ['key' => 'growth', 'name' => 'Growth', 'priceLabel' => 'NGN 5,000'],
+                ],
+                'comparisonMatrix' => [],
+                'comparisonAddOns' => [],
+            ]]),
+        ]);
+
+        $response = $this->get('/get-started?plan=growth&billing_interval=annual');
+
+        $response->assertOk();
+        $response->assertSee('data-island="get-started"', false);
+
+        $props = $this->decodeIslandProps($response->getContent(), 'get-started');
+        $this->assertSame('https://app-staging.claryeo.com', $props['appUrl']);
+        $this->assertSame('growth', $props['initialPlan']);
+        $this->assertSame('annual', $props['initialInterval']);
+        $this->assertCount(2, $props['plans']);
     }
 
-    public function test_get_started_redirects_without_plan(): void
+    public function test_get_started_renders_when_api_unavailable(): void
     {
-        $this->get('/get-started')->assertRedirect('https://app-staging.claryeo.com/start');
+        Http::fake(['web.test/api/internal/pricing' => Http::response('', 500)]);
+
+        $response = $this->get('/get-started');
+
+        $response->assertOk();
+        $response->assertSee('data-island="get-started"', false);
+
+        $props = $this->decodeIslandProps($response->getContent(), 'get-started');
+        $this->assertSame([], $props['plans']);
+        $this->assertNull($props['initialPlan']);
+    }
+
+    /**
+     * Decode the HTML-escaped JSON from a named island's data-props attribute.
+     *
+     * @return array<string, mixed>
+     */
+    private function decodeIslandProps(string $html, string $island): array
+    {
+        $pattern = '/data-island="'.preg_quote($island, '/').'"\s+data-props="([^"]*)"/';
+        $this->assertMatchesRegularExpression($pattern, $html);
+        preg_match($pattern, $html, $matches);
+
+        return json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
     }
 }

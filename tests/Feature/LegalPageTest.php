@@ -16,12 +16,16 @@ class LegalPageTest extends TestCase
         config()->set('services.main_api.token', 'secret');
     }
 
-    public function test_privacy_page_renders_markdown_from_api(): void
+    public function test_privacy_page_renders_document_island_from_api(): void
     {
         Http::fake([
+            'web.test/api/internal/legal/privacy/versions' => Http::response(['data' => [
+                'currentVersion' => '2.1.1',
+                'versions' => [['version' => '2.1.1', 'effective_date' => '2026-03-19', 'status' => 'active']],
+            ]]),
             'web.test/api/internal/legal/privacy' => Http::response(['data' => [
                 'body' => "## Section one\n\nHello from the policy.",
-                'meta' => ['effective_date' => '2026-03-19'],
+                'meta' => ['effective_date' => '2026-03-19', 'status' => 'active'],
                 'version' => '2.1.1',
             ]]),
         ]);
@@ -29,13 +33,17 @@ class LegalPageTest extends TestCase
         $response = $this->get('/privacy');
 
         $response->assertOk();
-        $response->assertSee('Privacy Policy', false);
-        $response->assertSee('Hello from the policy.', false);
-        $response->assertSee('Effective 2026-03-19', false);
-        $response->assertSee('Section one', false);
+        $response->assertSee('data-island="legal-document"', false);
+
+        $props = $this->decodeIslandProps($response->getContent(), 'legal-document');
+        $this->assertSame('privacy', $props['slug']);
+        $this->assertSame('Privacy Policy', $props['title']);
+        $this->assertStringContainsString('Hello from the policy.', $props['body']);
+        $this->assertSame('2.1.1', $props['version']);
+        $this->assertSame('2.1.1', $props['currentVersion']);
     }
 
-    public function test_versions_page_lists_versions_with_current_badge(): void
+    public function test_versions_page_renders_versions_island_from_api(): void
     {
         Http::fake([
             'web.test/api/internal/legal/terms/versions' => Http::response(['data' => [
@@ -50,9 +58,27 @@ class LegalPageTest extends TestCase
         $response = $this->get('/terms/versions');
 
         $response->assertOk();
-        $response->assertSee('Version 2.0.0', false);
-        $response->assertSee('Version 1.0.0', false);
-        $response->assertSee('Current', false);
+        $response->assertSee('data-island="legal-versions"', false);
+
+        $props = $this->decodeIslandProps($response->getContent(), 'legal-versions');
+        $this->assertSame('2.0.0', $props['currentVersion']);
+        $this->assertCount(2, $props['versions']);
+        $this->assertSame('/terms', $props['versions'][0]['url']);
+        $this->assertSame('/terms/1.0.0', $props['versions'][1]['url']);
+    }
+
+    /**
+     * Decode the HTML-escaped JSON from a single island's data-props attribute.
+     *
+     * @return array<string, mixed>
+     */
+    private function decodeIslandProps(string $html, string $island): array
+    {
+        $pattern = '/data-island="'.preg_quote($island, '/').'"\s+data-props="([^"]*)"/';
+        $this->assertMatchesRegularExpression($pattern, $html);
+        preg_match($pattern, $html, $matches);
+
+        return json_decode(html_entity_decode($matches[1], ENT_QUOTES, 'UTF-8'), true);
     }
 
     public function test_unknown_legal_slug_is_not_found(): void

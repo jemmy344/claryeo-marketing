@@ -1,0 +1,8 @@
+title: Blog
+route: '/blog/{slug}'
+template: blog/show
+date: true
+sort_dir: desc
+taxonomies:
+  - categories
+default_publish_state: true

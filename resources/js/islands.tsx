@@ -1,9 +1,23 @@
 import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
-import ContactForm from './islands/ContactForm';
-import Pricing from './islands/Pricing';
-import TaxCalculator from './islands/TaxCalculator';
-import WaitlistForm from './islands/WaitlistForm';
+import About from './islands/about/page';
+import AppearanceToggle from './islands/appearance-toggle';
+import ContactForm from './islands/contact/page';
+import FeaturePage from './islands/feature/page';
+import Features from './islands/features/page';
+import GetStarted from './islands/get-started/page';
+import GuideFreelancer from './islands/guides/freelancer-tax-nigeria';
+import GuideInvoice from './islands/guides/invoice-guide-nigeria';
+import GuidePaye from './islands/guides/paye-tax-nigeria';
+import GuideSmallBusiness from './islands/guides/small-business-tax-nigeria';
+import Landing from './islands/landing/page';
+import LegalDocumentPage from './islands/legal/document';
+import LegalVersionsPage from './islands/legal/versions';
+import Pricing from './islands/pricing/page';
+import SiteNav from './islands/site-nav/page';
+import TaxCalculator from './islands/tax-calculator/page';
+import Waitlist from './islands/waitlist/page';
+import { initializeTheme } from '@/hooks/use-appearance';
 
 /**
  * Registry of engineer-owned interactive React "islands" mounted into
@@ -16,8 +30,35 @@ import WaitlistForm from './islands/WaitlistForm';
 const registry: Record<string, ComponentType<Record<string, unknown>>> = {
     pricing: Pricing as ComponentType<Record<string, unknown>>,
     'contact-form': ContactForm as ComponentType<Record<string, unknown>>,
-    'waitlist-form': WaitlistForm as ComponentType<Record<string, unknown>>,
+    'waitlist-form': Waitlist as ComponentType<Record<string, unknown>>,
     'tax-calculator': TaxCalculator as ComponentType<Record<string, unknown>>,
+    'appearance-toggle': AppearanceToggle as ComponentType<
+        Record<string, unknown>
+    >,
+    'site-nav': SiteNav as ComponentType<Record<string, unknown>>,
+    about: About as ComponentType<Record<string, unknown>>,
+    landing: Landing as ComponentType<Record<string, unknown>>,
+    features: Features as ComponentType<Record<string, unknown>>,
+    feature: FeaturePage as ComponentType<Record<string, unknown>>,
+    'guide-paye-tax-nigeria': GuidePaye as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-small-business-tax-nigeria': GuideSmallBusiness as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-freelancer-tax-nigeria': GuideFreelancer as ComponentType<
+        Record<string, unknown>
+    >,
+    'guide-invoice-guide-nigeria': GuideInvoice as ComponentType<
+        Record<string, unknown>
+    >,
+    'get-started': GetStarted as ComponentType<Record<string, unknown>>,
+    'legal-document': LegalDocumentPage as ComponentType<
+        Record<string, unknown>
+    >,
+    'legal-versions': LegalVersionsPage as ComponentType<
+        Record<string, unknown>
+    >,
 };
 
 function mountIslands(): void {
@@ -53,6 +94,11 @@ function mountIslands(): void {
         );
     });
 }
+
+// Sync the stored light/dark/system preference (and listen for OS changes).
+// A blocking inline script in the shell <head> already applied the initial
+// class to avoid a flash; this wires up reactivity for the toggle.
+initializeTheme();
 
 if (document.readyState !== 'loading') {
     mountIslands();
