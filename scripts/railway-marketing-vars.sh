@@ -30,6 +30,10 @@ set -euo pipefail
 RAILWAY_MARKETING_SERVICE="${RAILWAY_MARKETING_SERVICE:-marketing}"
 # The main app's service name on Railway's private network (for MAIN_API_URL).
 RAILWAY_WEB_SERVICE="${RAILWAY_WEB_SERVICE:-web}"
+# The fixed port web listens on (must match PORT set on the web service). Used
+# as a literal in MAIN_API_URL — the ${{web.PORT}} reference doesn't resolve for
+# Railway's auto-injected PORT, which leaves the URL portless (connects to :80).
+RAILWAY_WEB_PORT="${RAILWAY_WEB_PORT:-8080}"
 
 PROD_MARKETING_DOMAIN="${PROD_MARKETING_DOMAIN:-claryeo.com}"
 PROD_APP_DOMAIN="${PROD_APP_DOMAIN:-app.claryeo.com}"
@@ -57,11 +61,12 @@ railway status >/dev/null 2>&1 || { err "This directory isn't linked to a Railwa
 configure() {
     local env_name="$1" app_env="$2" app_debug="$3" marketing_domain="$4" app_domain="$5"
 
-    # Single-quote MAIN_API_URL so the literal ${{web.PORT}} reference reaches
-    # Railway instead of being expanded by bash.
+    # Literal host:port over Railway's private network. Port is hardcoded (not a
+    # ${{web.PORT}} reference) because that reference doesn't resolve for the
+    # auto-injected PORT and would leave MAIN_API_URL portless (connecting :80).
     local main_api_ref
-    main_api_ref=$(printf 'MAIN_API_URL=http://%s.railway.internal:${{%s.PORT}}' \
-        "$RAILWAY_WEB_SERVICE" "$RAILWAY_WEB_SERVICE")
+    main_api_ref=$(printf 'MAIN_API_URL=http://%s.railway.internal:%s' \
+        "$RAILWAY_WEB_SERVICE" "$RAILWAY_WEB_PORT")
 
     log "Setting ${RAILWAY_MARKETING_SERVICE} vars for ${env_name}..."
     railway variable set -s "$RAILWAY_MARKETING_SERVICE" -e "$env_name" --skip-deploys \
