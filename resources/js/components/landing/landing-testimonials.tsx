@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const testimonials = [
@@ -8,7 +8,6 @@ const testimonials = [
         quote: 'Claryeo has transformed the way I manage invoicing and tax. Invoicing, expenses, and FIRS-ready summaries in one place. A game-changer for freelancers in Nigeria.',
         author: 'Shekinah T.',
         role: 'Freelance Designer',
-        avatar: 'https://tailus.io/images/reviews/shekinah.webp',
         fallback: 'ST',
         featured: true,
     },
@@ -16,7 +15,6 @@ const testimonials = [
         quote: 'Clean, simple, and tax-ready. Exactly what our small business needed. We’re rolling it out to the whole team.',
         author: 'Jonathan Y.',
         role: 'Small Business Owner',
-        avatar: 'https://tailus.io/images/reviews/jonathan.webp',
         fallback: 'JY',
         featured: false,
     },
@@ -24,7 +22,6 @@ const testimonials = [
         quote: 'Great work on the tax summaries. One of the best tools I’ve seen for Nigerian freelancers.',
         author: 'Yucel F.',
         role: 'Software Engineer',
-        avatar: 'https://tailus.io/images/reviews/yucel.webp',
         fallback: 'YF',
         featured: false,
     },
@@ -32,11 +29,13 @@ const testimonials = [
         quote: 'Expense tracking and reports are a game-changer. Join the waitlist if you haven’t already.',
         author: 'Rodrigo A.',
         role: 'Freelancer',
-        avatar: 'https://tailus.io/images/reviews/rodrigo.webp',
         fallback: 'RA',
         featured: false,
     },
 ];
+
+const avatarClass =
+    'size-12 bg-primary-surface text-primary-surface-foreground font-medium';
 
 const LandingTestimonials: FC = () => (
     <section
@@ -70,13 +69,8 @@ const LandingTestimonials: FC = () => (
                                 {testimonials[0].quote}
                             </p>
                             <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-                                <Avatar className="size-12">
-                                    <AvatarImage
-                                        src={testimonials[0].avatar}
-                                        alt={testimonials[0].author}
-                                        loading="lazy"
-                                    />
-                                    <AvatarFallback>
+                                <Avatar className={avatarClass}>
+                                    <AvatarFallback className="bg-primary-surface text-primary-surface-foreground font-medium">
                                         {testimonials[0].fallback}
                                     </AvatarFallback>
                                 </Avatar>
@@ -100,13 +94,8 @@ const LandingTestimonials: FC = () => (
                                     {t.quote}
                                 </p>
                                 <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-                                    <Avatar className="size-12">
-                                        <AvatarImage
-                                            src={t.avatar}
-                                            alt={t.author}
-                                            loading="lazy"
-                                        />
-                                        <AvatarFallback>
+                                    <Avatar className={avatarClass}>
+                                        <AvatarFallback className="bg-primary-surface text-primary-surface-foreground font-medium">
                                             {t.fallback}
                                         </AvatarFallback>
                                     </Avatar>
