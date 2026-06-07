@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "64b057e52dc09a2694340f8a149a4793",
+    "content-hash": "f7d73f7d2603960296107d4dd75f499c",
     "packages": [
         {
             "name": "ajthinking/archetype",
@@ -5232,16 +5232,16 @@
         },
         {
             "name": "statamic/cms",
-            "version": "v6.20.0",
+            "version": "v6.20.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/statamic/cms.git",
-                "reference": "3363f7c1c1b9882c21d146773ad6483d78fc3df1"
+                "reference": "83b33ca56e21b73e29de36072ce04e1381eae455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/statamic/cms/zipball/3363f7c1c1b9882c21d146773ad6483d78fc3df1",
-                "reference": "3363f7c1c1b9882c21d146773ad6483d78fc3df1",
+                "url": "https://api.github.com/repos/statamic/cms/zipball/83b33ca56e21b73e29de36072ce04e1381eae455",
+                "reference": "83b33ca56e21b73e29de36072ce04e1381eae455",
                 "shasum": ""
             },
             "require": {
@@ -5255,7 +5255,7 @@
                 "laravel/framework": "^12.40.0 || ^13.0",
                 "laravel/prompts": "^0.3.0",
                 "league/commonmark": "^2.2",
-                "league/csv": "^9.0",
+                "league/csv": "^9.1",
                 "league/glide": "^3.0",
                 "maennchen/zipstream-php": "^3.1",
                 "michelf/php-smartypants": "^1.8.1",
@@ -5353,7 +5353,7 @@
             ],
             "support": {
                 "issues": "https://github.com/statamic/cms/issues",
-                "source": "https://github.com/statamic/cms/tree/v6.20.0"
+                "source": "https://github.com/statamic/cms/tree/v6.20.2"
             },
             "funding": [
                 {
@@ -5361,7 +5361,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-05-23T00:02:23+00:00"
+            "time": "2026-06-05T14:37:13+00:00"
         },
         {
             "name": "statamic/stringy",
