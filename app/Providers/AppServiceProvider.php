@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\MainApi;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -68,6 +69,10 @@ class AppServiceProvider extends ServiceProvider
             'lead' => ['label' => 'All features', 'href' => '/features'],
             'items' => $featureItems,
         ];
+
+        // @vitejs/plugin-react needs its dev preamble before islands.tsx loads;
+        // Statamic's {{ vite }} tag doesn't emit it. Empty string in prod.
+        View::share('vite_react_refresh', (string) Vite::reactRefresh());
 
         View::share('claryeo_app_url', $appUrl);
         View::share('waitlist_mode', $waitlistMode);
