@@ -13,6 +13,7 @@
         {{ if canonical_url }}<link rel="canonical" href="{{ canonical_url }}">{{ /if }}
         {{# Apply the saved light/dark/system theme before first paint to avoid a flash. #}}
         <script src="/theme-init.js"></script>
+        {{ vite_react_refresh | raw }}
         {{ vite src="resources/js/site.js|resources/js/islands.tsx|resources/css/site.css" }}
     </head>
     <body class="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
