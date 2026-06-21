@@ -19,11 +19,15 @@
 /public/hot
 /public/static
 /public/storage
-# Statamic CP assets are build artifacts: the Dockerfile runs
-# `php artisan statamic:install` (after COPY) which republishes them from the
-# version-matched Composer package, so they're regenerated in the image and
-# don't need committing.
-/public/vendor/statamic
+# Statamic 6 ships the CP as a build artifact: resources/dist is empty in the
+# Composer package, so the compiled CP assets are NOT in the download and CANNOT
+# be regenerated in the Docker image (statamic:install finds nothing to publish
+# and the Vite manifest goes missing — 500s the CP). Commit the published CP
+# assets so they ship via COPY. Re-run
+# `php artisan vendor:publish --tag=statamic-cp --force` and recommit after every
+# Statamic upgrade.
+/public/vendor/statamic/*
+!/public/vendor/statamic/cp
 /storage/*.key
 /storage/pail
 /users/*
