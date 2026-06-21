@@ -134,6 +134,14 @@
     html {
         @apply bg-background;
         min-height: 100%;
+        /* Offset anchor targets so they aren't hidden under the sticky header (h-14). */
+        scroll-padding-top: 4rem;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
     }
 
     body {
