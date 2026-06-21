@@ -25,4 +25,14 @@ return [
         'business' => 'Running a business',
         'product' => 'Product updates',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Blog view tracking
+    |--------------------------------------------------------------------------
+    | Powers the popularity-ranked "Top Reads" block. View counts are stored
+    | internally (SQLite) and never shown to visitors. Disable in environments
+    | where you don't want to record views (e.g. local development).
+    */
+    'view_tracking' => (bool) env('BLOG_VIEW_TRACKING', true),
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\View\Composers\BlogIndexComposer;
 use App\Services\MainApi;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\View;
@@ -104,6 +105,9 @@ class AppServiceProvider extends ServiceProvider
             $blogCategories[] = ['key' => $slug, 'value' => $title];
         }
         View::share('blog_categories', $blogCategories);
+
+        // Popularity-ranked "Top Reads" for the blog index.
+        View::composer('blog.index', BlogIndexComposer::class);
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogViewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
@@ -20,13 +21,18 @@ Route::get('features/{slug}', [FeatureController::class, 'show'])->name('feature
 
 Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 
+// Records a session-deduped view for the "Top Reads" ranking. Hit by a small
+// client-side beacon on the post page; a distinct path from Statamic's native
+// GET /blog/{slug} so there is no routing conflict.
+Route::post('blog/{id}/view', BlogViewController::class)
+    ->middleware('throttle:30,1')
+    ->name('blog.view');
+
 // Blog index + category filter. Individual posts (/blog/{slug}) are served
 // natively by the Statamic `blog` collection route (template: blog/show).
 Route::view('blog', 'blog.index', [
     'title' => 'Blog — Claryeo',
     'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses.',
-    'heading' => 'The Claryeo blog',
-    'intro' => 'Practical, plain-English guidance on invoicing, expenses, bank sync, and tax — built for Nigerian freelancers and small businesses.',
     'activeCategory' => null,
 ])->name('blog');
 
@@ -39,8 +45,6 @@ Route::get('blog/category/{category}', function (string $category) {
     return view('blog.index', [
         'title' => $categories[$category].' — Claryeo blog',
         'meta_description' => 'Claryeo blog posts on '.$categories[$category].'.',
-        'heading' => $categories[$category],
-        'intro' => 'Posts filed under '.$categories[$category].'.',
         'activeCategory' => $category,
     ]);
 })->name('blog.category');

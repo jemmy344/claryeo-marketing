@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class BlogPageTest extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -17,7 +21,9 @@ class BlogPageTest extends TestCase
     {
         $this->get('/blog')
             ->assertOk()
-            ->assertSee('The Claryeo blog')
+            ->assertSee('The Latest')
+            ->assertSee('Top Reads')
+            ->assertSee('Browse by categories')
             ->assertSee('VAT for Nigerian small businesses')
             ->assertSee('5 invoicing mistakes that delay your payments');
     }
@@ -58,5 +64,87 @@ class BlogPageTest extends TestCase
     public function test_unknown_post_is_not_found(): void
     {
         $this->get('/blog/nope')->assertNotFound();
+    }
+
+    public function test_recording_a_view_increments_the_counter(): void
+    {
+        $this->post('/blog/blog-vat-nigerian-small-businesses/view')
+            ->assertNoContent();
+
+        $this->assertDatabaseHas('post_views', [
+            'entry_id' => 'blog-vat-nigerian-small-businesses',
+            'views' => 1,
+        ]);
+    }
+
+    public function test_a_repeat_view_in_the_same_session_is_not_counted(): void
+    {
+        $this->withSession(['blog_viewed_blog-vat-nigerian-small-businesses' => true])
+            ->post('/blog/blog-vat-nigerian-small-businesses/view')
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('post_views', [
+            'entry_id' => 'blog-vat-nigerian-small-businesses',
+        ]);
+    }
+
+    public function test_views_are_not_recorded_for_unknown_entries(): void
+    {
+        $this->post('/blog/not-a-real-entry/view')->assertNoContent();
+
+        $this->assertDatabaseMissing('post_views', ['entry_id' => 'not-a-real-entry']);
+    }
+
+    public function test_view_tracking_can_be_disabled_via_config(): void
+    {
+        config(['marketing.view_tracking' => false]);
+
+        $this->post('/blog/blog-vat-nigerian-small-businesses/view')
+            ->assertNoContent();
+
+        $this->assertDatabaseMissing('post_views', [
+            'entry_id' => 'blog-vat-nigerian-small-businesses',
+        ]);
+    }
+
+    public function test_top_reads_are_ranked_by_view_count(): void
+    {
+        // Give the OLDEST post the most views; without ranking it would never
+        // appear before "Browse by categories" (it would sit in the dated grid).
+        DB::table('post_views')->insert([
+            ['entry_id' => 'blog-bank-sync-vs-manual-bookkeeping', 'views' => 100, 'last_viewed_at' => now()],
+            ['entry_id' => 'blog-vat-nigerian-small-businesses', 'views' => 50, 'last_viewed_at' => now()],
+            ['entry_id' => 'blog-invoicing-mistakes-delay-payments', 'views' => 25, 'last_viewed_at' => now()],
+        ]);
+
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSeeInOrder([
+                'Bank sync vs. manual bookkeeping',
+                'Browse by categories',
+            ]);
+    }
+
+    public function test_top_reads_fall_back_to_recent_posts_without_views(): void
+    {
+        $this->get('/blog')
+            ->assertOk()
+            ->assertSee('Top Reads')
+            // With no recorded views, the block fills with recent posts.
+            ->assertSeeInOrder([
+                'Top Reads',
+                'Browse by categories',
+            ]);
+    }
+
+    public function test_related_posts_are_filtered_by_category(): void
+    {
+        // VAT post is in the "tax" category. Related should show a tax sibling
+        // and never an invoicing-only post.
+        $this->get('/blog/vat-for-nigerian-small-businesses')
+            ->assertOk()
+            ->assertSee('Related posts')
+            ->assertSee('Guide to Klaviyo')
+            ->assertDontSee('5 invoicing mistakes that delay your payments');
     }
 }

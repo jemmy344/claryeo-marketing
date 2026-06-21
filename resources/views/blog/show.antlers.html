@@ -2,33 +2,225 @@
     Single blog post. Rendered by the Statamic `blog` collection (the entry is
     in scope here) and wrapped by layout.antlers.html, which supplies the shell.
 #}}
-<article class="mx-auto max-w-3xl px-4 py-12 md:py-16">
-    <nav class="mb-8 text-sm text-muted-foreground">
-        <a href="/blog" class="transition-colors hover:text-foreground">&larr; Back to the blog</a>
-    </nav>
-
-    <div class="flex flex-wrap gap-2">
-        {{ categories }}
-            <a href="/blog/category/{{ slug }}" class="rounded-full bg-primary-surface px-2.5 py-0.5 text-xs font-medium text-primary-surface-foreground">{{ title }}</a>
-        {{ /categories }}
+<div class="relative">
+    {{# Subtle decorative background shapes (brand purple). Kept in a separately
+        clipped layer so they don't introduce an `overflow-hidden` ancestor that
+        would break the sticky sidebar below. #}}
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 right-0 size-72 rounded-full bg-primary/5 blur-3xl"></div>
+        <div class="absolute top-1/3 -left-16 size-56 rounded-full bg-primary/5 blur-3xl"></div>
     </div>
 
-    <h1 class="mt-4 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">{{ title }}</h1>
-    <p class="mt-3 text-sm text-muted-foreground">{{ author }} &middot; {{ date format="j F Y" }}</p>
+    <div class="relative mx-auto max-w-[1180px] px-4 py-10 md:px-0 md:py-14">
+        <nav class="text-sm text-muted-foreground">
+            <a href="/blog" class="inline-flex items-center gap-1 transition-colors hover:text-primary">&larr; Back to the blog</a>
+        </nav>
 
-    {{ if hero_image }}
-        <div class="mt-8 aspect-[16/9] overflow-hidden rounded-2xl border border-border bg-muted">
-            <img src="{{ hero_image }}" alt="{{ title }}" class="h-full w-full object-cover">
+        <header class="mx-auto mt-6 max-w-3xl text-center">
+            <div class="flex flex-wrap justify-center gap-2">
+                {{ categories }}
+                    <a href="/blog/category/{{ slug }}" class="rounded-full bg-primary-surface px-3 py-1 text-xs font-medium text-primary-surface-foreground transition-opacity hover:opacity-80">{{ title }}</a>
+                {{ /categories }}
+            </div>
+
+            <h1 class="mt-4 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">{{ title }}</h1>
+            <p class="mt-3 text-sm text-muted-foreground">{{ author }} &middot; {{ date format="j F Y" }}</p>
+        </header>
+
+        {{ if hero_image }}
+            <div class="mx-auto mt-8 aspect-[16/10] w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-muted shadow-sm">
+                <img src="{{ hero_image }}" alt="{{ title }}" class="h-full w-full object-cover">
+            </div>
+        {{ /if }}
+
+        <div class="mt-10 grid gap-10 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+            {{# Sidebar: auto-generated table of contents + newsletter CTA #}}
+            <aside class="lg:sticky lg:top-24 lg:self-start">
+                <div class="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                    <nav id="blog-toc-wrap" class="hidden p-5" aria-label="Table of contents">
+                        <h2 class="text-sm font-semibold tracking-tight text-foreground">Table Of Contents</h2>
+                        <ul id="blog-toc" class="mt-4 space-y-2.5 text-sm"></ul>
+                    </nav>
+
+                    <div class="border-t border-border bg-primary-surface p-5">
+                        <h2 class="text-base font-semibold tracking-tight text-primary-surface-foreground">Subscribe Now</h2>
+                        <p class="mt-1.5 text-xs leading-relaxed text-primary-surface-foreground/80">Get practical invoicing, expenses &amp; tax tips for Nigerian businesses — straight to your inbox.</p>
+                        <form class="mt-4 space-y-2.5" action="{{ primary_cta:href }}" method="get">
+                            <label class="sr-only" for="blog-subscribe-email">Email address</label>
+                            <input
+                                id="blog-subscribe-email"
+                                type="email"
+                                name="email"
+                                placeholder="Enter your Email Address"
+                                class="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                            >
+                            <button type="submit" class="bg-gradient-primary inline-flex w-full items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">Subscribe Now &rarr;</button>
+                        </form>
+                    </div>
+                </div>
+            </aside>
+
+            {{# Main content #}}
+            <div>
+                <div id="blog-content" class="prose prose-zinc dark:prose-invert max-w-none prose-headings:scroll-mt-24 prose-headings:tracking-tight prose-a:text-primary prose-img:mx-auto prose-img:aspect-[16/10] prose-img:w-full prose-img:max-w-xl prose-img:rounded-2xl prose-img:border prose-img:border-border prose-img:object-cover">
+                    {{ content }}
+                </div>
+
+                <section class="mt-14 rounded-2xl border border-primary/20 bg-primary-surface p-8 text-center md:p-10">
+                    <h2 class="text-xl font-semibold text-primary-surface-foreground md:text-2xl">Invoicing, expenses &amp; tax in one place</h2>
+                    <p class="mx-auto mt-2 max-w-lg text-sm text-primary-surface-foreground/80">Built for freelancers and small businesses in Nigeria.</p>
+                    <a href="{{ primary_cta:href }}" class="bg-gradient-primary mt-5 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">{{ primary_cta:label }}</a>
+                </section>
+            </div>
         </div>
-    {{ /if }}
 
-    <div class="prose prose-zinc dark:prose-invert mt-8 max-w-none prose-headings:tracking-tight prose-a:text-primary">
-        {{ content }}
+        {{# Related posts: latest entries, with the current one hidden via .is-current #}}
+        <section class="mt-16 border-t border-border pt-12 [&_[data-blog-card].is-current]:hidden">
+            <div class="flex items-end justify-between gap-4">
+                <h2 class="text-xl font-semibold tracking-tight text-foreground md:text-2xl">Related posts</h2>
+                <a href="/blog" class="shrink-0 text-sm font-medium text-primary transition-colors hover:text-primary/80">View all &rarr;</a>
+            </div>
+            <div id="blog-related" class="mt-6 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {{ collection:blog taxonomy:categories:any="{ categories }}" sort="date:desc" limit="4" }}
+                    <article data-blog-card class="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md {{ if url == current_url }}is-current{{ /if }}">
+                        <a href="{{ url }}" class="relative block overflow-hidden">
+                            {{ if hero_image }}
+                                <img src="{{ hero_image }}" alt="{{ title }}" loading="lazy" class="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                            {{ else }}
+                                <div class="aspect-[16/10] bg-muted"></div>
+                            {{ /if }}
+                            {{ if categories }}
+                                <div class="absolute inset-x-0 bottom-0 flex flex-wrap gap-1.5 bg-gradient-to-t from-black/50 to-transparent p-4 pt-10">
+                                    {{ categories }}
+                                        <span class="rounded-full bg-white/95 px-2.5 py-0.5 text-xs font-medium text-primary">{{ title }}</span>
+                                    {{ /categories }}
+                                </div>
+                            {{ /if }}
+                        </a>
+                        <div class="flex flex-1 flex-col p-5 md:p-6">
+                            <p class="text-xs text-muted-foreground">{{ date format="F j, Y" }}</p>
+                            <h3 class="mt-2 text-lg font-semibold leading-snug tracking-tight text-foreground">
+                                <a href="{{ url }}" class="transition-colors group-hover:text-primary">{{ title }}</a>
+                            </h3>
+                            {{ if excerpt }}
+                                <p class="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{{ excerpt }}</p>
+                            {{ /if }}
+                            <a href="{{ url }}" class="mt-4 inline-flex text-sm font-medium text-primary transition-colors hover:text-primary/80">Read More &rarr;</a>
+                        </div>
+                    </article>
+                {{ /collection:blog }}
+            </div>
+        </section>
     </div>
+</div>
 
-    <section class="mt-16 rounded-2xl border border-border bg-muted/30 p-8 text-center md:p-10">
-        <h2 class="text-xl font-semibold text-foreground md:text-2xl">Invoicing, expenses &amp; tax in one place</h2>
-        <p class="mx-auto mt-2 max-w-lg text-sm text-muted-foreground">Built for freelancers and small businesses in Nigeria.</p>
-        <a href="{{ primary_cta:href }}" class="bg-gradient-primary mt-5 inline-flex items-center rounded-full px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">{{ primary_cta:label }}</a>
-    </section>
-</article>
+<script>
+    (function () {
+        var content = document.getElementById('blog-content');
+        var toc = document.getElementById('blog-toc');
+        var wrap = document.getElementById('blog-toc-wrap');
+        if (!content || !toc || !wrap) return;
+
+        var headings = content.querySelectorAll('h2, h3');
+        if (!headings.length) return;
+
+        function slugify(text) {
+            return text.toLowerCase().trim()
+                .replace(/[^\w\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-');
+        }
+
+        var used = {};
+        var links = [];
+
+        headings.forEach(function (heading) {
+            var id = heading.id;
+            if (!id) {
+                id = slugify(heading.textContent) || 'section';
+                if (used[id]) {
+                    used[id]++;
+                    id = id + '-' + used[id];
+                } else {
+                    used[id] = 1;
+                }
+                heading.id = id;
+            }
+
+            var li = document.createElement('li');
+            if (heading.tagName === 'H3') li.className = 'pl-3';
+
+            var a = document.createElement('a');
+            a.href = '#' + id;
+            a.textContent = heading.textContent;
+            a.className = 'block text-muted-foreground transition-colors hover:text-primary';
+            a.dataset.tocId = id;
+
+            li.appendChild(a);
+            toc.appendChild(li);
+            links.push(a);
+        });
+
+        wrap.classList.remove('hidden');
+
+        function setActive(id) {
+            links.forEach(function (a) {
+                var on = a.dataset.tocId === id;
+                a.classList.toggle('text-primary', on);
+                a.classList.toggle('font-medium', on);
+                a.classList.toggle('text-muted-foreground', !on);
+            });
+        }
+
+        if ('IntersectionObserver' in window) {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) setActive(entry.target.id);
+                });
+            }, { rootMargin: '-96px 0px -70% 0px', threshold: 0 });
+
+            headings.forEach(function (heading) { observer.observe(heading); });
+        }
+
+        setActive(headings[0].id);
+    })();
+
+    (function () {
+        var id = "{{ id }}";
+        var meta = document.querySelector('meta[name="csrf-token"]');
+        if (!id || !meta) return;
+
+        var key = 'blog_viewed_' + id;
+        try {
+            if (sessionStorage.getItem(key)) return;
+        } catch (e) { /* sessionStorage unavailable; server still dedupes */ }
+
+        fetch('/blog/' + encodeURIComponent(id) + '/view', {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': meta.content, 'Accept': 'application/json' },
+            keepalive: true,
+            credentials: 'same-origin',
+        }).then(function () {
+            try { sessionStorage.setItem(key, '1'); } catch (e) {}
+        }).catch(function () {});
+    })();
+
+    (function () {
+        var grid = document.getElementById('blog-related');
+        if (!grid) return;
+
+        var shown = 0;
+        Array.prototype.forEach.call(grid.querySelectorAll('[data-blog-card]'), function (card) {
+            if (card.classList.contains('is-current') || shown >= 3) {
+                card.classList.add('hidden');
+                return;
+            }
+            shown++;
+        });
+
+        if (shown === 0) {
+            var section = grid.closest('section');
+            if (section) section.classList.add('hidden');
+        }
+    })();
+</script>
