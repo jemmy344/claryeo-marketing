@@ -92,6 +92,12 @@ if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "staging" ]; then
     php artisan view:cache
     log "Refreshing the Statamic Stache (clear + warm) ..."
     php artisan statamic:stache:refresh || log "Warning: stache refresh failed (continuing)."
+    # Clear the application cache. Statamic caches the asset-folder listing
+    # (AssetContainerContents) in the file cache under storage/, which is
+    # persisted on the volume — so images added via git (not a CP upload) stay
+    # invisible in the CP asset browser until this is cleared on each deploy.
+    log "Clearing application cache ..."
+    php artisan cache:clear || log "Warning: cache clear failed (continuing)."
 fi
 
 php artisan storage:link --quiet 2>/dev/null || true
