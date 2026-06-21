@@ -39,14 +39,14 @@ persist_dir() {
 }
 
 if [ -n "$VOL" ]; then
-    log "Persistent volume at $VOL — linking users/storage/assets ..."
+    log "Persistent volume at $VOL — linking users/storage ..."
     persist_dir users
     persist_dir storage
-    persist_dir public/assets
-    # content/ is intentionally NOT persisted: blog posts are authored in git and
-    # baked into the image. persist_dir seeds the volume once, so a persisted
-    # content/ shadows every post committed after the first deploy. Serve it from
-    # the image instead. (Author via git, not the staging/prod CP.)
+    # content/ and public/assets are intentionally NOT persisted: blog posts and
+    # their images are authored in git and baked into the image. persist_dir
+    # seeds the volume once, so a persisted dir shadows everything committed after
+    # the first deploy (posts and images 404). Serve them from the image instead.
+    # (Author via git, not the staging/prod CP.)
 else
     log "No RAILWAY_VOLUME_MOUNT_PATH set — running without a persistent volume."
 fi
