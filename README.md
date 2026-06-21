@@ -5,6 +5,25 @@
 </picture>
 </p>
 
+## Content & deployment model
+
+Deployed on Railway (Docker). Two rules govern where things live:
+
+**Authored in git, served from the image** (the Docker build is the source of truth):
+
+- Blog posts — `content/collections/blog/*.md`
+- Blog images — `public/assets/...` (commit **both** the file and its `.meta/*.yaml` sidecar)
+- Statamic CP assets — `public/vendor/statamic/cp`. Statamic 6 ships `resources/dist` empty in the Composer package, so these can't be regenerated in the image and must be committed. **Recommit after every Statamic upgrade:** `php artisan vendor:publish --tag=statamic-cp --force`.
+
+**Persisted on the Railway volume** (seeded once, on first boot): only `users/` and `storage/` — runtime/server state, including the `post_views` SQLite DB. The volume must NOT hold anything authored in git: it's seeded once, so it would shadow every later commit and the content/images would 404. `content/` and `public/assets` are deliberately not persisted (see `.docker/railway/entrypoint.sh`).
+
+**Workflow:**
+
+- Author posts and upload assets in the **local** CP, then `git add` + commit (assets: the file **and** its `.meta/*.yaml`), push, deploy.
+- Do **not** author content or upload assets via the staging/prod CP — those dirs aren't persisted there, so the changes vanish on the next redeploy.
+- `hero_image` is a free-text URL field: use an external CDN URL or a host-relative `/assets/...` path — never an absolute `http://localhost:8088/...` dev URL.
+- The Stache is rebuilt (`statamic:stache:refresh`) on every deploy, so committed content appears.
+
 ## Code quality & git hooks
 
 This project enforces formatting, static analysis, and commit conventions both
