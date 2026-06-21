@@ -26,14 +26,18 @@ class PostViews
      */
     public function topIds(int $limit): array
     {
-        /** @var list<string> $ids */
-        $ids = DB::table('post_views')
-            ->orderByDesc('views')
-            ->orderByDesc('last_viewed_at')
-            ->limit($limit)
-            ->pluck('entry_id')
-            ->all();
+        try {
+            /** @var list<string> $ids */
+            $ids = DB::table('post_views')
+                ->orderByDesc('views')
+                ->orderByDesc('last_viewed_at')
+                ->limit($limit)
+                ->pluck('entry_id')
+                ->all();
 
-        return $ids;
+            return $ids;
+        } catch (\Throwable) {
+            return []; // ponytail: Top Reads is decorative — falls back to recent posts
+        }
     }
 }
