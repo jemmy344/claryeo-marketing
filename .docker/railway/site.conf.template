@@ -54,6 +54,10 @@ server {
         fastcgi_index        index.php;
         fastcgi_param        SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include              fastcgi_params;
+        # Railway terminates TLS at the edge; forward proxy headers so Laravel
+        # TrustProxies can detect HTTPS and issue secure session cookies.
+        fastcgi_param        HTTP_X_FORWARDED_PROTO $http_x_forwarded_proto;
+        fastcgi_param        HTTP_X_FORWARDED_FOR   $proxy_add_x_forwarded_for;
         fastcgi_read_timeout 300;
         fastcgi_buffers      16 16k;
         fastcgi_buffer_size  32k;
