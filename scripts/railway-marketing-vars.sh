@@ -41,8 +41,9 @@ PROD_APP_DOMAIN="${PROD_APP_DOMAIN:-app.claryeo.com}"
 STAGING_MARKETING_DOMAIN="${STAGING_MARKETING_DOMAIN:-staging.claryeo.com}"
 STAGING_APP_DOMAIN="${STAGING_APP_DOMAIN:-app-staging.claryeo.com}"
 
-# Shared cookie scope so marketing + app sessions/UTMs span subdomains.
-SESSION_BASE_DOMAIN="${SESSION_BASE_DOMAIN:-.claryeo.com}"
+# Host-only session cookies on the marketing domain. Do NOT share SESSION_DOMAIN
+# or SESSION_COOKIE with the main app — both use APP_NAME=Claryeo and would
+# otherwise emit claryeo-session on .claryeo.com, breaking CP login (CSRF loops).
 
 # ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -81,7 +82,7 @@ configure() {
         "LOG_STACK=stderr" \
         "CACHE_STORE=file" \
         "SESSION_DRIVER=file" \
-        "SESSION_DOMAIN=$SESSION_BASE_DOMAIN" \
+        "SESSION_COOKIE=claryeo-marketing-session" \
         "SESSION_SECURE_COOKIE=true" \
         "QUEUE_CONNECTION=sync" \
         "TRUSTED_PROXIES=*" \
