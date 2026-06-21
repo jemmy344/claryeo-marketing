@@ -16,8 +16,9 @@ envsubst '${PORT} ${APP_DOMAIN}' \
 # ─── Persist writable dirs on the Railway volume ─────────────────────────────
 # Railway injects RAILWAY_VOLUME_MOUNT_PATH when a volume is attached. Seed each
 # writable dir into the volume on first boot, then replace the image's copy with
-# a symlink so CP-created users/content/uploads survive deploys. Without a volume
-# (e.g. local `docker run`) this is skipped and the dirs stay in the image.
+# a symlink so CP-created users/uploads and runtime storage survive deploys.
+# (content/ is excluded — see below.) Without a volume (e.g. local `docker run`)
+# this is skipped and the dirs stay in the image.
 APP_ROOT=/var/www/html
 VOL="${RAILWAY_VOLUME_MOUNT_PATH:-}"
 
@@ -38,11 +39,14 @@ persist_dir() {
 }
 
 if [ -n "$VOL" ]; then
-    log "Persistent volume at $VOL — linking users/content/storage/assets ..."
+    log "Persistent volume at $VOL — linking users/storage/assets ..."
     persist_dir users
-    persist_dir content
     persist_dir storage
     persist_dir public/assets
+    # content/ is intentionally NOT persisted: blog posts are authored in git and
+    # baked into the image. persist_dir seeds the volume once, so a persisted
+    # content/ shadows every post committed after the first deploy. Serve it from
+    # the image instead. (Author via git, not the staging/prod CP.)
 else
     log "No RAILWAY_VOLUME_MOUNT_PATH set — running without a persistent volume."
 fi
