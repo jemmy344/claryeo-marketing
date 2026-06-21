@@ -59,9 +59,24 @@ mkdir -p \
 chown -R www-data:www-data /var/www/html/storage /var/www/html/content /var/www/html/users /var/www/html/public/assets 2>/dev/null || true
 [ -n "$VOL" ] && chown -R www-data:www-data "$VOL" 2>/dev/null || true
 
+# ─── Database (SQLite) ───────────────────────────────────────────────────────
+# Statamic content stays flat-file, but the post_views counter lives in SQLite
+# under storage/ (symlinked onto the Railway volume above) so view counts
+# survive deploys. Create it on first boot, then migrate.
+# ponytail: SQLite is enough for one counter table — swap to Postgres in all
+# envs when analytics/newsletters need it.
+DB_FILE="${DB_DATABASE:-/var/www/html/database/database.sqlite}"
+if [ ! -f "$DB_FILE" ]; then
+    log "Creating SQLite database at $DB_FILE ..."
+    mkdir -p "$(dirname "$DB_FILE")"
+    touch "$DB_FILE"
+    chown www-data:www-data "$DB_FILE"
+fi
+log "Running migrations ..."
+php artisan migrate --force
+
 # ─── Production optimisations ────────────────────────────────────────────────
-# No database / migrations: Statamic content is flat-file. Warm the Stache so
-# the first request isn't slow.
+# Warm the Stache so the first request isn't slow.
 
 if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "staging" ]; then
     log "Caching config, routes and views ..."

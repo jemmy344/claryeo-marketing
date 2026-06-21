@@ -7,9 +7,10 @@
 # ONLY the marketing service — the main app's web/console/workers/databases are
 # left completely alone.
 #
-# The marketing app is API-ONLY: no database (flat-file content), file
-# cache/session, and it reaches the main app's internal API over Railway
-# private networking. So there are no Postgres/Redis references here.
+# The marketing app is mostly API-ONLY: Statamic content is flat-file and it
+# reaches the main app's internal API over Railway private networking. The one
+# exception is the post_views counter, stored in SQLite under storage/ (on the
+# persistent volume). File cache/session; no Postgres/Redis references here.
 #
 # Prerequisites:
 #   1. railway login
@@ -87,6 +88,8 @@ configure() {
         "QUEUE_CONNECTION=sync" \
         "TRUSTED_PROXIES=*" \
         "FILESYSTEM_DISK=local" \
+        "DB_CONNECTION=sqlite" \
+        "DB_DATABASE=/var/www/html/storage/app/database.sqlite" \
         "$main_api_ref" \
         "CLARYEO_APP_URL=https://$app_domain" \
         "WAITLIST_MODE=false"
