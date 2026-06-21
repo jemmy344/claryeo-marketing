@@ -80,15 +80,18 @@ log "Running migrations ..."
 php artisan migrate --force
 
 # ─── Production optimisations ────────────────────────────────────────────────
-# Warm the Stache so the first request isn't slow.
+# Rebuild the Stache so the first request isn't slow. Must REFRESH (clear +
+# warm), not just warm: the Stache lives under storage/ which is persisted on
+# the volume, so a stale index from a previous deploy would otherwise hide posts
+# added to the image since (content/ ships from git, not the volume).
 
 if [ "$APP_ENV" = "production" ] || [ "$APP_ENV" = "staging" ]; then
     log "Caching config, routes and views ..."
     php artisan config:cache
     php artisan route:cache
     php artisan view:cache
-    log "Warming the Statamic Stache ..."
-    php artisan statamic:stache:warm || log "Warning: stache warm failed (continuing)."
+    log "Refreshing the Statamic Stache (clear + warm) ..."
+    php artisan statamic:stache:refresh || log "Warning: stache refresh failed (continuing)."
 fi
 
 php artisan storage:link --quiet 2>/dev/null || true
