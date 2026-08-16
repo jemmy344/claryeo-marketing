@@ -165,16 +165,16 @@ const GetStarted: FC<GetStartedProps> = ({
                     >
                         <div className="space-y-8 md:space-y-10">
                             <div className="space-y-7">
-                                <span className="inline-flex items-center rounded-full border border-border bg-card/90 px-3 py-1 text-[0.7rem] font-semibold tracking-[0.24em] text-muted-foreground uppercase shadow-sm backdrop-blur">
+                                <span className="t-label inline-flex items-center rounded-full border border-border bg-card/90 px-3 py-1 text-muted-foreground shadow-sm backdrop-blur">
                                     Choose your starting plan
                                 </span>
 
                                 <div className="space-y-5">
-                                    <h1 className="max-w-2xl text-5xl leading-[1.02] font-semibold tracking-tight text-foreground md:text-6xl xl:text-[4.5rem]">
+                                    <h1 className="t-display-hero max-w-2xl text-foreground">
                                         Start with the Claryeo setup that fits
                                         your workflow.
                                     </h1>
-                                    <p className="max-w-xl text-base leading-7 text-muted-foreground md:text-lg">
+                                    <p className="t-lead max-w-xl text-muted-foreground">
                                         Pick a plan once and Claryeo keeps that
                                         choice through account creation,
                                         onboarding, and the right next step.
@@ -184,10 +184,10 @@ const GetStarted: FC<GetStartedProps> = ({
                                 <div className="rounded-4xl border border-border bg-card/95 p-6 shadow-lg">
                                     <div className="flex items-start justify-between gap-4">
                                         <div>
-                                            <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                                            <p className="t-eyebrow text-muted-foreground">
                                                 Current selection
                                             </p>
-                                            <h2 className="mt-3 text-2xl font-semibold text-foreground">
+                                            <h2 className="t-display-3 mt-3 text-foreground">
                                                 {selectedPlanDetails?.name}
                                                 {isSelfServePlanKey(
                                                     selectedPlan,
@@ -283,7 +283,7 @@ const GetStarted: FC<GetStartedProps> = ({
                                                     <Icon className="h-5 w-5" />
                                                 </div>
                                                 <div>
-                                                    <h2 className="text-base font-semibold text-foreground">
+                                                    <h2 className="t-ui-title text-foreground">
                                                         {item.title}
                                                     </h2>
                                                     <p className="mt-1 text-sm leading-6 text-muted-foreground">
@@ -299,10 +299,10 @@ const GetStarted: FC<GetStartedProps> = ({
                             <div className="rounded-4xl border border-border bg-card/95 p-6 shadow-lg">
                                 <div className="flex items-center justify-between gap-4">
                                     <div>
-                                        <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                                        <p className="t-eyebrow text-muted-foreground">
                                             Included from day one
                                         </p>
-                                        <h2 className="mt-2 text-2xl font-semibold text-foreground">
+                                        <h2 className="t-display-3 mt-2 text-foreground">
                                             The product value stays visible
                                             while you choose.
                                         </h2>
@@ -327,7 +327,7 @@ const GetStarted: FC<GetStartedProps> = ({
                                                 <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-background shadow-sm">
                                                     <Icon className="h-5 w-5 text-primary" />
                                                 </div>
-                                                <h3 className="mt-4 font-semibold text-foreground">
+                                                <h3 className="t-ui-title mt-4 text-foreground">
                                                     {item.title}
                                                 </h3>
                                                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -355,10 +355,10 @@ const GetStarted: FC<GetStartedProps> = ({
                                     >
                                         <div className="flex items-start justify-between gap-4">
                                             <div>
-                                                <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                                                <p className="t-eyebrow text-muted-foreground">
                                                     Billing cadence
                                                 </p>
-                                                <h2 className="mt-2 text-xl font-semibold text-foreground">
+                                                <h2 className="t-display-4 mt-2 text-foreground">
                                                     Shape your plan before auth
                                                 </h2>
                                             </div>
@@ -475,7 +475,7 @@ const GetStarted: FC<GetStartedProps> = ({
                                                             <div>
                                                                 <p
                                                                     className={cn(
-                                                                        'text-xs font-semibold tracking-[0.18em] uppercase',
+                                                                        't-eyebrow',
                                                                         isSelected &&
                                                                             isPremium &&
                                                                             'text-primary',
@@ -488,7 +488,7 @@ const GetStarted: FC<GetStartedProps> = ({
                                                                 >
                                                                     {plan.label}
                                                                 </p>
-                                                                <h3 className="mt-1 text-xl font-semibold">
+                                                                <h3 className="t-display-4 mt-1">
                                                                     {plan.name}
                                                                 </h3>
                                                             </div>
@@ -571,7 +571,7 @@ const GetStarted: FC<GetStartedProps> = ({
                                     </div>
 
                                     <div className="mt-5 rounded-[1.9rem] border border-border bg-muted/20 p-5">
-                                        <p className="text-xs font-semibold tracking-[0.2em] text-muted-foreground uppercase">
+                                        <p className="t-eyebrow text-muted-foreground">
                                             What happens next
                                         </p>
 

@@ -3,6 +3,54 @@
 All notable changes to the Claryeo marketing site. Format based on
 [Keep a Changelog](https://keepachangelog.com/). Dates are `YYYY-MM-DD`.
 
+## 2026-08-17 — Landing rebuild, contact & waitlist redesign
+
+### Added
+- **Rebuilt landing page** — new hero, product bento, ledger rail, reconciliation
+  ring/spotlight, reports spotlight, business-balance spotlight, final CTA and an
+  atmosphere canvas, plus dashboard preview components and a shared `ui/chart`.
+- **Redesigned contact page** — full-bleed tinted band, typographic support
+  columns, `mailto:`/`tel:` links, in-field icons, a live 1000-character message
+  counter, bold Terms/Privacy links, and an FAQ section whose email box carries
+  the address into the form above.
+- **Phone capture** on the waitlist and contact forms; `phone` is proxied to the
+  main API by both controllers.
+- **Section bullets on feature pages** — the 45 `bullets` strings in
+  `config/feature_pages.php` render again, under each section's body.
+
+### Changed
+- **Islands are code-split.** The registry now uses dynamic imports, so a page
+  downloads only the islands it mounts: the single 1,541 kB eager chunk became a
+  ~192 kB shared entry plus per-island chunks (+59 kB on /contact, +43 kB for the
+  nav, 806 kB only on the landing page).
+- **Waitlist copy** — "3 months free" removed site-wide (waitlist, four guides,
+  `guide-layout`, tax calculator, one blog post); new headline, subhead and
+  "Save my spot" CTA; the wordmark uses the logo's sans face.
+- **Landing nav** — drawer panels and the mobile sheet share the header's `ink`
+  surface, the header goes opaque while a menu is open, and links moved from
+  `text-mist` to `text-paper/80` for legibility over the hero.
+- Contact and waitlist submissions are validated before proxying, so the form's
+  limits can't drift from the main app's.
+
+### Fixed
+- PHPStan level-9 failures in `FeatureController` that would have broken the
+  pre-commit hook and CI.
+- Testimonials rendered on the homepage in waitlist mode.
+- `useRevealOnce` ran *more* animation under `prefers-reduced-motion`, and section
+  reveals flickered because the hidden start state was applied on scroll.
+- Invoicing bento card linked to `/tax-calculator`.
+- Blog index repeated the three "Most read" posts; heading levels in the blog
+  partials.
+- Privacy toggle leaked the hidden balance through a native `title` tooltip.
+- Contact FAQ email box shared state with the form's email input.
+- Waitlist fields had no accessible name.
+- Malformed `feature_pages` entries 500'd every route from `AppServiceProvider::boot()`;
+  a bad entry now drops one card/menu row.
+
+### Removed
+- `ui/text.tsx`, the unused `ui/chart` exports (~213 lines), the unreachable
+  `ChecklistCard`, and the `--atm-negative-tint` token.
+
 ## 2026-06-21 — Blog views & deploy reliability
 
 ### Added

@@ -2488,7 +2488,7 @@ const TaxCalculatorPage: FC = () => {
                                         className="bg-gradient-primary text-primary-foreground hover:opacity-90"
                                     >
                                         <Link href="/waitlist">
-                                            Get early access — 3 months free
+                                            Get early access
                                             <ArrowUpRight className="size-4" />
                                         </Link>
                                     </Button>
@@ -2530,7 +2530,7 @@ const TaxCalculatorPage: FC = () => {
                             className="bg-gradient-primary text-primary-foreground hover:opacity-90"
                         >
                             <Link href="/waitlist">
-                                Join the waitlist — 3 months free
+                                Join the waitlist
                                 <ArrowUpRight className="size-4" />
                             </Link>
                         </Button>

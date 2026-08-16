@@ -6,7 +6,7 @@ const TaxEducationContent: FC = () => (
             <h2 className="text-2xl font-bold md:text-3xl">
                 Understanding Nigerian Tax
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="t-body mt-4 text-muted-foreground">
                 Nigeria operates a multi-layered tax system administered by the
                 Federal Inland Revenue Service (FIRS) at the federal level and
                 State Internal Revenue Services (SIRS) at the state level. The
@@ -21,7 +21,7 @@ const TaxEducationContent: FC = () => (
                 </strong>{' '}
                 for registered businesses.
             </p>
-            <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+            <p className="t-body mt-3 text-muted-foreground">
                 Freelancers and self-employed individuals are assessed under PIT
                 using the same progressive tax bands as PAYE employees, but they
                 file directly with their state tax authority. Understanding
@@ -34,7 +34,7 @@ const TaxEducationContent: FC = () => (
             <h2 className="text-2xl font-bold md:text-3xl">
                 PAYE Tax Bands in Nigeria (2026)
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="t-body mt-4 text-muted-foreground">
                 Nigeria uses a progressive tax system under the Personal Income
                 Tax Act (PITA). After deducting the Consolidated Relief
                 Allowance (CRA) and other allowable reliefs, your taxable income
@@ -99,7 +99,7 @@ const TaxEducationContent: FC = () => (
             <h2 className="text-2xl font-bold md:text-3xl">
                 Company Income Tax (CIT) Rates
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="t-body mt-4 text-muted-foreground">
                 Companies registered in Nigeria are subject to CIT on their
                 worldwide profits. The rate depends on company size, measured by
                 annual turnover:
@@ -159,7 +159,7 @@ const TaxEducationContent: FC = () => (
             <h2 className="text-2xl font-bold md:text-3xl">
                 Tax Relief &amp; Deductions
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+            <p className="t-body mt-4 text-muted-foreground">
                 Nigerian tax law provides several reliefs and deductions that
                 reduce your taxable income:
             </p>

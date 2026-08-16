@@ -1,7 +1,6 @@
 import type { FC } from 'react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const testimonials = [
     {
@@ -34,83 +33,57 @@ const testimonials = [
     },
 ];
 
-const avatarClass =
-    'size-12 bg-primary-surface text-primary-surface-foreground font-medium';
+const avatarClass = 'size-11 border border-paper/20 bg-paper/10 font-medium text-paper';
+
+const gradients = [
+    'from-dawn/40 via-violet-bright/30 to-transparent',
+    'from-violet-bright/35 via-dusk/25 to-transparent',
+    'from-dusk/35 via-dawn/25 to-transparent',
+];
 
 const LandingTestimonials: FC = () => (
-    <section
-        id="testimonials"
-        className="py-16 transition-colors duration-300 md:py-32"
-    >
+    <section id="testimonials" className="bg-ink py-16 transition-colors duration-300 md:py-32">
         <div className="mx-auto max-w-6xl space-y-8 px-6 md:space-y-16">
-            <div className="relative z-10 mx-auto max-w-xl space-y-6 text-center md:space-y-12">
-                <h2 className="text-4xl font-medium text-foreground lg:text-5xl">
-                    Built for growing businesses. Loved by those who hate
-                    bookkeeping
+            <div className="relative z-10 mx-auto max-w-xl space-y-4 text-center">
+                <span className="t-eyebrow text-mist">
+                    Testimonials
+                </span>
+                <h2 className="t-display-2 text-paper">
+                    <em>Loved</em> by those who hate bookkeeping
                 </h2>
-                <p className="text-muted-foreground">
-                    Claryeo brings together invoicing, expenses, and tax
-                    summaries so you can focus on what you do best.
+                <p className="text-mist">
+                    Claryeo brings together invoicing, expenses, and tax summaries so you can
+                    focus on what you do best.
                 </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4 lg:grid-rows-2">
-                <Card className="grid grid-rows-[auto_1fr] gap-8 sm:col-span-2 sm:p-6 lg:row-span-2">
-                    <CardHeader>
-                        <img
-                            src="/favicon.svg"
-                            alt="Claryeo"
-                            className="h-6 w-fit dark:invert"
-                        />
-                    </CardHeader>
-                    <CardContent>
-                        <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                            <p className="text-xl font-medium text-foreground">
-                                {testimonials[0].quote}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {testimonials.map((t, i) => (
+                    <div
+                        key={t.author}
+                        className={`relative overflow-hidden rounded-2xl border border-ink-border bg-linear-to-br p-6 ${gradients[i % gradients.length]} ${i === 0 ? 'sm:col-span-2 lg:col-span-2 lg:row-span-2' : ''}`}
+                    >
+                        <div className="relative flex h-full flex-col justify-between gap-8">
+                            <p
+                                className={`text-paper ${i === 0 ? 'text-xl font-medium' : 'text-base'}`}
+                            >
+                                {t.quote}
                             </p>
-                            <div className="grid grid-cols-[auto_1fr] items-center gap-3">
+                            <div className="flex items-center gap-3">
                                 <Avatar className={avatarClass}>
-                                    <AvatarFallback className="bg-primary-surface text-primary-surface-foreground font-medium">
-                                        {testimonials[0].fallback}
+                                    <AvatarFallback className="bg-transparent text-paper">
+                                        {t.fallback}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <cite className="block text-sm font-medium text-foreground not-italic">
-                                        {testimonials[0].author}
+                                    <cite className="block text-sm font-medium text-paper not-italic">
+                                        {t.author}
                                     </cite>
-                                    <span className="block text-sm text-muted-foreground">
-                                        {testimonials[0].role}
-                                    </span>
+                                    <span className="block text-sm text-mist">{t.role}</span>
                                 </div>
                             </div>
-                        </blockquote>
-                    </CardContent>
-                </Card>
-                {testimonials.slice(1).map((t) => (
-                    <Card key={t.author}>
-                        <CardContent className="h-full pt-6">
-                            <blockquote className="grid h-full grid-rows-[1fr_auto] gap-6">
-                                <p className="text-xl font-medium text-foreground">
-                                    {t.quote}
-                                </p>
-                                <div className="grid grid-cols-[auto_1fr] items-center gap-3">
-                                    <Avatar className={avatarClass}>
-                                        <AvatarFallback className="bg-primary-surface text-primary-surface-foreground font-medium">
-                                            {t.fallback}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <cite className="block text-sm font-medium text-foreground not-italic">
-                                            {t.author}
-                                        </cite>
-                                        <span className="block text-sm text-muted-foreground">
-                                            {t.role}
-                                        </span>
-                                    </div>
-                                </div>
-                            </blockquote>
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>

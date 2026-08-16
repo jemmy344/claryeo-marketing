@@ -54,15 +54,24 @@ class AppServiceProvider extends ServiceProvider
         ));
 
         // Features mega-menu, built from the individual feature pages.
-        /** @var array<string, array{slug: string, title: mixed, tagline: mixed, badge?: mixed, icon?: mixed}> $featurePages */
+        /** @var array<string, array<string, mixed>> $featurePages */
         $featurePages = Config::array('feature_pages', []);
+        $str = static fn (mixed $v): string => is_string($v) ? $v : '';
         $featureItems = collect($featurePages)
+            // Nullish reads on purpose: this runs in boot() for every request,
+            // so a feature entry missing a key degrades one menu row instead of
+            // 500-ing the whole site.
             ->map(fn (array $f): array => [
-                'title' => $f['title'],
-                'tagline' => $f['tagline'],
-                'href' => '/features/'.$f['slug'],
-                'icon' => $f['icon'] ?? 'Sparkles',
+                'eyebrow' => $str($f['eyebrow'] ?? null),
+                'title' => $str($f['title'] ?? null),
+                'tagline' => $str($f['tagline'] ?? null),
+                'slug' => $str($f['slug'] ?? null),
                 'badge' => $f['badge'] ?? null,
+            ])
+            ->filter(fn (array $f): bool => $f['title'] !== '' && $f['slug'] !== '')
+            ->map(fn (array $f): array => [
+                ...$f,
+                'href' => '/features/'.$f['slug'],
             ])
             ->values()
             ->all();
@@ -78,6 +87,9 @@ class AppServiceProvider extends ServiceProvider
         View::share('claryeo_app_url', $appUrl);
         View::share('waitlist_mode', $waitlistMode);
         View::share('primary_cta', $primaryCta);
+        // Header chrome: 'dark' lets a page sit the header over a full-bleed
+        // dark hero (landing only); everything else keeps the solid header.
+        View::share('nav_theme', 'light');
 
         // JSON props for the header island (Features + Resources mega-menus).
         View::share('nav_props', htmlspecialchars(

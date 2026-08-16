@@ -26,9 +26,9 @@ const faqs = [
     },
     {
         id: 'item-2',
-        q: 'What is AI-Powered invoicing?',
+        q: 'How does payment matching work?',
         icon: Sparkles,
-        a: 'Describe the work by speaking it out loud or pasting a brief—our AI listens and suggests accurate line items and amounts. One click applies everything into a professional invoice you can edit. Less typing, fewer errors, so you can focus on delivery.',
+        a: 'Every credit that lands in your synced account is checked against your open invoices by amount, reference and timing. Direct matches are one click to confirm; nothing is marked paid without you saying so.',
     },
     {
         id: 'item-3',
@@ -72,12 +72,14 @@ const LandingFAQs: FC = () => (
     <section className="py-16 md:py-24" id="faq">
         <div className="mx-auto max-w-5xl px-4 md:px-6">
             <div className="mx-auto max-w-xl text-center">
-                <h2 className="text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
-                    Frequently Asked Questions
+                <span className="t-eyebrow text-muted-foreground">
+                    Questions
+                </span>
+                <h2 className="t-display-2 mt-3 text-balance text-foreground">
+                    <em>Answers</em>, before you ask
                 </h2>
                 <p className="mt-4 text-balance text-muted-foreground">
-                    Discover quick and comprehensive answers to common questions
-                    about our platform, services, and features.
+                    Everything you need to know about invoicing, bank sync and tax on Claryeo.
                 </p>
             </div>
 

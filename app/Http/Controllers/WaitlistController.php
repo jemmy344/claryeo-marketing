@@ -25,8 +25,16 @@ class WaitlistController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        // Mirrors the main app's waitlist validation so a bad submission is
+        // rejected here rather than round-tripping for a 422.
+        $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:32'],
+        ]);
+
         $payload = [
-            ...$request->only(['email', 'name', 'source']),
+            ...$request->only(['email', 'name', 'phone', 'source']),
             ...CaptureUtmParameters::resolve($request),
             'client_ip' => $request->ip(),
             'client_user_agent' => $request->userAgent(),

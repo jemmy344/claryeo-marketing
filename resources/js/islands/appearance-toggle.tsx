@@ -2,70 +2,48 @@ import { Monitor, Moon, Sun } from 'lucide-react';
 import type { FC } from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useAppearance } from '@/hooks/use-appearance';
+import type { Appearance } from '@/hooks/use-appearance';
 
 type AppearanceToggleProps = {
     className?: string;
 };
 
+const CYCLE: { value: Appearance; label: string; Icon: typeof Sun }[] = [
+    { value: 'light', label: 'Light', Icon: Sun },
+    { value: 'dark', label: 'Dark', Icon: Moon },
+    { value: 'system', label: 'System', Icon: Monitor },
+];
+
 /**
- * Light/dark/system theme switcher, ported from the main app's
- * AppearanceToggleDropdown. Mounted as an island in the Antlers nav.
+ * Light → dark → system theme switcher. One button, one click per state --
+ * three options don't earn a menu.
  */
 const AppearanceToggle: FC<AppearanceToggleProps> = ({ className = '' }) => {
     const [{ appearance }, { updateAppearance }] = useAppearance();
 
-    const getCurrentIcon = () => {
-        switch (appearance) {
-            case 'dark':
-                return <Moon className="h-5 w-5" />;
-            case 'light':
-                return <Sun className="h-5 w-5" />;
-            default:
-                return <Monitor className="h-5 w-5" />;
-        }
-    };
+    const index = Math.max(
+        CYCLE.findIndex((option) => option.value === appearance),
+        0,
+    );
+    const current = CYCLE[index];
+    const next = CYCLE[(index + 1) % CYCLE.length];
+    const { Icon } = current;
 
     return (
         <div className={className}>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 rounded-md"
-                    >
-                        {getCurrentIcon()}
-                        <span className="sr-only">Toggle theme</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => updateAppearance('light')}>
-                        <span className="flex items-center gap-2">
-                            <Sun className="h-5 w-5" />
-                            Light
-                        </span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => updateAppearance('dark')}>
-                        <span className="flex items-center gap-2">
-                            <Moon className="h-5 w-5" />
-                            Dark
-                        </span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => updateAppearance('system')}>
-                        <span className="flex items-center gap-2">
-                            <Monitor className="h-5 w-5" />
-                            System
-                        </span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 rounded-md"
+                title={`Theme: ${current.label}`}
+                onClick={() => updateAppearance(next.value)}
+            >
+                <Icon className="h-5 w-5" />
+                <span className="sr-only">
+                    Theme: {current.label}. Switch to {next.label}.
+                </span>
+            </Button>
         </div>
     );
 };

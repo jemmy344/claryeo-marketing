@@ -1,36 +1,36 @@
 {{ paginate }}
     {{ if total_pages > 1 }}
-        <nav class="mt-12 flex items-center justify-center gap-1.5" aria-label="Blog pagination">
+        <nav class="t-mono mt-10 flex items-center justify-center gap-4 text-xs" aria-label="Blog pagination">
             {{ links:segments }}
                 {{ first }}
                     {{ if page == current_page }}
-                        <span class="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground" aria-current="page">{{ page }}</span>
+                        <span class="border-b border-primary pb-1 text-primary" aria-current="page">{{ page }}</span>
                     {{ else }}
-                        <a href="{{ url }}" class="flex size-9 items-center justify-center rounded-full text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{{ page }}</a>
+                        <a href="{{ url }}" class="border-b border-transparent pb-1 text-muted-foreground transition-colors hover:border-border hover:text-foreground">{{ page }}</a>
                     {{ /if }}
                 {{ /first }}
 
                 {{ if slider }}
-                    <span class="px-1 text-sm text-muted-foreground" aria-hidden="true">&hellip;</span>
+                    <span class="text-muted-foreground" aria-hidden="true">&hellip;</span>
                 {{ /if }}
 
                 {{ slider }}
                     {{ if page == current_page }}
-                        <span class="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground" aria-current="page">{{ page }}</span>
+                        <span class="border-b border-primary pb-1 text-primary" aria-current="page">{{ page }}</span>
                     {{ else }}
-                        <a href="{{ url }}" class="flex size-9 items-center justify-center rounded-full text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{{ page }}</a>
+                        <a href="{{ url }}" class="border-b border-transparent pb-1 text-muted-foreground transition-colors hover:border-border hover:text-foreground">{{ page }}</a>
                     {{ /if }}
                 {{ /slider }}
 
                 {{ if slider || (!slider && last) }}
-                    <span class="px-1 text-sm text-muted-foreground" aria-hidden="true">&hellip;</span>
+                    <span class="text-muted-foreground" aria-hidden="true">&hellip;</span>
                 {{ /if }}
 
                 {{ last }}
                     {{ if page == current_page }}
-                        <span class="flex size-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-primary-foreground" aria-current="page">{{ page }}</span>
+                        <span class="border-b border-primary pb-1 text-primary" aria-current="page">{{ page }}</span>
                     {{ else }}
-                        <a href="{{ url }}" class="flex size-9 items-center justify-center rounded-full text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{{ page }}</a>
+                        <a href="{{ url }}" class="border-b border-transparent pb-1 text-muted-foreground transition-colors hover:border-border hover:text-foreground">{{ page }}</a>
                     {{ /if }}
                 {{ /last }}
             {{ /links:segments }}

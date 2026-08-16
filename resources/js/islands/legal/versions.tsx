@@ -34,10 +34,8 @@ const LegalVersionsPage: FC<LegalVersionsPageProps> = ({
         <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <div className="border-b border-border bg-muted/20 py-12 transition-colors duration-300 md:py-16">
                 <div className="mx-auto max-w-3xl px-4 md:px-6">
-                    <h1 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-                        Updates: {title}
-                    </h1>
-                    <p className="mt-4 text-muted-foreground">
+                    <h1 className="t-display-1 text-foreground">Updates: {title}</h1>
+                    <p className="t-lead mt-4 text-muted-foreground">
                         We want to be as transparent as possible about the
                         changes we make to our {title}. In this archive you can
                         see previous versions of the policy. Each version is

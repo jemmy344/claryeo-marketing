@@ -127,7 +127,7 @@ const PricingPlansShowcase: FC<PricingPlansShowcaseProps> = ({
     const inner = (
         <>
             {heading && (
-                <h2 className="mx-auto max-w-3xl text-center text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+                <h2 className="t-display-2 mx-auto max-w-3xl text-center text-foreground">
                     {heading}
                 </h2>
             )}
