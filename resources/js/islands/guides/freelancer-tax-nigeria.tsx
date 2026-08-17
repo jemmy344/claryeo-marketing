@@ -41,7 +41,7 @@ const faqs = [
 const FreelancerTaxGuide: FC = () => (
     <GuideLayout
         title="How Freelancers Pay Tax in Nigeria: A Complete Guide"
-        description="Everything freelancers and self-employed professionals need to know about paying tax in Nigeria — registration, tax rates, allowable deductions, and filing requirements."
+        description="Everything freelancers and self-employed professionals need to know about paying tax in Nigeria: registration, tax rates, allowable deductions, and filing requirements."
         canonical="https://claryeo.com/guides/freelancer-tax-nigeria"
         keywords="freelancer tax Nigeria, self-employed tax Nigeria, personal income tax Nigeria, freelance tax guide, PIT Nigeria, direct assessment Nigeria"
         publishedDate="2026-04-06"
@@ -119,7 +119,7 @@ const FreelancerTaxGuide: FC = () => (
             <strong className="text-foreground">direct assessment</strong>{' '}
             (self-filing). If your annual income grows beyond ₦50 million, or
             you want liability protection, registering a company may offer tax
-            advantages — see our{' '}
+            advantages. See our{' '}
             <a
                 href="/guides/small-business-tax-nigeria"
                 className="font-medium text-primary hover:underline"
@@ -204,7 +204,7 @@ const FreelancerTaxGuide: FC = () => (
         <h2 className="t-display-3 mt-10">Step 3: Calculate Your Tax</h2>
         <p className="t-body mt-3 text-muted-foreground">
             As a sole proprietor, your tax is calculated the same way as PAYE
-            employees — using the progressive PIT bands after deducting the
+            employees, using the progressive PIT bands after deducting the
             Consolidated Relief Allowance (CRA) and other eligible reliefs.
         </p>
         <p className="t-body mt-3 text-muted-foreground">

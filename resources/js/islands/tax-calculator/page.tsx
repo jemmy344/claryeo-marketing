@@ -1979,7 +1979,7 @@ const TaxCalculatorPage: FC = () => {
                                                     </p>
                                                     <p className="mt-1 text-xs text-muted-foreground">
                                                         We&apos;ll email your
-                                                        breakdown — free,
+                                                        breakdown. Free,
                                                         instantly.
                                                     </p>
                                                 </div>
@@ -2479,7 +2479,7 @@ const TaxCalculatorPage: FC = () => {
                             <div className="mt-6 space-y-3">
                                 <p className="text-sm text-muted-foreground">
                                     Done estimating? Let Claryeo track your
-                                    taxes automatically — invoicing, expenses,
+                                    taxes automatically: invoicing, expenses,
                                     and tax summaries in one place.
                                 </p>
                                 <div className="flex flex-wrap gap-3">
@@ -2521,7 +2521,7 @@ const TaxCalculatorPage: FC = () => {
                     </h2>
                     <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
                         Claryeo automatically calculates your tax from your
-                        invoices and expenses — so you always know what you owe,
+                        invoices and expenses, so you always know what you owe,
                         without the guesswork.
                     </p>
                     <div className="mt-6 flex flex-wrap justify-center gap-3">

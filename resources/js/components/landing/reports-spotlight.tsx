@@ -89,8 +89,8 @@ const ReportsSpotlight: FC = () => {
                         Zero spreadsheets.
                     </h2>
                     <p className="t-body mt-5 max-w-sm text-mist">
-                        Eight report types — profit &amp; loss, cash flow, invoice aging, client and
-                        product summaries — built from the invoices and bank transactions already
+                        Eight report types: profit &amp; loss, cash flow, invoice aging, client and
+                        product summaries, built from the invoices and bank transactions already
                         in your account. Export any of them as PDF or CSV.
                     </p>
                 </div>

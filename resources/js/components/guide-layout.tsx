@@ -86,7 +86,7 @@ const GuideLayout: FC<GuideLayoutProps> = ({
                     Take control of your finances with Claryeo
                 </h2>
                 <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-                    Invoicing, expense tracking, and tax-ready summaries — built
+                    Invoicing, expense tracking, and tax-ready summaries, built
                     for freelancers and small businesses in Nigeria. Join the
                     waitlist to get your invite first.
                 </p>

@@ -28,7 +28,7 @@ const Features: FC<FeaturesProps> = ({ features = [] }) => (
                     <em>Everything</em> you need to run your business
                 </h1>
                 <p className="t-lead mt-5 text-muted-foreground">
-                    An AI-powered experience across the app — automatic bank
+                    An AI-powered experience across the app: automatic bank
                     sync, realtime tracking, invoicing, and export-ready tax
                     summaries. Without the long forms or the complexity. Rolling
                     out in Nigeria first.

@@ -102,7 +102,7 @@ function useTypewriter(full: string) {
 function AiAssistantPreview({
     eyebrow = 'Ask your books',
     question = 'How much did I spend on fuel last quarter?',
-    answer = '₦184,500 across 12 transactions — 18% more than last quarter.',
+    answer = '₦184,500 across 12 transactions, 18% more than last quarter.',
 }: {
     eyebrow?: string;
     question?: string;
@@ -290,8 +290,8 @@ function InvoiceDocumentPreview() {
 
             <div className="mt-5 flex flex-col gap-2">
                 {[
-                    ['Web design — homepage', formatCurrency(65_000, 'NGN', { compact: true })],
-                    ['Web design — checkout flow', formatCurrency(20_000, 'NGN', { compact: true })],
+                    ['Web design: homepage', formatCurrency(65_000, 'NGN', { compact: true })],
+                    ['Web design: checkout flow', formatCurrency(20_000, 'NGN', { compact: true })],
                 ].map(([label, amount], i) => (
                     <div
                         key={label}
@@ -447,7 +447,7 @@ function SyncFlowPreview() {
             </div>
             <div className="mt-6 flex items-center justify-center gap-1.5 t-mono text-[11px] text-muted-foreground">
                 <Lock className="size-3" />
-                Read-only — Claryeo can never move your money
+                Read-only. Claryeo can never move your money
             </div>
         </div>
     );
@@ -621,7 +621,7 @@ function ReportCardPreview() {
 
 /** A plain-language insight, the way it would surface on a dashboard. */
 function InsightCardPreview({
-    insight = 'Fuel spend is up 18% this quarter — mostly from 3 trips in July.',
+    insight = 'Fuel spend is up 18% this quarter, mostly from 3 trips in July.',
 }: {
     insight?: string;
 }) {
@@ -645,8 +645,8 @@ function InsightCardPreview({
 }
 
 const DRAFT_LINES = [
-    ['Web design — homepage', formatCurrency(65_000, 'NGN', { compact: true })],
-    ['Web design — checkout flow', formatCurrency(20_000, 'NGN', { compact: true })],
+    ['Web design: homepage', formatCurrency(65_000, 'NGN', { compact: true })],
+    ['Web design: checkout flow', formatCurrency(20_000, 'NGN', { compact: true })],
 ];
 
 /** A one-line prompt turning into invoice line items -- the "drafts your invoices" claim, shown in motion. */
@@ -669,7 +669,7 @@ function DraftingPreview() {
                 You typed
             </span>
             <p className="mt-2 rounded-lg bg-muted px-3 py-2.5 text-sm text-foreground">
-                "Web design for Adaeze — homepage and checkout, ₦85k"
+                "Web design for Adaeze: homepage and checkout, ₦85k"
             </p>
             <span className="t-label mt-5 block text-muted-foreground">
                 Claryeo drafted
@@ -703,7 +703,7 @@ const AiOwesPreview: FC = () => (
     <AiAssistantPreview
         eyebrow="Ask your books"
         question="Who owes me the most right now?"
-        answer="Ikeja Retail Co. — ₦210,000 across 2 overdue invoices."
+        answer="Ikeja Retail Co.: ₦210,000 across 2 overdue invoices."
     />
 );
 
@@ -879,7 +879,7 @@ const FeaturePage: FC<FeaturePageProps> = ({
                         Ready to put {feature.title.toLowerCase()} to work?
                     </h2>
                     <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
-                        Invoicing, expenses, and tax in one place — with AI across
+                        Invoicing, expenses, and tax in one place, with AI across
                         the app. Get set up in minutes.
                     </p>
                     <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

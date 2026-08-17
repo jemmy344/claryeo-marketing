@@ -18,12 +18,12 @@ const ContentSection: FC<ContentSectionProps> = ({
         <div className="mx-auto max-w-5xl px-6">
             <div className="grid gap-6 md:grid-cols-2 md:gap-12">
                 <h2 className="t-display-2 text-foreground">
-                    Invoicing, expenses, tax and payment matching — all from one login.
+                    Invoicing, expenses, tax and payment matching, all from one login.
                 </h2>
                 <div className="space-y-6">
                     <p className="text-muted-foreground">
                         Claryeo is built for freelancers and small businesses.
-                        Your bank transactions sync automatically—no manual
+                        Your bank transactions sync automatically, no manual
                         entry or statement uploads. Realtime account tracking,
                         automatic payment matching, and tax-ready summaries
                         in one place. Less admin, more focus on your business.

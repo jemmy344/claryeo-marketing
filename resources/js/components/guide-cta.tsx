@@ -12,7 +12,7 @@ type GuideCtaProps = {
 
 const GuideCta: FC<GuideCtaProps> = ({
     heading = 'Try the free Nigerian tax calculator',
-    description = 'Calculate your PAYE or business tax instantly — no signup required.',
+    description = 'Calculate your PAYE or business tax instantly. No signup required.',
     buttonText = 'Open tax calculator',
     buttonHref = '/tax-calculator',
 }) => (

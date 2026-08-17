@@ -41,7 +41,7 @@ const faqs = [
 const PayeTaxNigeriaGuide: FC = () => (
     <GuideLayout
         title="PAYE Tax in Nigeria: Complete Guide for Employees & Employers (2026)"
-        description="Everything you need to know about PAYE tax in Nigeria — tax bands, CRA calculation, employer obligations, and filing deadlines. Updated for 2026."
+        description="Everything you need to know about PAYE tax in Nigeria: tax bands, CRA calculation, employer obligations, and filing deadlines. Updated for 2026."
         canonical="https://claryeo.com/guides/paye-tax-nigeria"
         keywords="PAYE tax Nigeria, PAYE calculator Nigeria, personal income tax Nigeria, tax bands Nigeria 2026, CRA Nigeria, how to calculate PAYE"
         publishedDate="2026-04-06"
@@ -63,13 +63,13 @@ const PayeTaxNigeriaGuide: FC = () => (
             Personal Income Tax (PIT) from employee salaries and remit it to the
             relevant State Internal Revenue Service (SIRS). If you earn a salary
             in Nigeria, PAYE is how your tax gets paid. This guide covers
-            everything you need to know — from how PAYE is calculated to your
+            everything you need to know, from how PAYE is calculated to your
             obligations as an employee or employer.
         </p>
 
         <h2 className="t-display-3 mt-10">What Is PAYE?</h2>
         <p className="t-body mt-3 text-muted-foreground">
-            PAYE is not a separate tax — it is the collection mechanism for
+            PAYE is not a separate tax. It is the collection mechanism for
             Personal Income Tax under the{' '}
             <strong className="text-foreground">
                 Personal Income Tax Act (PITA)
@@ -100,7 +100,7 @@ const PayeTaxNigeriaGuide: FC = () => (
         </p>
         <p className="t-body mt-3 text-muted-foreground">
             Both Nigerian residents and non-residents earning income in Nigeria
-            may be liable for PAYE. The key distinction is residency — residents
+            may be liable for PAYE. The key distinction is residency: residents
             are taxed on worldwide income, while non-residents are taxed only on
             Nigerian-sourced income.
         </p>
@@ -337,7 +337,7 @@ const PayeTaxNigeriaGuide: FC = () => (
 
         <GuideCta
             heading="Track your income and tax automatically"
-            description="Claryeo calculates your tax from invoices and expenses — no spreadsheets needed."
+            description="Claryeo calculates your tax from invoices and expenses. No spreadsheets needed."
             buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />

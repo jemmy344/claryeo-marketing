@@ -26,7 +26,7 @@ class GetStartedController extends Controller
         $initialInterval = $request->string('billing_interval')->value();
 
         return view('get-started', [
-            'title' => 'Get Started — Claryeo',
+            'title' => 'Get Started | Claryeo',
             'meta_description' => 'Choose a plan and start managing your invoices, expenses, and taxes with Claryeo. Free and Pro plans available.',
             'island_props' => htmlspecialchars(
                 (string) json_encode([

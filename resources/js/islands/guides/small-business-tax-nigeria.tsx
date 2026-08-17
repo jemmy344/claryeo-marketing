@@ -282,7 +282,7 @@ const SmallBusinessTaxGuide: FC = () => (
 
         <GuideCta
             heading="Track expenses and tax automatically"
-            description="Claryeo handles invoicing, expense tracking, and tax summaries — so you can focus on growing your business."
+            description="Claryeo handles invoicing, expense tracking, and tax summaries, so you can focus on growing your business."
             buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />

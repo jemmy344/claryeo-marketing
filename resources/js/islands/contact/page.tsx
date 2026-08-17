@@ -50,7 +50,7 @@ const FAQS = [
     {
         id: 'billing',
         q: 'I have a billing or account question.',
-        a: 'Include the email address on the account in your message and we can look it up straight away — no ticket number needed.',
+        a: 'Include the email address on the account in your message and we can look it up straight away. No ticket number needed.',
     },
     {
         id: 'demo',

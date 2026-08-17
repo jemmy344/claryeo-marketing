@@ -51,7 +51,7 @@ const BusinessBalanceSpotlight: FC = () => {
                         <em>See</em> exactly where your business stands
                     </h2>
                     <p className="mx-auto mt-3 max-w-md text-mist">
-                        The same balance card that greets you every time you log in — revenue,
+                        The same balance card that greets you every time you log in: revenue,
                         expenses and net, at a glance.
                     </p>
                 </div>
