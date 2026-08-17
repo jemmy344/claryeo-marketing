@@ -15,7 +15,7 @@ class TaxCalculatorController extends Controller
     public function show(): View
     {
         return view('tax-calculator', [
-            'title' => 'Nigerian tax calculator — Claryeo',
+            'title' => 'Nigerian tax calculator | Claryeo',
             'meta_description' => 'Estimate your Nigerian PAYE or business tax in seconds, then email yourself the full breakdown.',
         ]);
     }

@@ -15,7 +15,7 @@ class WaitlistController extends Controller
     public function show(): View
     {
         return view('waitlist', [
-            'title' => 'Join the waitlist — Claryeo',
+            'title' => 'Join the waitlist | Claryeo',
             'meta_description' => 'Be the first to know when Claryeo launches.',
         ]);
     }

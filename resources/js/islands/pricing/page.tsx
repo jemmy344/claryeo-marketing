@@ -72,7 +72,7 @@ const PricingPage: FC<PricingPageProps> = ({
                     </h2>
                     <p className="mx-auto mt-2 max-w-2xl text-center text-muted-foreground">
                         Every column reflects the same catalog we use in
-                        checkout—so what you see here matches what you get in
+                        checkout, so what you see here matches what you get in
                         product.
                     </p>
                     <div className="mt-10">

@@ -40,13 +40,13 @@ const faqs = [
         id: 'item-4',
         q: 'How does transaction sync work?',
         icon: RefreshCw,
-        a: 'Connect your bank once and your transaction (data) syncs automatically. No manual entry or statement uploads—transactions flow in so you spend less time on data entry and more on your business.',
+        a: 'Connect your bank once and your transaction (data) syncs automatically. No manual entry or statement uploads. Transactions flow in so you spend less time on data entry and more on your business.',
     },
     {
         id: 'item-5',
         q: 'What is realtime account tracking?',
         icon: Activity,
-        a: 'Realtime tracking and analysis shows your cash flow, balances, and business health as they update. Make decisions with current data, not last month’s—so you’re always in the know.',
+        a: 'Realtime tracking and analysis shows your cash flow, balances, and business health as they update. Make decisions with current data, not last month’s, so you’re always in the know.',
     },
     {
         id: 'item-6',

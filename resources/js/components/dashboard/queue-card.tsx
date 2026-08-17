@@ -93,9 +93,9 @@ const QueueCard: FC<QueueCardProps> = ({ credit, onOpenMatchScreen, onSetAside, 
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => onSetAside(credit.id)}>
-                            Set aside — not for an invoice
+                            Set aside, not for an invoice
                         </DropdownMenuItem>
-                        <DropdownMenuItem>Decide later — it keeps waiting here</DropdownMenuItem>
+                        <DropdownMenuItem>Decide later, it keeps waiting here</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -108,8 +108,8 @@ const QueueCard: FC<QueueCardProps> = ({ credit, onOpenMatchScreen, onSetAside, 
                     </p>
                     <p className="mt-0.5 text-xs text-muted-foreground">
                         You recorded a {credit.possibleDuplicateOf.method.toLowerCase()} payment for{' '}
-                        {credit.possibleDuplicateOf.clientName} on {formatDay(credit.possibleDuplicateOf.recordedAt)} —
-                        matching both would count the money twice.
+                        {credit.possibleDuplicateOf.clientName} on {formatDay(credit.possibleDuplicateOf.recordedAt)}.
+                        Matching both would count the money twice.
                     </p>
                     <div className="mt-3 flex flex-col gap-2 sm:flex-row">
                         <Button size="sm" className="sm:flex-1">

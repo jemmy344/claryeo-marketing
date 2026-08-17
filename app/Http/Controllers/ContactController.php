@@ -15,7 +15,7 @@ class ContactController extends Controller
     public function show(): View
     {
         return view('contact', [
-            'title' => 'Contact — Claryeo',
+            'title' => 'Contact | Claryeo',
             'meta_description' => 'Get in touch with the Claryeo team.',
         ]);
     }

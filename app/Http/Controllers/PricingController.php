@@ -19,7 +19,7 @@ class PricingController extends Controller
         $pricing = $this->api->pricing();
 
         return view('pricing', [
-            'title' => 'Pricing — Claryeo',
+            'title' => 'Pricing | Claryeo',
             'meta_description' => 'Simple, transparent pricing for Claryeo. Choose the plan that fits your business.',
             // HTML-escape the JSON so its structural double quotes become
             // &quot; and survive embedding in a double-quoted HTML attribute

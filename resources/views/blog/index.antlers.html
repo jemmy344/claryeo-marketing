@@ -68,7 +68,7 @@
             {{ if activeCategory }}
                 {{ collection:blog sort="date:desc" taxonomy:categories="{activeCategory}" paginate="10" as="posts" }}
                     {{ if no_results }}
-                        <p class="py-16 text-center text-muted-foreground">No posts here yet — check back soon.</p>
+                        <p class="py-16 text-center text-muted-foreground">No posts here yet. Check back soon.</p>
                     {{ /if }}
                     {{ posts }}
                         {{ partial:blog/card }}

@@ -78,7 +78,7 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
                 </h1>
 
                 <p data-hero-in className="t-lead mt-6 max-w-lg text-balance text-mist">
-                    Claryeo syncs your bank, matches your payments, and works out your tax —
+                    Claryeo syncs your bank, matches your payments, and works out your tax,
                     automatically. Built for freelancers and small businesses.
                 </p>
 

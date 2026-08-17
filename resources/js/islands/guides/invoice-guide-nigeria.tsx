@@ -19,7 +19,7 @@ const faqs = [
     {
         id: 'inv-faq-2',
         question: 'What is the difference between an invoice and a receipt?',
-        answer: 'An invoice is a request for payment sent before or at the time of delivery. A receipt is proof that payment has been received. Invoices are issued by the seller to the buyer as a bill, while receipts are issued after the buyer has paid. For tax purposes, both documents serve different roles — invoices track revenue owed, and receipts confirm income received.',
+        answer: 'An invoice is a request for payment sent before or at the time of delivery. A receipt is proof that payment has been received. Invoices are issued by the seller to the buyer as a bill, while receipts are issued after the buyer has paid. For tax purposes, both documents serve different roles: invoices track revenue owed, and receipts confirm income received.',
     },
     {
         id: 'inv-faq-3',
@@ -41,7 +41,7 @@ const faqs = [
 const InvoiceGuideNigeria: FC = () => (
     <GuideLayout
         title="How to Create Professional Invoices in Nigeria: Complete Guide"
-        description="Learn how to create professional invoices in Nigeria — what to include, VAT invoice requirements, payment terms, and best practices for freelancers and small businesses."
+        description="Learn how to create professional invoices in Nigeria: what to include, VAT invoice requirements, payment terms, and best practices for freelancers and small businesses."
         canonical="https://claryeo.com/guides/invoice-guide-nigeria"
         keywords="invoice template Nigeria, how to create invoice Nigeria, Nigerian invoice requirements, VAT invoice Nigeria, professional invoice, invoice guide"
         publishedDate="2026-04-06"
@@ -59,7 +59,7 @@ const InvoiceGuideNigeria: FC = () => (
         </p>
 
         <p className="t-body mt-6 text-muted-foreground">
-            A professional invoice is more than a payment request — it is a
+            A professional invoice is more than a payment request. It is a
             legal document that establishes a clear record of work done, amounts
             owed, and payment terms. Whether you are a freelancer billing a
             client or a small business invoicing customers, getting your
@@ -207,7 +207,7 @@ const InvoiceGuideNigeria: FC = () => (
 
         <GuideCta
             heading="Create professional invoices in minutes"
-            description="Claryeo lets you create, send, and track invoices — with automatic tax calculations built in."
+            description="Claryeo lets you create, send, and track invoices, with automatic tax calculations built in."
             buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />
@@ -307,7 +307,7 @@ const InvoiceGuideNigeria: FC = () => (
                     <strong className="text-foreground">
                         Be specific in line items.
                     </strong>{' '}
-                    "Website development — 5-page business site" is better than
+                    "Website development: 5-page business site" is better than
                     "Web services".
                 </span>
             </li>

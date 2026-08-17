@@ -74,7 +74,7 @@ const ReconciliationSpotlight: FC = () => {
                     </h2>
                     <p className="t-body mt-5 max-w-sm text-mist">
                         Every credit that lands is checked against your open invoices by amount,
-                        reference and timing. You see the evidence and confirm — nothing posts to
+                        reference and timing. You see the evidence and confirm. Nothing posts to
                         your books until you say so.
                     </p>
                 </div>

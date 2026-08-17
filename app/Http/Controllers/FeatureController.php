@@ -38,8 +38,8 @@ class FeatureController extends Controller
             ->all();
 
         return view('features', [
-            'title' => 'Features — Claryeo',
-            'meta_description' => 'Invoicing, bank sync, tax & reports, and an AI assistant — everything you need to run your business, in one place.',
+            'title' => 'Features | Claryeo',
+            'meta_description' => 'Invoicing, bank sync, tax & reports, and an AI assistant: everything you need to run your business, in one place.',
             'island_props' => htmlspecialchars(
                 (string) json_encode(['features' => $features]),
                 ENT_QUOTES,
@@ -80,7 +80,7 @@ class FeatureController extends Controller
             : ['label' => 'Get started', 'href' => '/get-started'];
 
         return view('feature', [
-            'title' => $feature['title'].' — Claryeo',
+            'title' => $feature['title'].' | Claryeo',
             'meta_description' => $feature['heroParagraph'],
             'island_props' => htmlspecialchars(
                 (string) json_encode([

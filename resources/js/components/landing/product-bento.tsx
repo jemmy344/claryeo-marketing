@@ -111,7 +111,7 @@ const ProductBento: FC = () => (
         <BentoCard
             eyebrow="Invoices & documents"
             title="Send it, track it, get paid for it"
-            description="This is the actual invoice card from your dashboard — same numbers, same layout, once you're in."
+            description="This is the actual invoice card from your dashboard: same numbers, same layout, once you're in."
             href="/features/invoicing"
         >
             <InvoiceOverviewCard invoiceCount={23} paidCount={18} pendingCount={4} overdueCount={1} outstanding={0} />
@@ -138,7 +138,7 @@ const ProductBento: FC = () => (
         <BentoCard
             eyebrow="Notifications"
             title="Updates where you already look"
-            description="In-app, email or WhatsApp — you pick where invoice and payment news lands."
+            description="In-app, email or WhatsApp: you pick where invoice and payment news lands."
             className="md:col-span-2"
         >
             <NotificationsPanel />

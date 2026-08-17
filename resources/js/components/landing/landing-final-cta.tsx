@@ -28,7 +28,7 @@ const LandingFinalCta: FC<LandingFinalCtaProps> = ({
                 Open your evening.
             </h2>
             <p className="t-lead mt-5 max-w-lg text-mist">
-                Invoicing, expenses, and tax in one place — with bank sync and payment matching
+                Invoicing, expenses, and tax in one place, with bank sync and payment matching
                 doing the admin, so you don't have to.
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
