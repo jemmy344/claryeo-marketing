@@ -1,26 +1,37 @@
-<article data-blog-card class="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md" data-search="{{ title | lower }} {{ excerpt | lower }} {{ author | lower }}">
-    <a href="{{ url }}" class="relative block overflow-hidden">
+{{#
+    One entry in the register. A ruled row rather than a card -- the archive is
+    a dated record, and rows let you scan ten of them at once. Used by both the
+    blog index and the related-posts list on a post.
+#}}
+<article
+    data-blog-card
+    data-search="{{ title | lower }} {{ excerpt | lower }} {{ author | lower }}"
+    class="group border-b border-border {{ if url == current_url }}is-current{{ /if }}"
+>
+    <a href="{{ url }}" class="flex items-start gap-5 py-6 md:gap-8 md:py-7">
+        <div class="min-w-0 flex-1">
+            <p class="t-label text-muted-foreground">
+                {{ date format="d M Y" }}
+                {{ if categories }}
+                    <span class="text-border">·</span>
+                    {{ categories }}<span class="text-primary">{{ title }}</span> {{ /categories }}
+                {{ /if }}
+            </p>
+            <h2 class="t-display-4 mt-2 text-foreground transition-colors group-hover:text-primary">
+                {{ title }}
+            </h2>
+            {{ if excerpt }}
+                <p class="t-body-sm mt-2 line-clamp-2 max-w-2xl text-muted-foreground">{{ excerpt }}</p>
+            {{ /if }}
+        </div>
+
         {{ if hero_image }}
-            <img src="{{ hero_image }}" alt="{{ title }}" loading="lazy" class="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-105">
-        {{ else }}
-            <div class="aspect-[16/10] bg-muted"></div>
-        {{ /if }}
-        {{ if categories }}
-            <div class="absolute inset-x-0 bottom-0 flex flex-wrap gap-1.5 bg-gradient-to-t from-black/50 to-transparent p-4 pt-10">
-                {{ categories }}
-                    <span class="rounded-full bg-white/95 px-2.5 py-0.5 text-xs font-medium text-primary">{{ title }}</span>
-                {{ /categories }}
-            </div>
+            <img
+                src="{{ hero_image }}"
+                alt=""
+                loading="lazy"
+                class="size-16 shrink-0 rounded-md object-cover md:size-24"
+            >
         {{ /if }}
     </a>
-    <div class="flex flex-1 flex-col p-5 md:p-6">
-        <p class="text-xs text-muted-foreground">{{ date format="F j, Y" }}</p>
-        <h2 class="mt-2 text-lg font-semibold leading-snug tracking-tight text-foreground">
-            <a href="{{ url }}" class="transition-colors group-hover:text-primary">{{ title }}</a>
-        </h2>
-        {{ if excerpt }}
-            <p class="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{{ excerpt }}</p>
-        {{ /if }}
-        <a href="{{ url }}" class="mt-4 inline-flex text-sm font-medium text-primary transition-colors hover:text-primary/80">Read More</a>
-    </div>
 </article>

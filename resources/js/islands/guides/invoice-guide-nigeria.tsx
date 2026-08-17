@@ -51,14 +51,14 @@ const InvoiceGuideNigeria: FC = () => (
             faqs.map((f) => ({ question: f.question, answer: f.answer })),
         )}
     >
-        <h1 className="text-3xl leading-tight font-bold md:text-4xl">
+        <h1 className="t-display-2">
             How to Create Professional Invoices in Nigeria
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
             Updated April 2026 &middot; 6 min read
         </p>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-6 text-muted-foreground">
             A professional invoice is more than a payment request — it is a
             legal document that establishes a clear record of work done, amounts
             owed, and payment terms. Whether you are a freelancer billing a
@@ -67,10 +67,10 @@ const InvoiceGuideNigeria: FC = () => (
             tax-ready.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             What to Include on Every Invoice
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             A complete Nigerian invoice should include the following elements:
         </p>
         <ol className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -178,8 +178,8 @@ const InvoiceGuideNigeria: FC = () => (
             </li>
         </ol>
 
-        <h2 className="mt-10 text-2xl font-bold">VAT Invoice Requirements</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">VAT Invoice Requirements</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             If your business is VAT-registered (annual turnover above ₦25
             million), your invoices must comply with FIRS requirements. A VAT
             invoice must additionally include:
@@ -208,14 +208,14 @@ const InvoiceGuideNigeria: FC = () => (
         <GuideCta
             heading="Create professional invoices in minutes"
             description="Claryeo lets you create, send, and track invoices — with automatic tax calculations built in."
-            buttonText="Join the waitlist — 3 months free"
+            buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Common Payment Terms in Nigeria
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Payment terms define when you expect to be paid. The most common
             terms used in Nigeria:
         </p>
@@ -279,7 +279,7 @@ const InvoiceGuideNigeria: FC = () => (
             </table>
         </div>
 
-        <h2 className="mt-10 text-2xl font-bold">Invoice Best Practices</h2>
+        <h2 className="t-display-3 mt-10">Invoice Best Practices</h2>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
             <li className="flex gap-3">
                 <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
@@ -333,10 +333,10 @@ const InvoiceGuideNigeria: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Invoicing and Tax Compliance
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Your invoices are the foundation of your tax records. They prove
             your income, support your expense claims, and provide the audit
             trail tax authorities need. For{' '}
@@ -357,7 +357,7 @@ const InvoiceGuideNigeria: FC = () => (
             season and a stressful scramble.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Frequently Asked Questions</h2>
+        <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
         <div className="mt-6">
             <Accordion
                 type="single"
@@ -383,7 +383,7 @@ const InvoiceGuideNigeria: FC = () => (
             </Accordion>
         </div>
 
-        <h2 className="mt-10 text-2xl font-bold">Related Guides</h2>
+        <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">
             <li>
                 <a

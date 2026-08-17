@@ -11,17 +11,43 @@
         <link rel="apple-touch-icon" href="/favicon.svg">
         {{ if meta_description }}<meta name="description" content="{{ meta_description }}">{{ /if }}
         {{ if canonical_url }}<link rel="canonical" href="{{ canonical_url }}">{{ /if }}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&display=swap" rel="stylesheet">
         {{# Apply the saved light/dark/system theme before first paint to avoid a flash. #}}
         <script src="/theme-init.js"></script>
         {{ vite_react_refresh | raw }}
         {{ vite src="resources/js/site.js|resources/js/islands.tsx|resources/css/site.css" }}
     </head>
     <body class="flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased">
+        {{ if nav_theme == "dark" }}
+        <header class="sticky top-0 z-50 -mb-14 w-full border-b border-transparent bg-transparent">
+        {{ else }}
         <header class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur transition-colors duration-300 supports-backdrop-filter:bg-background/60">
+        {{ /if }}
             {{# Interactive header (logo, nav, Resources mega-menu, theme toggle). A
                 server-rendered fallback below keeps nav usable without JS / for SEO;
                 the island replaces it on hydration. #}}
-            <div data-island="site-nav" data-props="{{ nav_props }}">
+            <div data-island="site-nav" data-theme="{{ nav_theme }}" data-props="{{ nav_props }}">
+                {{ if nav_theme == "dark" }}
+                <nav class="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
+                    <a href="/" class="flex items-center gap-3">
+                        <img src="/favicon.svg" alt="Claryeo" class="h-7 w-auto dark:invert">
+                        <span class="text-lg font-semibold tracking-tight text-paper">Claryeo</span>
+                    </a>
+                    <div class="hidden items-center gap-8 md:flex">
+                        <a href="/features" class="text-sm text-paper/80 transition-colors hover:text-paper">Features</a>
+                        {{ nav_primary }}
+                            <a href="{{ href }}" class="text-sm text-paper/80 transition-colors hover:text-paper">{{ label }}</a>
+                        {{ /nav_primary }}
+                        <a href="/blog" class="text-sm text-paper/80 transition-colors hover:text-paper">Resources</a>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        {{ unless waitlist_mode }}<a href="{{ claryeo_app_url }}/login" class="hidden rounded-full px-4 py-2 text-sm text-paper/80 transition-colors hover:bg-white/10 hover:text-paper md:inline-block">Log in</a>{{ /unless }}
+                        <a href="{{ primary_cta:href }}" class="rounded-full bg-paper px-4 py-2 text-sm font-medium text-ink shadow-sm transition-opacity hover:opacity-90">{{ primary_cta:label }}</a>
+                    </div>
+                </nav>
+                {{ else }}
                 <nav class="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
                     <a href="/" class="flex items-center gap-3">
                         <img src="/favicon.svg" alt="Claryeo" class="h-7 w-auto dark:invert">
@@ -39,6 +65,7 @@
                         <a href="{{ primary_cta:href }}" class="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90">{{ primary_cta:label }}</a>
                     </div>
                 </nav>
+                {{ /if }}
             </div>
         </header>
 

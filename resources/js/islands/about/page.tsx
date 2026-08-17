@@ -41,14 +41,12 @@ const About: FC = () => (
         <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <section className="border-b border-border bg-muted/20 py-14 transition-colors duration-300 md:py-20">
                 <div className="mx-auto max-w-3xl px-4 md:px-6">
-                    <p className="text-sm font-medium tracking-wide text-primary uppercase">
-                        About Claryeo
-                    </p>
-                    <h1 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
+                    <p className="t-eyebrow text-primary">About Claryeo</p>
+                    <h1 className="t-display-1 mt-3">
                         We are building modern business finance tools for the
                         teams doing real work.
                     </h1>
-                    <p className="mt-5 text-base text-muted-foreground md:text-lg">
+                    <p className="t-lead mt-5 text-muted-foreground">
                         Claryeo started with a simple problem: small businesses
                         and freelancers spend too much time stitching together
                         invoices, expenses, and tax records across disconnected
@@ -60,7 +58,7 @@ const About: FC = () => (
 
             <section className="mx-auto grid w-full max-w-5xl gap-10 px-4 py-14 md:grid-cols-2 md:px-6 md:py-20">
                 <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+                    <h2 className="t-display-3 text-foreground">
                         Our Story
                     </h2>
                     <p className="text-muted-foreground">
@@ -79,7 +77,7 @@ const About: FC = () => (
                     />
                 </div>
                 <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-                    <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+                    <h2 className="t-display-3 text-foreground">
                         Our Mission
                     </h2>
                     <p className="mt-3 text-muted-foreground">
@@ -99,7 +97,7 @@ const About: FC = () => (
 
             <section className="border-y border-border bg-muted/15 py-14 transition-colors duration-300 md:py-20">
                 <div className="mx-auto max-w-5xl px-4 md:px-6">
-                    <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                    <h2 className="t-display-3 text-foreground">
                         Values
                     </h2>
                     <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -108,7 +106,7 @@ const About: FC = () => (
                                 key={value.title}
                                 className="rounded-xl border border-border bg-card p-6 shadow-sm"
                             >
-                                <h3 className="text-base font-semibold text-foreground">
+                                <h3 className="t-ui-title text-foreground">
                                     {value.title}
                                 </h3>
                                 <p className="mt-2 text-sm text-muted-foreground">
@@ -121,7 +119,7 @@ const About: FC = () => (
             </section>
 
             <section className="mx-auto max-w-5xl px-4 py-14 md:px-6 md:py-20">
-                <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                <h2 className="t-display-3 text-foreground">
                     Team
                 </h2>
                 <p className="mt-3 max-w-3xl text-muted-foreground">
@@ -135,7 +133,7 @@ const About: FC = () => (
                             key={group.name}
                             className="rounded-xl border border-border bg-card p-6 shadow-sm"
                         >
-                            <h3 className="text-base font-semibold text-foreground">
+                            <h3 className="t-ui-title text-foreground">
                                 {group.name}
                             </h3>
                             <p className="mt-2 text-sm text-muted-foreground">

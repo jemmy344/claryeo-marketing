@@ -79,16 +79,16 @@ const GuideLayout: FC<GuideLayoutProps> = ({
                 <span className="text-foreground">{breadcrumbTitle}</span>
             </nav>
 
-            <div className="prose-custom">{children}</div>
+            <div className="prose-claryeo">{children}</div>
 
             <section className="mt-16 rounded-2xl border border-border bg-muted/30 p-8 text-center md:p-12">
-                <h2 className="text-2xl font-bold md:text-3xl">
+                <h2 className="t-display-3">
                     Take control of your finances with Claryeo
                 </h2>
                 <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
                     Invoicing, expense tracking, and tax-ready summaries — built
                     for freelancers and small businesses in Nigeria. Join the
-                    waitlist and get 3 months free.
+                    waitlist to get your invite first.
                 </p>
                 <div className="mt-6 flex flex-wrap justify-center gap-3">
                     <Button
@@ -96,7 +96,7 @@ const GuideLayout: FC<GuideLayoutProps> = ({
                         className="bg-gradient-primary text-primary-foreground hover:opacity-90"
                     >
                         <a href="/waitlist">
-                            Join the waitlist — 3 months free
+                            Join the waitlist
                             <ArrowUpRight className="size-4" />
                         </a>
                     </Button>

@@ -17,7 +17,7 @@ const GuideCta: FC<GuideCtaProps> = ({
     buttonHref = '/tax-calculator',
 }) => (
     <div className="my-10 rounded-xl border border-primary/20 bg-primary/5 p-6 md:p-8">
-        <h3 className="text-lg font-semibold text-foreground">{heading}</h3>
+        <h3 className="t-ui-title-lg text-foreground">{heading}</h3>
         <p className="mt-2 text-sm text-muted-foreground">{description}</p>
         <div className="mt-4">
             <Button

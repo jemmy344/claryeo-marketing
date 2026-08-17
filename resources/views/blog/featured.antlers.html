@@ -1,17 +1,27 @@
-<article class="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+{{#
+    The lead entry. No frame -- the image and the type carry it, so the newest
+    post reads as the front page rather than as the first of six cards.
+#}}
+<article class="group">
     {{ if hero_image }}
-        <a href="{{ url }}" class="block overflow-hidden">
-            <img src="{{ hero_image }}" alt="{{ title }}" class="aspect-[5/2] w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]">
+        <a href="{{ url }}" class="block overflow-hidden rounded-lg">
+            <img
+                src="{{ hero_image }}"
+                alt="{{ title }}"
+                class="aspect-[16/9] w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            >
         </a>
     {{ /if }}
-    <div class="p-4 md:p-5">
-        <h2 class="text-lg font-semibold tracking-tight text-foreground md:text-xl md:leading-snug">
-            <a href="{{ url }}" class="transition-colors hover:text-primary">{{ title }}</a>
-        </h2>
-        <p class="mt-2 text-xs text-muted-foreground md:text-sm">{{ date format="F j, Y" }} &middot; {{ author }}</p>
-        {{ if excerpt }}
-            <p class="mt-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{{ excerpt }}</p>
-        {{ /if }}
-        <a href="{{ url }}" class="mt-4 inline-flex text-sm font-medium text-primary underline underline-offset-4 transition-colors hover:text-primary/80">Read more</a>
-    </div>
+
+    <p class="mt-5 t-label text-muted-foreground">
+        {{ date format="d M Y" }} <span class="text-border">·</span> {{ author }}
+    </p>
+
+    <h2 class="t-display-3 mt-2 text-foreground">
+        <a href="{{ url }}" class="transition-colors group-hover:text-primary">{{ title }}</a>
+    </h2>
+
+    {{ if excerpt }}
+        <p class="t-body mt-3 max-w-xl text-muted-foreground">{{ excerpt }}</p>
+    {{ /if }}
 </article>

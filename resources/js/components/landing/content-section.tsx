@@ -17,15 +17,15 @@ const ContentSection: FC<ContentSectionProps> = ({
     <section className="py-16 transition-colors duration-300 md:py-32">
         <div className="mx-auto max-w-5xl px-6">
             <div className="grid gap-6 md:grid-cols-2 md:gap-12">
-                <h2 className="text-4xl font-medium text-foreground">
-                    Invoicing, expenses, tax—and AI to save you time.
+                <h2 className="t-display-2 text-foreground">
+                    Invoicing, expenses, tax and payment matching — all from one login.
                 </h2>
                 <div className="space-y-6">
                     <p className="text-muted-foreground">
                         Claryeo is built for freelancers and small businesses.
                         Your bank transactions sync automatically—no manual
-                        entry or statement uploads. Realtime account tracking
-                        and analysis, AI across the app, and tax-ready summaries
+                        entry or statement uploads. Realtime account tracking,
+                        automatic payment matching, and tax-ready summaries
                         in one place. Less admin, more focus on your business.
                         Rolling out in Nigeria first.
                     </p>
@@ -41,7 +41,7 @@ const ContentSection: FC<ContentSectionProps> = ({
                         ) : (
                             <>
                                 <span className="font-bold text-foreground">
-                                    Get started
+                                    Get started free
                                 </span>{' '}
                                 in minutes. No credit card required.
                             </>
@@ -55,7 +55,7 @@ const ContentSection: FC<ContentSectionProps> = ({
                     >
                         <a href={waitlistMode ? waitlistUrl : getStartedUrl}>
                             <span>
-                                {waitlistMode ? 'Join waitlist' : 'Get started'}
+                                {waitlistMode ? 'Join waitlist' : 'Get started free'}
                             </span>
                             <ChevronRight className="size-4" />
                         </a>

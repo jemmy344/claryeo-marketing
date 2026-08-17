@@ -51,14 +51,14 @@ const PayeTaxNigeriaGuide: FC = () => (
             faqs.map((f) => ({ question: f.question, answer: f.answer })),
         )}
     >
-        <h1 className="text-3xl leading-tight font-bold md:text-4xl">
+        <h1 className="t-display-2">
             PAYE Tax in Nigeria: Complete Guide for Employees &amp; Employers
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
             Updated April 2026 &middot; 8 min read
         </p>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-6 text-muted-foreground">
             Pay-As-You-Earn (PAYE) is the system through which employers deduct
             Personal Income Tax (PIT) from employee salaries and remit it to the
             relevant State Internal Revenue Service (SIRS). If you earn a salary
@@ -67,8 +67,8 @@ const PayeTaxNigeriaGuide: FC = () => (
             obligations as an employee or employer.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">What Is PAYE?</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">What Is PAYE?</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             PAYE is not a separate tax — it is the collection mechanism for
             Personal Income Tax under the{' '}
             <strong className="text-foreground">
@@ -78,7 +78,7 @@ const PayeTaxNigeriaGuide: FC = () => (
             salaries at source and remit it monthly. The tax authority
             responsible is the SIRS of the state where the employee resides.
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Self-employed individuals and freelancers do not pay through PAYE.
             Instead, they file under{' '}
             <a
@@ -90,25 +90,25 @@ const PayeTaxNigeriaGuide: FC = () => (
             .
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Who Pays PAYE?</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Who Pays PAYE?</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             All employees earning above the national minimum wage are subject to
             PAYE. The current minimum wage is{' '}
             <strong className="text-foreground">₦70,000 per month</strong>{' '}
             (₦840,000 annually). Employees earning at or below this threshold
             are exempt from PAYE.
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Both Nigerian residents and non-residents earning income in Nigeria
             may be liable for PAYE. The key distinction is residency — residents
             are taxed on worldwide income, while non-residents are taxed only on
             Nigerian-sourced income.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             How PAYE Is Calculated: Step by Step
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             PAYE calculation involves three main steps:
         </p>
         <ol className="mt-4 space-y-4 text-base text-muted-foreground">
@@ -152,10 +152,10 @@ const PayeTaxNigeriaGuide: FC = () => (
             </li>
         </ol>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             PAYE Tax Bands in Nigeria (2026)
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Nigeria's PIT uses a progressive (graduated) structure. After
             deducting reliefs, your taxable income is applied to these bands:
         </p>
@@ -211,19 +211,19 @@ const PayeTaxNigeriaGuide: FC = () => (
 
         <GuideCta />
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Consolidated Relief Allowance (CRA)
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             The CRA is available to all Nigerian taxpayers and significantly
             reduces taxable income. It is calculated as:
         </p>
         <div className="mt-4 rounded-lg border border-border bg-muted/30 p-4">
-            <p className="font-mono text-sm">
+            <p className="t-mono text-sm">
                 CRA = max(₦200,000, 1% of Gross Income) + 20% of Gross Income
             </p>
         </div>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-4 text-muted-foreground">
             <strong className="text-foreground">Example:</strong> For an
             employee earning ₦6,000,000 annually:
         </p>
@@ -236,8 +236,8 @@ const PayeTaxNigeriaGuide: FC = () => (
             <li>Taxable income = ₦6,000,000 − ₦1,400,000 = ₦4,600,000</li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">Other Tax Reliefs</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Other Tax Reliefs</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             In addition to CRA, employees can claim the following deductions:
         </p>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -284,8 +284,8 @@ const PayeTaxNigeriaGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">Employer Obligations</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Employer Obligations</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             Employers in Nigeria have several legal obligations related to PAYE:
         </p>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -319,16 +319,16 @@ const PayeTaxNigeriaGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Filing Deadlines and Penalties
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Individual taxpayers must file their annual returns by{' '}
             <strong className="text-foreground">March 31st</strong> of the
             following year. Employers must file annual PAYE returns by{' '}
             <strong className="text-foreground">January 31st</strong>.
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Late filing attracts penalties including fines and interest on
             unpaid tax. In severe cases, the tax authority may pursue criminal
             prosecution. Staying on top of deadlines is essential for
@@ -338,11 +338,11 @@ const PayeTaxNigeriaGuide: FC = () => (
         <GuideCta
             heading="Track your income and tax automatically"
             description="Claryeo calculates your tax from invoices and expenses — no spreadsheets needed."
-            buttonText="Join the waitlist — 3 months free"
+            buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />
 
-        <h2 className="mt-10 text-2xl font-bold">Frequently Asked Questions</h2>
+        <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
         <div className="mt-6">
             <Accordion
                 type="single"
@@ -368,7 +368,7 @@ const PayeTaxNigeriaGuide: FC = () => (
             </Accordion>
         </div>
 
-        <h2 className="mt-10 text-2xl font-bold">Related Guides</h2>
+        <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">
             <li>
                 <a

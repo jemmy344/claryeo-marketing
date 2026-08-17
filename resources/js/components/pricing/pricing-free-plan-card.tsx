@@ -24,7 +24,7 @@ const PricingFreePlanCard: FC<PricingFreePlanCardProps> = ({
         className={`flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-sm dark:border-border dark:bg-card ${className}`}
     >
         <div className="flex min-h-[260px] flex-col p-6 md:p-8">
-            <h3 className="text-xl font-semibold text-foreground">
+            <h3 className="t-ui-title-lg text-foreground">
                 {plan.name}
             </h3>
             <p className="mt-6 flex items-end gap-2 text-5xl font-bold tracking-tight text-foreground md:text-6xl">

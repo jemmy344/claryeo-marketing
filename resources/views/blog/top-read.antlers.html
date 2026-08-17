@@ -1,11 +1,17 @@
-<a href="{{ url }}" class="group flex items-center gap-4 overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/20">
-    {{ if hero_image }}
-        <div class="h-16 w-[5.75rem] shrink-0 overflow-hidden rounded-lg bg-muted md:h-[4.25rem] md:w-[6.25rem]">
-            <img src="{{ hero_image }}" alt="{{ title }}" loading="lazy" class="h-full w-full object-cover">
-        </div>
-    {{ /if }}
+{{#
+    Ranked row. The number is real information here -- these are ordered by
+    how often the post is actually read, not decoration.
+#}}
+<a href="{{ url }}" class="group flex items-baseline gap-4 border-b border-border py-4">
+    <span class="t-mono text-xs text-muted-foreground">{{ count }}</span>
     <div class="min-w-0 flex-1">
-        <h3 class="text-sm font-semibold leading-snug text-foreground transition-colors group-hover:text-primary md:text-[0.9375rem]">{{ title }}</h3>
-        <p class="mt-2 text-xs text-muted-foreground">{{ date format="F j, Y" }} &middot; <span class="text-primary">{{ author }}</span></p>
+        {{# A heading, not a span: these are post titles, and heading-by-heading
+            navigation should reach them like every other title on the page. #}}
+        <h3 class="font-display text-[15px] leading-snug text-foreground transition-colors group-hover:text-primary">
+            {{ title }}
+        </h3>
+        <span class="mt-1.5 block t-label text-muted-foreground">
+            {{ date format="d M Y" }}
+        </span>
     </div>
 </a>

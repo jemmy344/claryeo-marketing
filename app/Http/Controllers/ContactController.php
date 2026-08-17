@@ -26,8 +26,20 @@ class ContactController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        // Validated here as well as in the main app so the limits the form
+        // enforces (the 1000-char counter, the optional phone) can't drift
+        // from what gets proxied. Keep MESSAGE_MAX in the contact island and
+        // the main app's ContactRequest in step with these rules.
+        $request->validate([
+            'first_name' => ['nullable', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:32'],
+            'message' => ['required', 'string', 'min:10', 'max:1000'],
+        ]);
+
         $payload = [
-            ...$request->only(['first_name', 'last_name', 'email', 'message']),
+            ...$request->only(['first_name', 'last_name', 'email', 'phone', 'message']),
             ...CaptureUtmParameters::resolve($request),
             'client_ip' => $request->ip(),
             'client_user_agent' => $request->userAgent(),

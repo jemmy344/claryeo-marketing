@@ -51,14 +51,14 @@ const FreelancerTaxGuide: FC = () => (
             faqs.map((f) => ({ question: f.question, answer: f.answer })),
         )}
     >
-        <h1 className="text-3xl leading-tight font-bold md:text-4xl">
+        <h1 className="t-display-2">
             How Freelancers Pay Tax in Nigeria
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
             Updated April 2026 &middot; 7 min read
         </p>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-6 text-muted-foreground">
             If you earn income as a freelancer, consultant, or self-employed
             professional in Nigeria, you are legally required to pay tax. Unlike
             employees whose tax is deducted through{' '}
@@ -72,10 +72,10 @@ const FreelancerTaxGuide: FC = () => (
             and filing. This guide walks you through the process step by step.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             PIT vs CIT: Which Tax Do Freelancers Pay?
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             The tax you pay depends on your business structure:
         </p>
         <div className="mt-6 overflow-x-auto">
@@ -114,7 +114,7 @@ const FreelancerTaxGuide: FC = () => (
                 </tbody>
             </table>
         </div>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-4 text-muted-foreground">
             Most freelancers start as sole proprietors and pay PIT through{' '}
             <strong className="text-foreground">direct assessment</strong>{' '}
             (self-filing). If your annual income grows beyond ₦50 million, or
@@ -129,10 +129,10 @@ const FreelancerTaxGuide: FC = () => (
             for details.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Step 1: Register With Your Tax Authority
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Before you can file taxes, you need a Tax Identification Number
             (TIN). As a freelancer, register with the{' '}
             <strong className="text-foreground">
@@ -160,10 +160,10 @@ const FreelancerTaxGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Step 2: Track Your Income and Expenses
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Accurate record-keeping is essential. You need to track:
         </p>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -197,17 +197,17 @@ const FreelancerTaxGuide: FC = () => (
         <GuideCta
             heading="Track income and expenses effortlessly"
             description="Claryeo syncs your transactions, tracks expenses, and generates tax summaries automatically."
-            buttonText="Join the waitlist — 3 months free"
+            buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />
 
-        <h2 className="mt-10 text-2xl font-bold">Step 3: Calculate Your Tax</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Step 3: Calculate Your Tax</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             As a sole proprietor, your tax is calculated the same way as PAYE
             employees — using the progressive PIT bands after deducting the
             Consolidated Relief Allowance (CRA) and other eligible reliefs.
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             The key difference is that you calculate and pay it yourself, rather
             than having an employer do it for you. The progressive bands range
             from 0% on the first ₦800,000 of taxable income up to 25% on income
@@ -216,10 +216,10 @@ const FreelancerTaxGuide: FC = () => (
 
         <GuideCta />
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Allowable Deductions for Freelancers
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             You can reduce your taxable income by claiming business expenses.
             Common deductions for freelancers include:
         </p>
@@ -269,14 +269,14 @@ const FreelancerTaxGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">Step 4: File Your Return</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Step 4: File Your Return</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             Freelancers file annual tax returns by{' '}
             <strong className="text-foreground">March 31st</strong> of the
             following year. You file with your State Internal Revenue Service
             using Form A (self-assessment).
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             What you need to file:
         </p>
         <ul className="mt-4 space-y-2 text-base text-muted-foreground">
@@ -298,7 +298,7 @@ const FreelancerTaxGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Tips for Managing Tax as a Freelancer
         </h2>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -348,7 +348,7 @@ const FreelancerTaxGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">Frequently Asked Questions</h2>
+        <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
         <div className="mt-6">
             <Accordion
                 type="single"
@@ -374,7 +374,7 @@ const FreelancerTaxGuide: FC = () => (
             </Accordion>
         </div>
 
-        <h2 className="mt-10 text-2xl font-bold">Related Guides</h2>
+        <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">
             <li>
                 <a

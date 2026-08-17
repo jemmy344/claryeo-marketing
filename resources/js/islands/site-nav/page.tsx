@@ -1,14 +1,4 @@
-import {
-    ArrowUpRight,
-    BarChart3,
-    ChevronDown,
-    FileText,
-    Menu,
-    RefreshCw,
-    Sparkles,
-    X,
-    type LucideIcon,
-} from 'lucide-react';
+import { ArrowUpRight, ChevronDown, Menu, X } from 'lucide-react';
 import type { FC } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -19,10 +9,10 @@ type NavLink = { label: string; href: string };
 type ResourceColumn = { title: string; links: NavLink[] };
 type SupportLink = { label: string; href: string; desc?: string };
 type FeatureItem = {
+    eyebrow: string;
     title: string;
     tagline: string;
     href: string;
-    icon: string;
     badge?: string | null;
 };
 
@@ -37,19 +27,14 @@ type SiteNavProps = {
     };
     waitlistMode?: boolean;
     cta?: { label: string; href: string };
+    /** 'dark' sits the header over a full-bleed dark hero (landing only): transparent at the top, glass once scrolled. */
+    theme?: 'light' | 'dark';
 };
 
 type MenuKey = 'features' | 'resources';
 
-const ICONS: Record<string, LucideIcon> = {
-    FileText,
-    RefreshCw,
-    BarChart3,
-    Sparkles,
-};
-
-const linkClass =
-    'text-sm text-muted-foreground transition-colors hover:text-foreground';
+const LIGHT_HEADER_CLASS =
+    'sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur transition-colors duration-300 supports-backdrop-filter:bg-background/60';
 
 const SiteNav: FC<SiteNavProps> = ({
     appUrl = '',
@@ -58,10 +43,18 @@ const SiteNav: FC<SiteNavProps> = ({
     resources = {},
     waitlistMode = false,
     cta = { label: 'Get started', href: '/get-started' },
+    theme = 'light',
 }) => {
     const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const rootRef = useRef<HTMLDivElement>(null);
+    const isDark = theme === 'dark';
+
+    const linkClass = isDark
+        ? 'text-sm text-paper/80 transition-colors hover:text-paper'
+        : 'text-sm text-muted-foreground transition-colors hover:text-foreground';
 
     // In waitlist mode, pricing/get-started links are removed from the menus.
     const hidden = waitlistMode ? ['/pricing', '/get-started'] : [];
@@ -109,6 +102,38 @@ const SiteNav: FC<SiteNavProps> = ({
         };
     }, [mobileOpen]);
 
+    // Dark-hero pages (landing): header starts transparent over the hero
+    // atmosphere and picks up a glass backdrop once scrolled past it.
+    useEffect(() => {
+        if (!isDark) return;
+
+        const onScroll = (): void => setScrolled(window.scrollY > 32);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [isDark]);
+
+    // The header's own background/border live on the <header> ancestor
+    // (server-rendered in the Antlers shell); this island takes over that
+    // styling once mounted so it can react to theme + scroll.
+    useEffect(() => {
+        const header = rootRef.current?.closest('header');
+        if (!header) return;
+
+        // An open drawer makes the header opaque ink so bar and panel read as
+        // one surface; otherwise transparent over the hero until scrolled.
+        header.className = isDark
+            ? cn(
+                  'sticky top-0 z-50 -mb-14 w-full transition-colors duration-300',
+                  openMenu || mobileOpen
+                      ? 'border-b border-transparent bg-ink'
+                      : scrolled
+                        ? 'border-b border-paper/10 bg-ink/80 backdrop-blur-md'
+                        : 'border-b border-transparent bg-transparent',
+              )
+            : LIGHT_HEADER_CLASS;
+    }, [isDark, scrolled, openMenu, mobileOpen]);
+
     const open = (key: MenuKey): void => {
         if (closeTimer.current) {
             clearTimeout(closeTimer.current);
@@ -123,6 +148,15 @@ const SiteNav: FC<SiteNavProps> = ({
         closeTimer.current = setTimeout(() => setOpenMenu(null), 120);
     };
 
+    // ponytail: ink/paper tokens flip with the appearance, so the dark-theme
+    // drawer just reuses bg-ink — the same surface the header sits on.
+    const panelClass = cn(
+        'absolute inset-x-0 top-full hidden border-b shadow-xl md:block',
+        isDark
+            ? 'border-ink-border bg-ink'
+            : 'border-border bg-background/98 backdrop-blur',
+    );
+
     const trigger = (key: MenuKey, label: string) => (
         <div
             className="flex items-center"
@@ -135,9 +169,13 @@ const SiteNav: FC<SiteNavProps> = ({
                 onClick={() => setOpenMenu((v) => (v === key ? null : key))}
                 className={cn(
                     'flex items-center gap-1 text-sm transition-colors',
-                    openMenu === key
-                        ? 'text-foreground'
-                        : 'text-muted-foreground hover:text-foreground',
+                    isDark
+                        ? openMenu === key
+                            ? 'text-paper'
+                            : 'text-paper/80 hover:text-paper'
+                        : openMenu === key
+                          ? 'text-foreground'
+                          : 'text-muted-foreground hover:text-foreground',
                 )}
             >
                 {label}
@@ -152,7 +190,7 @@ const SiteNav: FC<SiteNavProps> = ({
     );
 
     return (
-        <div className="w-full">
+        <div ref={rootRef} className="w-full">
             <nav className="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
                 <a
                     href="/"
@@ -163,7 +201,12 @@ const SiteNav: FC<SiteNavProps> = ({
                         alt="Claryeo"
                         className="h-7 w-auto dark:invert"
                     />
-                    <span className="text-lg font-semibold tracking-tight text-foreground">
+                    <span
+                        className={cn(
+                            'text-lg font-semibold tracking-tight',
+                            isDark ? 'text-paper' : 'text-foreground',
+                        )}
+                    >
                         Claryeo
                     </span>
                 </a>
@@ -179,19 +222,29 @@ const SiteNav: FC<SiteNavProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <AppearanceToggle className="shrink-0" />
+                    <AppearanceToggle className={cn('shrink-0', isDark && 'text-paper')} />
                     <div className="hidden items-center gap-2 md:flex">
                         {!waitlistMode && (
                             <a
                                 href={loginHref}
-                                className="rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                className={cn(
+                                    'rounded-full px-4 py-2 text-sm transition-colors',
+                                    isDark
+                                        ? 'text-paper/80 hover:bg-paper/10 hover:text-paper'
+                                        : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                                )}
                             >
                                 Log in
                             </a>
                         )}
                         <a
                             href={cta.href}
-                            className="bg-gradient-primary rounded-full px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+                            className={cn(
+                                'rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-opacity hover:opacity-90',
+                                isDark
+                                    ? 'bg-paper text-ink'
+                                    : 'bg-gradient-primary text-primary-foreground',
+                            )}
                         >
                             {cta.label}
                         </a>
@@ -201,7 +254,12 @@ const SiteNav: FC<SiteNavProps> = ({
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-                        className="inline-flex items-center justify-center rounded-full border border-border/60 bg-muted/40 p-2.5 text-foreground transition-colors hover:bg-muted/70 md:hidden"
+                        className={cn(
+                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden',
+                            isDark
+                                ? 'border-paper/15 bg-paper/5 text-paper hover:bg-paper/10'
+                                : 'border-border/60 bg-muted/40 text-foreground hover:bg-muted/70',
+                        )}
                     >
                         {mobileOpen ? (
                             <X className="size-5" />
@@ -215,51 +273,51 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Features mega-menu */}
             {openMenu === 'features' && featureItems.length > 0 && (
                 <div
-                    className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
+                    className={panelClass}
                     onMouseEnter={() => open('features')}
                     onMouseLeave={scheduleClose}
                 >
-                    <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
+                    <div className="mx-auto w-full max-w-[1180px] px-4 py-9 md:px-0">
                         {featureLead && (
                             <a
                                 href={featureLead.href}
-                                className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
+                                className="t-eyebrow group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                             >
                                 {featureLead.label}
-                                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
+                                <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </a>
                         )}
-                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                            {featureItems.map((item) => {
-                                const Icon = ICONS[item.icon] ?? Sparkles;
-
-                                return (
-                                    <a
-                                        key={item.href}
-                                        href={item.href}
-                                        className="group flex items-start gap-4 rounded-2xl border border-transparent p-4 transition-colors hover:border-border hover:bg-accent"
-                                    >
-                                        <div className="bg-gradient-primary flex size-10 shrink-0 items-center justify-center rounded-xl text-primary-foreground shadow-sm">
-                                            <Icon className="size-5" />
+                        <div className="mt-5 grid gap-x-10 sm:grid-cols-2">
+                            {featureItems.map((item, i) => (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    className={cn(
+                                        'group flex items-start justify-between gap-4 border-border py-5',
+                                        i >= 2 && 'border-t',
+                                    )}
+                                >
+                                    <div className="min-w-0">
+                                        <span className="t-label text-muted-foreground">
+                                            {item.eyebrow}
+                                        </span>
+                                        <div className="mt-1.5 flex items-baseline gap-2">
+                                            <span className="t-display-4 text-foreground">
+                                                {item.title}
+                                            </span>
+                                            {item.badge && (
+                                                <span className="t-label rounded-full bg-primary-surface px-2 py-0.5 text-primary-surface-foreground">
+                                                    {item.badge}
+                                                </span>
+                                            )}
                                         </div>
-                                        <div className="min-w-0">
-                                            <div className="flex items-center gap-2">
-                                                <p className="text-sm font-semibold text-foreground">
-                                                    {item.title}
-                                                </p>
-                                                {item.badge && (
-                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
-                                                        {item.badge}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <p className="mt-1 text-sm text-muted-foreground">
-                                                {item.tagline}
-                                            </p>
-                                        </div>
-                                    </a>
-                                );
-                            })}
+                                        <p className="mt-1.5 text-sm text-muted-foreground">
+                                            {item.tagline}
+                                        </p>
+                                    </div>
+                                    <ArrowUpRight className="mt-1 size-4 shrink-0 text-muted-foreground/60 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
+                                </a>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -268,25 +326,25 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Resources mega-menu */}
             {openMenu === 'resources' && columns.length > 0 && (
                 <div
-                    className="absolute inset-x-0 top-full hidden border-b border-border bg-background/98 shadow-xl backdrop-blur md:block"
+                    className={panelClass}
                     onMouseEnter={() => open('resources')}
                     onMouseLeave={scheduleClose}
                 >
-                    <div className="mx-auto w-full max-w-[1180px] px-4 py-8 md:px-0">
+                    <div className="mx-auto w-full max-w-[1180px] px-4 py-9 md:px-0">
                         {resourcesLead && (
                             <a
                                 href={resourcesLead.href}
-                                className="group inline-flex items-center gap-1 text-lg font-semibold text-foreground"
+                                className="t-eyebrow group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
                             >
                                 {resourcesLead.label}
-                                <ArrowUpRight className="size-4 text-primary transition-transform group-hover:translate-x-0.5" />
+                                <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             </a>
                         )}
 
-                        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                        <div className="mt-5 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                             {columns.map((col) => (
                                 <div key={col.title}>
-                                    <p className="text-sm font-semibold text-foreground">
+                                    <p className="t-label text-muted-foreground">
                                         {col.title}
                                     </p>
                                     <ul className="mt-3 flex flex-col gap-2.5">
@@ -307,7 +365,7 @@ const SiteNav: FC<SiteNavProps> = ({
 
                         {support.length > 0 && (
                             <div className="mt-8 border-t border-border pt-6">
-                                <p className="text-sm font-semibold text-foreground">
+                                <p className="t-label text-muted-foreground">
                                     Support
                                 </p>
                                 <div className="mt-3 flex flex-wrap gap-3">
@@ -341,7 +399,14 @@ const SiteNav: FC<SiteNavProps> = ({
 
             {/* Mobile sheet */}
             {mobileOpen && (
-                <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b border-border bg-background px-4 pb-8 shadow-2xl md:hidden">
+                <div
+                    className={cn(
+                        'absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b px-4 pb-8 shadow-2xl md:hidden',
+                        isDark
+                            ? 'border-ink-border bg-ink'
+                            : 'border-border bg-background',
+                    )}
+                >
                     <div className="flex flex-col gap-6 py-6">
                         <div className="flex flex-col gap-4">
                             {primary.map((item) => (
@@ -357,7 +422,7 @@ const SiteNav: FC<SiteNavProps> = ({
 
                         {featureItems.length > 0 && (
                             <div>
-                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                <p className="t-eyebrow text-muted-foreground">
                                     Features
                                 </p>
                                 <ul className="mt-3 flex flex-col gap-3">
@@ -369,7 +434,7 @@ const SiteNav: FC<SiteNavProps> = ({
                                             >
                                                 {item.title}
                                                 {item.badge && (
-                                                    <span className="rounded-full bg-primary-surface px-2 py-0.5 text-[10px] font-semibold tracking-wide text-primary-surface-foreground uppercase">
+                                                    <span className="t-label rounded-full bg-primary-surface px-2 py-0.5 text-primary-surface-foreground">
                                                         {item.badge}
                                                     </span>
                                                 )}
@@ -382,7 +447,7 @@ const SiteNav: FC<SiteNavProps> = ({
 
                         {columns.map((col) => (
                             <div key={col.title}>
-                                <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                                <p className="t-eyebrow text-muted-foreground">
                                     {col.title}
                                 </p>
                                 <ul className="mt-3 flex flex-col gap-3">

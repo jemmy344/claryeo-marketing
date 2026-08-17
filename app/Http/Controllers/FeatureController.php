@@ -13,17 +13,25 @@ class FeatureController extends Controller
      */
     public function index(): View
     {
-        /** @var array<string, array{slug: string, title: mixed, eyebrow: mixed, tagline: mixed, badge?: mixed, icon?: mixed}> $featurePages */
+        /** @var array<string, array<string, mixed>> $featurePages */
         $featurePages = Config::array('feature_pages', []);
+        $str = static fn (mixed $v): string => is_string($v) ? $v : '';
 
+        // Nullish reads: a malformed config entry should drop one card, not
+        // take down /features (see AppServiceProvider::boot for the same rule).
         $features = collect($featurePages)
             ->map(fn (array $f): array => [
-                'slug' => $f['slug'],
-                'title' => $f['title'],
-                'eyebrow' => $f['eyebrow'],
-                'tagline' => $f['tagline'],
+                'slug' => $str($f['slug'] ?? null),
+                'title' => $str($f['title'] ?? null),
+                'eyebrow' => $str($f['eyebrow'] ?? null),
+                'tagline' => $str($f['tagline'] ?? null),
+                'body' => $str($f['heroParagraph'] ?? null),
+                'highlight' => $this->firstHighlight($f['highlights'] ?? null),
                 'badge' => $f['badge'] ?? null,
-                'icon' => $f['icon'] ?? 'Sparkles',
+            ])
+            ->filter(fn (array $f): bool => $f['slug'] !== '' && $f['title'] !== '')
+            ->map(fn (array $f): array => [
+                ...$f,
                 'href' => '/features/'.$f['slug'],
             ])
             ->values()
@@ -38,6 +46,22 @@ class FeatureController extends Controller
                 'UTF-8'
             ),
         ]);
+    }
+
+    /**
+     * "12k invoices sent" style stat from the first highlight, or null when the
+     * entry has no usable highlights.
+     */
+    private function firstHighlight(mixed $highlights): ?string
+    {
+        if (! is_array($highlights) || ! is_array($highlights[0] ?? null)) {
+            return null;
+        }
+
+        $value = $highlights[0]['value'] ?? null;
+        $label = $highlights[0]['label'] ?? null;
+
+        return is_string($value) && is_string($label) ? $value.' '.$label : null;
     }
 
     /**

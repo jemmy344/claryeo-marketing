@@ -20,6 +20,33 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
     --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --font-display: 'Fraunces', ui-serif, Georgia, serif;
+
+    /*
+     * "Atmosphere" palette for the landing page's editorial sections (hero,
+     * product showcase, footer bookend) -- see the :root / .dark blocks
+     * below for the light/dark values.
+     */
+    --color-ink: var(--atm-ink);
+    --color-ink-raised: var(--atm-ink-raised);
+    --color-ink-border: var(--atm-ink-border);
+    --color-paper: var(--atm-paper);
+    --color-dawn: var(--atm-dawn);
+    --color-violet-bright: var(--atm-violet-bright);
+    --color-dusk: var(--atm-dusk);
+    --color-mist: var(--atm-mist);
+
+    /* Same state/money-flow language as the product app (app.css), so
+       feature previews on the marketing site use real, not invented, colors. */
+    --color-positive: var(--atm-positive);
+    --color-positive-tint: var(--atm-positive-tint);
+    --color-negative: var(--atm-negative);
+    --color-pending: var(--atm-pending);
+    --color-pending-tint: var(--atm-pending-tint);
+    --color-info: var(--atm-info);
+    --color-info-tint: var(--atm-info-tint);
+    --color-chart-income: var(--atm-chart-income);
+    --color-chart-expense: var(--atm-chart-expense);
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -96,6 +123,37 @@
     --gradient-primary-to-color: #722bc0;
 
     --radius: 0.625rem;
+
+    /*
+     * "Atmosphere" palette for the landing page's editorial sections (hero,
+     * product showcase, footer bookend). ink/paper/mist flip with the
+     * light/dark toggle like the semantic tokens above; the dawn/violet/dusk
+     * accents stay constant across both.
+     */
+    --atm-ink: #f6f4ef;
+    --atm-ink-raised: #ffffff;
+    --atm-ink-border: #e5e1d6;
+    --atm-paper: #16131f;
+    --atm-mist: #746e82;
+    --atm-dawn: #2596ff;
+    --atm-violet-bright: #9163f2;
+    --atm-dusk: #ff8a5b;
+
+    /* Money-flow & status -- values ported verbatim from the app (light). */
+    --atm-positive: #067a53;
+    --atm-positive-tint: #e2f5ec;
+    --atm-negative: #c92434;
+    --atm-pending: #946200;
+    --atm-pending-tint: #fbf0d8;
+    --atm-info: #1387eb;
+    --atm-info-tint: #e4f0fe;
+    --atm-chart-income: #059669;
+    --atm-chart-expense: #b91c1c;
+
+    /* Raw (unprefixed) aliases -- the ported dashboard components reference
+       var(--chart-income) directly, same as the app. */
+    --chart-income: var(--atm-chart-income);
+    --chart-expense: var(--atm-chart-expense);
 }
 
 .dark {
@@ -124,6 +182,23 @@
 
     --gradient-primary-from-color: #25b7ff;
     --gradient-primary-to-color: #722bc0;
+
+    --atm-ink: #0b0a13;
+    --atm-ink-raised: #16131f;
+    --atm-ink-border: #2a2536;
+    --atm-paper: #fbf9f5;
+    --atm-mist: #a79fc2;
+
+    /* Money-flow & status (dark), ported verbatim from the app. */
+    --atm-positive: #2fbe86;
+    --atm-positive-tint: #122a22;
+    --atm-negative: #f2606c;
+    --atm-pending: #e0a93b;
+    --atm-pending-tint: #2a2113;
+    --atm-info: #4fa8f5;
+    --atm-info-tint: #14222f;
+    --atm-chart-income: #059669;
+    --atm-chart-expense: #ef4444;
 }
 
 @layer base {
@@ -146,6 +221,133 @@
 
     body {
         @apply min-h-dvh bg-background text-foreground antialiased;
+    }
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * Typography system
+ * ---------------------------------------------------------------------------
+ * One scale for the whole marketing site, consumed identically from Antlers
+ * templates and React islands. Before this existed the site ran two unrelated
+ * systems -- Fraunces headings on landing/features/blog, sans `font-bold`
+ * headings everywhere else -- plus 7 letter-spacing values across 5 sizes for
+ * a single eyebrow role.
+ *
+ * Rules that matter:
+ *
+ * 1. NEVER put a weight utility on a `.t-display-*` class. Fraunces is loaded
+ *    at wght 300-500 only (see the Google Fonts URL in partials/shell). Ask
+ *    for 600+ and the browser synthesizes a faux bold that looks nothing like
+ *    the real face. The display classes pin weight 400 themselves.
+ * 2. Fraunces is an optical-size font. Each tier sets `opsz` to match its
+ *    rendered size -- that's what keeps the big sizes from looking spindly and
+ *    the small ones from looking clotted.
+ * 3. Size is the only thing a caller should override, and only for a genuine
+ *    one-off. Everything else belongs in a tier.
+ */
+@layer components {
+    /* --- Display (Fraunces). Marketing headlines, post titles, hero figures. --- */
+    .t-display-hero,
+    .t-display-1,
+    .t-display-2,
+    .t-display-3,
+    .t-display-4,
+    .t-figure-display {
+        font-family: var(--font-display);
+        font-weight: 400;
+        letter-spacing: normal;
+    }
+
+    .t-display-hero {
+        @apply text-5xl leading-[1.05] md:text-7xl;
+        font-variation-settings: 'opsz' 144;
+    }
+
+    .t-display-1 {
+        @apply text-4xl leading-[1.08] md:text-6xl;
+        font-variation-settings: 'opsz' 96;
+    }
+
+    .t-display-2 {
+        @apply text-3xl leading-[1.1] md:text-5xl;
+        font-variation-settings: 'opsz' 72;
+    }
+
+    .t-display-3 {
+        @apply text-2xl leading-[1.15] md:text-3xl;
+        font-variation-settings: 'opsz' 40;
+    }
+
+    .t-display-4 {
+        @apply text-xl leading-snug;
+        font-variation-settings: 'opsz' 24;
+    }
+
+    /* --- UI headings (Instrument Sans). Product surfaces, cards, forms --
+       places where a serif would read as marketing dressing on a control. --- */
+    .t-ui-title {
+        @apply font-sans text-base leading-snug font-semibold tracking-tight;
+    }
+
+    .t-ui-title-lg {
+        @apply font-sans text-lg leading-snug font-semibold tracking-tight;
+    }
+
+    /* --- Body --- */
+    .t-lead {
+        @apply font-sans text-base leading-relaxed md:text-lg;
+    }
+
+    .t-body {
+        @apply font-sans text-base leading-relaxed;
+    }
+
+    .t-body-sm {
+        @apply font-sans text-sm leading-relaxed;
+    }
+
+    .t-caption {
+        @apply font-sans text-xs leading-normal;
+    }
+
+    /* --- Labels. Two tiers, deliberately: section eyebrows sit above a
+       heading and need the extra size; in-card labels would crowd at 11px. --- */
+    .t-eyebrow {
+        @apply font-mono text-[11px] tracking-[0.2em] uppercase;
+    }
+
+    .t-label {
+        @apply font-mono text-[10px] tracking-[0.18em] uppercase;
+    }
+
+    /* --- Numerals. `.t-figure` is family-only: data figures appear at many
+       sizes, so the caller sets size and this pins the family, tabular
+       alignment and weight. `.t-figure-display` is the one-per-section
+       marketing money moment -- the reconciled balance, the profit total. --- */
+    .t-figure {
+        @apply font-mono font-semibold;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .t-figure-display {
+        @apply text-3xl;
+        font-variation-settings: 'opsz' 40;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .t-mono {
+        @apply font-mono;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* --- Long-form prose. One config for guides, posts and any other
+       markdown-rendered body, replacing three divergent inline chains. --- */
+    .prose-claryeo {
+        @apply prose prose-zinc dark:prose-invert max-w-none;
+        @apply prose-headings:font-display prose-headings:font-normal prose-headings:tracking-normal prose-headings:scroll-mt-24;
+        @apply prose-a:text-primary prose-a:underline prose-a:underline-offset-4;
+        @apply prose-img:w-full prose-img:rounded-lg prose-img:border prose-img:border-border;
     }
 }
 

@@ -51,14 +51,14 @@ const SmallBusinessTaxGuide: FC = () => (
             faqs.map((f) => ({ question: f.question, answer: f.answer })),
         )}
     >
-        <h1 className="text-3xl leading-tight font-bold md:text-4xl">
+        <h1 className="t-display-2">
             Small Business Tax in Nigeria: What You Need to Know
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
             Updated April 2026 &middot; 7 min read
         </p>
 
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-6 text-muted-foreground">
             Running a business in Nigeria comes with tax obligations that vary
             based on your company size, structure, and industry. Understanding
             these obligations early helps you stay compliant, avoid penalties,
@@ -66,8 +66,8 @@ const SmallBusinessTaxGuide: FC = () => (
             the key taxes that affect small and medium businesses in Nigeria.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Company Income Tax (CIT)</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Company Income Tax (CIT)</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             CIT is the primary tax on company profits in Nigeria, administered
             by the{' '}
             <strong className="text-foreground">
@@ -123,14 +123,14 @@ const SmallBusinessTaxGuide: FC = () => (
             turnover.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Value Added Tax (VAT)</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Value Added Tax (VAT)</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             VAT is a consumption tax charged at{' '}
             <strong className="text-foreground">7.5%</strong> on most goods and
             services in Nigeria. Businesses with annual turnover above ₦25
             million must register for VAT with FIRS.
         </p>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Key points about VAT:
         </p>
         <ul className="mt-4 space-y-3 text-base text-muted-foreground">
@@ -159,10 +159,10 @@ const SmallBusinessTaxGuide: FC = () => (
 
         <GuideCta />
 
-        <h2 className="mt-10 text-2xl font-bold">
+        <h2 className="t-display-3 mt-10">
             Tax Identification Number (TIN)
         </h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-3 text-muted-foreground">
             Every business operating in Nigeria needs a TIN. It is required for:
         </p>
         <ul className="mt-4 space-y-2 text-base text-muted-foreground">
@@ -183,15 +183,15 @@ const SmallBusinessTaxGuide: FC = () => (
                 <span>Importing and exporting goods</span>
             </li>
         </ul>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+        <p className="t-body mt-4 text-muted-foreground">
             You can register for a TIN through the FIRS Joint Tax Board (JTB)
             portal or at your nearest FIRS office. You will need your CAC
             registration certificate, memorandum of association, utility bill,
             and valid identification.
         </p>
 
-        <h2 className="mt-10 text-2xl font-bold">Allowable Deductions</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Allowable Deductions</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             Businesses can reduce their taxable profit by claiming legitimate
             business expenses. Common allowable deductions include:
         </p>
@@ -234,8 +234,8 @@ const SmallBusinessTaxGuide: FC = () => (
             </li>
         </ul>
 
-        <h2 className="mt-10 text-2xl font-bold">Filing Deadlines</h2>
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        <h2 className="t-display-3 mt-10">Filing Deadlines</h2>
+        <p className="t-body mt-3 text-muted-foreground">
             Missing filing deadlines results in penalties and interest. Key
             deadlines for businesses:
         </p>
@@ -283,11 +283,11 @@ const SmallBusinessTaxGuide: FC = () => (
         <GuideCta
             heading="Track expenses and tax automatically"
             description="Claryeo handles invoicing, expense tracking, and tax summaries — so you can focus on growing your business."
-            buttonText="Join the waitlist — 3 months free"
+            buttonText="Join the waitlist"
             buttonHref="/waitlist"
         />
 
-        <h2 className="mt-10 text-2xl font-bold">Frequently Asked Questions</h2>
+        <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
         <div className="mt-6">
             <Accordion
                 type="single"
@@ -313,7 +313,7 @@ const SmallBusinessTaxGuide: FC = () => (
             </Accordion>
         </div>
 
-        <h2 className="mt-10 text-2xl font-bold">Related Guides</h2>
+        <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">
             <li>
                 <a

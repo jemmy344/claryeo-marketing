@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, User } from 'lucide-react';
+import { ArrowRight, Mail, Phone, User } from 'lucide-react';
 import type { FC, FormEvent } from 'react';
 import { useState } from 'react';
 
@@ -13,6 +13,32 @@ type WaitlistProps = {
     thankYouUrl?: string;
 };
 
+const FIELDS = [
+    {
+        name: 'name',
+        type: 'text',
+        icon: User,
+        placeholder: 'Full name',
+        autoComplete: 'name',
+    },
+    {
+        name: 'email',
+        type: 'email',
+        icon: Mail,
+        placeholder: 'Email address',
+        autoComplete: 'email',
+        required: true,
+    },
+    {
+        name: 'phone',
+        type: 'tel',
+        icon: Phone,
+        placeholder: 'Phone number (optional)',
+        autoComplete: 'tel',
+        inputMode: 'tel' as const,
+    },
+];
+
 /**
  * Faithful port of the main app's waitlist page (resources/js/pages/waitlist).
  * The Inertia <Form> is replaced with a fetch submit to the marketing proxy
@@ -26,7 +52,9 @@ const Waitlist: FC<WaitlistProps> = ({
     const [processing, setProcessing] = useState(false);
     const [errors, setErrors] = useState<Record<string, string[]>>({});
 
-    const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    const onSubmit = async (
+        event: FormEvent<HTMLFormElement>,
+    ): Promise<void> => {
         event.preventDefault();
         setProcessing(true);
         setErrors({});
@@ -57,7 +85,7 @@ const Waitlist: FC<WaitlistProps> = ({
         <main className="relative flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center overflow-hidden px-4 py-16">
             {/* Atmospheric background: subtle speckles */}
             <div
-                className="pointer-events-none absolute inset-0 opacity-[0.4] dark:opacity-50"
+                className="pointer-events-none absolute inset-0 opacity-20 [mask-image:radial-gradient(70%_60%_at_50%_40%,#000,transparent)] dark:opacity-30"
                 aria-hidden
             >
                 <div
@@ -98,81 +126,87 @@ const Waitlist: FC<WaitlistProps> = ({
                     </div>
                 </div>
 
-                {/* Headline */}
-                <h1 className="mt-10 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                    Join the waitlist for{' '}
-                    <span className="text-gradient-primary bg-clip-text font-bold text-transparent">
+                {/* Headline. The wordmark keeps the logo's sans face — never
+                    the Fraunces display used by the rest of the heading. */}
+                <h1 className="t-display-2 mt-8 text-balance text-foreground">
+                    <span className="text-gradient-primary bg-clip-text font-sans font-semibold tracking-tight text-transparent">
                         Claryeo
-                    </span>
+                    </span>{' '}
+                    is coming.
+                    <br />
+                    <em>Get in</em> early.
                 </h1>
-                <p className="mt-3 text-sm text-muted-foreground">
-                    Join the waitlist today and get 3 months free, plus early
-                    access to help shape the product.
+                <p className="t-body-sm mx-auto mt-4 max-w-sm text-balance text-muted-foreground">
+                    Invoicing, expenses and tax in one place. Join the list and
+                    we'll send your invite as soon as it's ready.
                 </p>
 
                 {/* Form */}
                 <form
                     onSubmit={onSubmit}
-                    className="mt-10 flex flex-col gap-5"
+                    className="mt-10 flex flex-col gap-3"
                     noValidate
                 >
-                    <div className="flex flex-col gap-2">
-                        <div className="focus-within:ring-opacity-20 dark:focus-within:ring-opacity-30 flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 transition-colors duration-200 focus-within:border-(--gradient-primary-from) focus-within:ring-2 focus-within:ring-(--gradient-primary-from) dark:bg-muted/20">
-                            <User className="size-5 shrink-0 text-muted-foreground" />
-                            <Input
-                                id="name"
-                                type="text"
-                                name="name"
-                                placeholder="Full name..."
-                                autoComplete="name"
-                                className="h-auto border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
+                    {FIELDS.map((field) => (
+                        <div key={field.name} className="flex flex-col gap-1.5">
+                            <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 transition-colors duration-200 focus-within:border-(--gradient-primary-from) focus-within:ring-2 focus-within:ring-(--gradient-primary-from)/20 dark:bg-muted/20">
+                                <field.icon className="size-4.5 shrink-0 text-muted-foreground" />
+                                {/* The design has no visible labels, so the
+                                    placeholder text has to reach assistive
+                                    tech some other way -- a placeholder alone
+                                    is not an accessible name, and vanishes as
+                                    soon as the user types. */}
+                                <Input
+                                    id={field.name}
+                                    name={field.name}
+                                    type={field.type}
+                                    inputMode={field.inputMode}
+                                    required={field.required}
+                                    placeholder={field.placeholder}
+                                    autoComplete={field.autoComplete}
+                                    aria-label={field.placeholder}
+                                    aria-invalid={
+                                        errors?.[field.name] ? true : undefined
+                                    }
+                                    aria-describedby={
+                                        errors?.[field.name]
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
+                                    className="h-auto border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
+                                />
+                            </div>
+                            <InputError
+                                id={`${field.name}-error`}
+                                message={errors?.[field.name]?.[0]}
+                                className="text-left"
                             />
                         </div>
-                        <InputError
-                            message={errors?.name?.[0]}
-                            className="mt-0.5 text-left"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <div className="focus-within:ring-opacity-20 dark:focus-within:ring-opacity-30 flex items-center gap-3 rounded-xl border border-border bg-muted/30 px-4 py-3 transition-colors duration-200 focus-within:border-(--gradient-primary-from) focus-within:ring-2 focus-within:ring-(--gradient-primary-from) dark:bg-muted/20">
-                            <Mail className="size-5 shrink-0 text-muted-foreground" />
-                            <Input
-                                id="email"
-                                type="email"
-                                name="email"
-                                required
-                                placeholder="Email address..."
-                                autoComplete="email"
-                                className="h-auto border-0 bg-transparent p-0 shadow-none focus-visible:ring-0"
-                            />
-                        </div>
-                        <InputError
-                            message={errors?.email?.[0]}
-                            className="mt-0.5 text-left"
-                        />
-                    </div>
+                    ))}
 
                     <Button
                         type="submit"
                         disabled={processing}
                         size="lg"
-                        className="mt-2 w-full rounded-xl py-6 text-base shadow-sm"
+                        className="bg-gradient-primary mt-3 w-full rounded-xl py-6 text-base text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
                     >
                         {processing ? (
                             <Spinner />
                         ) : (
                             <>
-                                Join waitlist
+                                Save my spot
                                 <ArrowRight className="size-5" />
                             </>
                         )}
                     </Button>
+                    <p className="text-xs text-muted-foreground">
+                        No spam. One email when your invite is ready.
+                    </p>
                 </form>
 
                 {/* Footer */}
                 <p className="mt-12 text-center text-xs text-muted-foreground">
-                    Invoicing, expenses & tax for freelancers. Rolling out in
+                    Built for freelancers and small businesses. Rolling out in
                     Nigeria first.
                 </p>
             </div>

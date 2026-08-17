@@ -18,12 +18,12 @@ class LandingController extends Controller
         $pricing = $this->api->pricing();
 
         return view('landing', [
-            'title' => 'Claryeo — Invoicing, expenses & tax for freelancers everywhere',
-            'meta_description' => 'Manage invoices, track expenses, and handle tax obligations in one simple platform built for freelancers and small businesses.',
+            'title' => 'Claryeo — Invoicing, Bank Sync & Tax for Nigerian Freelancers',
+            'meta_description' => 'Sync your bank, match payments to invoices, and know your PIT, CIT and VAT — automatically. Built for Nigerian freelancers and small businesses.',
+            'nav_theme' => 'dark',
             'island_props' => htmlspecialchars(
                 (string) json_encode([
                     'plans' => $pricing['plans'] ?? [],
-                    'showLogoCloud' => false,
                     'waitlistMode' => (bool) config('marketing.waitlist_mode'),
                 ]),
                 ENT_QUOTES,

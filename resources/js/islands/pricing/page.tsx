@@ -39,13 +39,11 @@ const PricingPage: FC<PricingPageProps> = ({
         <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <section className="bg-background py-12 transition-colors duration-300 md:py-16">
                 <div className="mx-auto max-w-3xl px-4 text-center md:px-6">
-                    <p className="text-sm font-medium tracking-wide text-primary uppercase">
-                        Pricing
-                    </p>
-                    <h1 className="mt-3 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+                    <p className="t-eyebrow text-primary">Pricing</p>
+                    <h1 className="t-display-1 mt-3 text-foreground">
                         Simple and transparent pricing for every business size
                     </h1>
-                    <p className="mt-4 text-muted-foreground">
+                    <p className="t-lead mt-4 text-muted-foreground">
                         Switch between monthly and annual billing to compare
                         Free, Growth, Pro, and Enterprise. Every plan uses
                         Claryeo's current theme and checkout paths.

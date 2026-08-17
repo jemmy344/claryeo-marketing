@@ -1,23 +1,10 @@
 import { StrictMode, type ComponentType } from 'react';
 import { createRoot } from 'react-dom/client';
-import About from './islands/about/page';
-import AppearanceToggle from './islands/appearance-toggle';
-import ContactForm from './islands/contact/page';
-import FeaturePage from './islands/feature/page';
-import Features from './islands/features/page';
-import GetStarted from './islands/get-started/page';
-import GuideFreelancer from './islands/guides/freelancer-tax-nigeria';
-import GuideInvoice from './islands/guides/invoice-guide-nigeria';
-import GuidePaye from './islands/guides/paye-tax-nigeria';
-import GuideSmallBusiness from './islands/guides/small-business-tax-nigeria';
-import Landing from './islands/landing/page';
-import LegalDocumentPage from './islands/legal/document';
-import LegalVersionsPage from './islands/legal/versions';
-import Pricing from './islands/pricing/page';
-import SiteNav from './islands/site-nav/page';
-import TaxCalculator from './islands/tax-calculator/page';
-import Waitlist from './islands/waitlist/page';
 import { initializeTheme } from '@/hooks/use-appearance';
+
+type IslandLoader = () => Promise<{
+    default: ComponentType<Record<string, unknown>>;
+}>;
 
 /**
  * Registry of engineer-owned interactive React "islands" mounted into
@@ -26,40 +13,35 @@ import { initializeTheme } from '@/hooks/use-appearance';
  *   <div data-island="pricing" data-props="{{ props_json }}"></div>
  *
  * and this script hydrates it with the matching component + JSON props.
+ *
+ * Entries are dynamic imports so each island (and its own deps — recharts,
+ * gsap, animejs) is a separate chunk: a page downloads only the islands it
+ * actually mounts, not the whole site. Keep them as inline `import()` calls —
+ * Vite needs the literal specifier to split the graph.
  */
-const registry: Record<string, ComponentType<Record<string, unknown>>> = {
-    pricing: Pricing as ComponentType<Record<string, unknown>>,
-    'contact-form': ContactForm as ComponentType<Record<string, unknown>>,
-    'waitlist-form': Waitlist as ComponentType<Record<string, unknown>>,
-    'tax-calculator': TaxCalculator as ComponentType<Record<string, unknown>>,
-    'appearance-toggle': AppearanceToggle as ComponentType<
-        Record<string, unknown>
-    >,
-    'site-nav': SiteNav as ComponentType<Record<string, unknown>>,
-    about: About as ComponentType<Record<string, unknown>>,
-    landing: Landing as ComponentType<Record<string, unknown>>,
-    features: Features as ComponentType<Record<string, unknown>>,
-    feature: FeaturePage as ComponentType<Record<string, unknown>>,
-    'guide-paye-tax-nigeria': GuidePaye as ComponentType<
-        Record<string, unknown>
-    >,
-    'guide-small-business-tax-nigeria': GuideSmallBusiness as ComponentType<
-        Record<string, unknown>
-    >,
-    'guide-freelancer-tax-nigeria': GuideFreelancer as ComponentType<
-        Record<string, unknown>
-    >,
-    'guide-invoice-guide-nigeria': GuideInvoice as ComponentType<
-        Record<string, unknown>
-    >,
-    'get-started': GetStarted as ComponentType<Record<string, unknown>>,
-    'legal-document': LegalDocumentPage as ComponentType<
-        Record<string, unknown>
-    >,
-    'legal-versions': LegalVersionsPage as ComponentType<
-        Record<string, unknown>
-    >,
-};
+const registry = {
+    pricing: () => import('./islands/pricing/page'),
+    'contact-form': () => import('./islands/contact/page'),
+    'waitlist-form': () => import('./islands/waitlist/page'),
+    'tax-calculator': () => import('./islands/tax-calculator/page'),
+    'appearance-toggle': () => import('./islands/appearance-toggle'),
+    'site-nav': () => import('./islands/site-nav/page'),
+    about: () => import('./islands/about/page'),
+    landing: () => import('./islands/landing/page'),
+    features: () => import('./islands/features/page'),
+    feature: () => import('./islands/feature/page'),
+    'guide-paye-tax-nigeria': () =>
+        import('./islands/guides/paye-tax-nigeria'),
+    'guide-small-business-tax-nigeria': () =>
+        import('./islands/guides/small-business-tax-nigeria'),
+    'guide-freelancer-tax-nigeria': () =>
+        import('./islands/guides/freelancer-tax-nigeria'),
+    'guide-invoice-guide-nigeria': () =>
+        import('./islands/guides/invoice-guide-nigeria'),
+    'get-started': () => import('./islands/get-started/page'),
+    'legal-document': () => import('./islands/legal/document'),
+    'legal-versions': () => import('./islands/legal/versions'),
+} as unknown as Record<string, IslandLoader>;
 
 function mountIslands(): void {
     document.querySelectorAll<HTMLElement>('[data-island]').forEach((el) => {
@@ -69,9 +51,9 @@ function mountIslands(): void {
             return;
         }
 
-        const Component = registry[name];
+        const load = registry[name];
 
-        if (!Component) {
+        if (!load) {
             console.warn(`[islands] no component registered for "${name}"`);
             return;
         }
@@ -86,12 +68,26 @@ function mountIslands(): void {
             }
         }
 
+        if (el.dataset.theme) {
+            props.theme = el.dataset.theme;
+        }
+
+        // Claimed before the await so a second mountIslands() pass can't
+        // double-mount the same node while its chunk is still in flight.
         el.dataset.mounted = 'true';
-        createRoot(el).render(
-            <StrictMode>
-                <Component {...props} />
-            </StrictMode>,
-        );
+
+        void load()
+            .then(({ default: Component }) => {
+                createRoot(el).render(
+                    <StrictMode>
+                        <Component {...props} />
+                    </StrictMode>,
+                );
+            })
+            .catch((error: unknown) => {
+                delete el.dataset.mounted;
+                console.error(`[islands] failed to load "${name}"`, error);
+            });
     });
 }
 

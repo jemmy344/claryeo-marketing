@@ -156,7 +156,7 @@ const LegalDocumentPage: FC<LegalDocumentPageProps> = ({
             <div className="min-h-screen bg-background text-foreground">
                 <div className="border-b border-border bg-muted/20 py-8 md:py-12">
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                        <p className="text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase">
+                        <p className="t-eyebrow text-muted-foreground">
                             Legal Document
                         </p>
                         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
@@ -202,7 +202,7 @@ const LegalDocumentPage: FC<LegalDocumentPageProps> = ({
                                     aria-label="Sections"
                                     className="rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur"
                                 >
-                                    <p className="px-2 text-xs font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+                                    <p className="t-eyebrow px-2 text-muted-foreground">
                                         On this page
                                     </p>
                                     <ul className="mt-3 flex flex-col gap-1">

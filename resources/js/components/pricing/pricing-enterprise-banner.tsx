@@ -18,7 +18,7 @@ const PricingEnterpriseBanner: FC<PricingEnterpriseBannerProps> = ({
     >
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-                <h3 className="text-lg font-semibold text-foreground">
+                <h3 className="t-ui-title-lg text-foreground">
                     {plan.name}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
