@@ -3,17 +3,13 @@ import { ArrowUpRight, Mail, Phone, Send } from 'lucide-react';
 import type { FC, FormEvent, ReactNode } from 'react';
 import { useState } from 'react';
 
+import { FaqAccordion } from '@/components/faq';
 import InputError from '@/components/input-error';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { contactFaqs } from '@/lib/faqs';
 import { cn } from '@/lib/utils';
 import { socialLinks } from '@/lib/social-links';
 import { submitJson } from '@/lib/submit';
@@ -42,28 +38,6 @@ const CHANNELS = [
     },
 ];
 
-const FAQS = [
-    {
-        id: 'reply',
-        q: 'How quickly will I hear back?',
-        a: 'Most messages get a reply within one business day. Anything sent over the weekend is answered first thing Monday.',
-    },
-    {
-        id: 'billing',
-        q: 'I have a billing or account question.',
-        a: 'Include the email address on the account in your message and we can look it up straight away. No ticket number needed.',
-    },
-    {
-        id: 'demo',
-        q: 'Can I see Claryeo before I sign up?',
-        a: 'Yes. Ask for a walkthrough in the message box and we will send you a time that fits, or a short recorded tour if that is easier.',
-    },
-    {
-        id: 'tax',
-        q: 'Do you answer tax questions?',
-        a: 'We can explain how Claryeo calculates PIT, CIT and VAT for Nigeria. For advice on your specific filing, talk to your accountant.',
-    },
-];
 
 /** Leading icon inside a field; the input carries the matching pl-10. */
 const WithIcon: FC<{
@@ -415,20 +389,7 @@ const Contact: FC<ContactProps> = ({
                         </div>
                     </div>
 
-                    <Accordion type="single" collapsible className="w-full">
-                        {FAQS.map((item) => (
-                            <AccordionItem key={item.id} value={item.id}>
-                                <AccordionTrigger className="cursor-pointer text-left text-base hover:no-underline">
-                                    {item.q}
-                                </AccordionTrigger>
-                                <AccordionContent>
-                                    <p className="text-base text-muted-foreground">
-                                        {item.a}
-                                    </p>
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
+                    <FaqAccordion items={contactFaqs} />
                 </div>
             </section>
         </>

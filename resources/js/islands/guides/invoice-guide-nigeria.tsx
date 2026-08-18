@@ -1,42 +1,11 @@
 import type { FC } from 'react';
 
+import { FaqAccordion } from '@/components/faq';
 import GuideCta from '@/components/guide-cta';
 import GuideLayout from '@/components/guide-layout';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { invoiceGuideFaqs } from '@/lib/faqs';
 import { buildFaqSchema } from '@/lib/structured-data';
 
-const faqs = [
-    {
-        id: 'inv-faq-1',
-        question: 'Is it mandatory to issue invoices in Nigeria?',
-        answer: 'While there is no general legal requirement for all businesses to issue invoices, VAT-registered businesses must issue VAT invoices for all taxable supplies. Additionally, invoices serve as essential business records for tax filing, auditing, and dispute resolution. It is strongly recommended that all businesses issue invoices for every transaction.',
-    },
-    {
-        id: 'inv-faq-2',
-        question: 'What is the difference between an invoice and a receipt?',
-        answer: 'An invoice is a request for payment sent before or at the time of delivery. A receipt is proof that payment has been received. Invoices are issued by the seller to the buyer as a bill, while receipts are issued after the buyer has paid. For tax purposes, both documents serve different roles: invoices track revenue owed, and receipts confirm income received.',
-    },
-    {
-        id: 'inv-faq-3',
-        question: 'Do I need to include VAT on my invoices?',
-        answer: 'Only if you are VAT-registered (annual turnover above ₦25 million). VAT-registered businesses must show VAT as a separate line item at 7.5% of the taxable amount. Non-VAT-registered businesses should not charge or show VAT on their invoices.',
-    },
-    {
-        id: 'inv-faq-4',
-        question: 'What currency should invoices be in?',
-        answer: 'Invoices in Nigeria are typically issued in Nigerian Naira (₦ / NGN). However, if you work with international clients, you can issue invoices in foreign currencies (USD, GBP, EUR, etc.). For tax purposes, foreign currency income must be converted to Naira using the CBN exchange rate at the date of the transaction.',
-    },
-    {
-        id: 'inv-faq-5',
-        question: 'How long should I keep copies of invoices?',
-        answer: 'Nigerian tax law requires businesses to keep financial records for at least 6 years. This includes copies of all invoices (both sent and received), receipts, bank statements, and expense records. Digital copies are acceptable as long as they are legible and properly backed up.',
-    },
-];
 
 const InvoiceGuideNigeria: FC = () => (
     <GuideLayout
@@ -47,9 +16,7 @@ const InvoiceGuideNigeria: FC = () => (
         publishedDate="2026-04-06"
         modifiedDate="2026-04-06"
         breadcrumbTitle="Invoice Guide"
-        structuredData={buildFaqSchema(
-            faqs.map((f) => ({ question: f.question, answer: f.answer })),
-        )}
+        structuredData={buildFaqSchema(invoiceGuideFaqs)}
     >
         <h1 className="t-display-2">
             How to Create Professional Invoices in Nigeria
@@ -358,30 +325,7 @@ const InvoiceGuideNigeria: FC = () => (
         </p>
 
         <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
-        <div className="mt-6">
-            <Accordion
-                type="single"
-                collapsible
-                className="w-full rounded-2xl bg-muted p-1 dark:bg-muted/50"
-            >
-                {faqs.map((item) => (
-                    <div className="group" key={item.id}>
-                        <AccordionItem
-                            value={item.id}
-                            className="rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:bg-card data-[state=open]:shadow-sm dark:data-[state=open]:bg-muted"
-                        >
-                            <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
-                                {item.question}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <p className="text-base">{item.answer}</p>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
-                    </div>
-                ))}
-            </Accordion>
-        </div>
+        <FaqAccordion items={invoiceGuideFaqs} className="mt-6" />
 
         <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">

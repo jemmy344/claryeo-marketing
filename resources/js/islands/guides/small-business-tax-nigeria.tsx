@@ -1,42 +1,11 @@
 import type { FC } from 'react';
 
+import { FaqAccordion } from '@/components/faq';
 import GuideCta from '@/components/guide-cta';
 import GuideLayout from '@/components/guide-layout';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { smallBusinessGuideFaqs } from '@/lib/faqs';
 import { buildFaqSchema } from '@/lib/structured-data';
 
-const faqs = [
-    {
-        id: 'biz-faq-1',
-        question: 'What is the minimum turnover for CIT in Nigeria?',
-        answer: 'All registered companies in Nigeria are required to file CIT returns regardless of turnover. However, small companies with annual turnover of ₦50 million or less (and fixed assets of ₦250 million or less) benefit from a 0% CIT rate, meaning they owe no CIT even though they must still file.',
-    },
-    {
-        id: 'biz-faq-2',
-        question: 'Do I need to register for VAT?',
-        answer: 'Yes. Businesses with annual turnover above ₦25 million are required to register for VAT with the Federal Inland Revenue Service (FIRS). VAT-registered businesses must charge 7.5% VAT on taxable goods and services, file monthly VAT returns, and remit the VAT collected.',
-    },
-    {
-        id: 'biz-faq-3',
-        question: 'How do I get a Tax Identification Number (TIN)?',
-        answer: 'You can obtain a TIN by registering with the Federal Inland Revenue Service (FIRS) for companies, or the State Internal Revenue Service (SIRS) for individuals. Registration can be done online through the FIRS e-Tax platform or at a local tax office. You will need your CAC registration documents, utility bill, and valid ID.',
-    },
-    {
-        id: 'biz-faq-4',
-        question: 'What expenses can my business deduct?',
-        answer: 'Nigerian tax law allows businesses to deduct expenses that are "wholly, exclusively, necessarily, and reasonably" incurred for business purposes. Common deductions include rent, salaries, utilities, professional fees, marketing costs, depreciation (capital allowances), and bad debts. Personal expenses, capital expenditure (except through capital allowances), and entertainment costs are generally not deductible.',
-    },
-    {
-        id: 'biz-faq-5',
-        question: 'What is the Development Levy?',
-        answer: 'The Development Levy is a 4% surcharge on the assessable profits of certain companies. It was introduced to fund national development projects. Small companies that qualify for the 0% CIT rate are generally exempt from the Development Levy.',
-    },
-];
 
 const SmallBusinessTaxGuide: FC = () => (
     <GuideLayout
@@ -47,9 +16,7 @@ const SmallBusinessTaxGuide: FC = () => (
         publishedDate="2026-04-06"
         modifiedDate="2026-04-06"
         breadcrumbTitle="Business Tax Guide"
-        structuredData={buildFaqSchema(
-            faqs.map((f) => ({ question: f.question, answer: f.answer })),
-        )}
+        structuredData={buildFaqSchema(smallBusinessGuideFaqs)}
     >
         <h1 className="t-display-2">
             Small Business Tax in Nigeria: What You Need to Know
@@ -288,30 +255,7 @@ const SmallBusinessTaxGuide: FC = () => (
         />
 
         <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
-        <div className="mt-6">
-            <Accordion
-                type="single"
-                collapsible
-                className="w-full rounded-2xl bg-muted p-1 dark:bg-muted/50"
-            >
-                {faqs.map((item) => (
-                    <div className="group" key={item.id}>
-                        <AccordionItem
-                            value={item.id}
-                            className="rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:bg-card data-[state=open]:shadow-sm dark:data-[state=open]:bg-muted"
-                        >
-                            <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
-                                {item.question}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <p className="text-base">{item.answer}</p>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
-                    </div>
-                ))}
-            </Accordion>
-        </div>
+        <FaqAccordion items={smallBusinessGuideFaqs} className="mt-6" />
 
         <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">

@@ -1,42 +1,11 @@
 import type { FC } from 'react';
 
+import { FaqAccordion } from '@/components/faq';
 import GuideCta from '@/components/guide-cta';
 import GuideLayout from '@/components/guide-layout';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { payeGuideFaqs } from '@/lib/faqs';
 import { buildFaqSchema } from '@/lib/structured-data';
 
-const faqs = [
-    {
-        id: 'paye-faq-1',
-        question: 'Who is required to pay PAYE in Nigeria?',
-        answer: 'Every employee in Nigeria earning above the national minimum wage of ₦70,000 per month (₦840,000 annually) is subject to PAYE. Employers are responsible for deducting and remitting PAYE on behalf of their employees to the relevant State Internal Revenue Service (SIRS).',
-    },
-    {
-        id: 'paye-faq-2',
-        question: 'How is the Consolidated Relief Allowance calculated?',
-        answer: 'The CRA is the higher of ₦200,000 or 1% of gross income, plus 20% of gross income. For example, if your gross annual income is ₦5,000,000: CRA = max(₦200,000, ₦50,000) + ₦1,000,000 = ₦1,200,000. This reduces your taxable income before tax bands are applied.',
-    },
-    {
-        id: 'paye-faq-3',
-        question: 'What happens if my employer does not deduct PAYE?',
-        answer: 'Employers who fail to deduct and remit PAYE face penalties under the Personal Income Tax Act (PITA). As an employee, you may also be held liable if your employer fails to remit. It is advisable to confirm with your employer that PAYE is being properly deducted and remitted.',
-    },
-    {
-        id: 'paye-faq-4',
-        question: 'Can I get a PAYE refund if I overpaid?',
-        answer: 'Yes. If you have overpaid PAYE (for example, due to not claiming all eligible reliefs), you can apply for a refund through your State Internal Revenue Service. You will need to provide your tax returns and evidence of overpayment.',
-    },
-    {
-        id: 'paye-faq-5',
-        question: 'Is PAYE the same as Personal Income Tax?',
-        answer: 'PAYE is a method of collecting Personal Income Tax (PIT), not a separate tax. It applies specifically to employees whose employers deduct tax at source. Self-employed individuals pay PIT through direct assessment instead of PAYE.',
-    },
-];
 
 const PayeTaxNigeriaGuide: FC = () => (
     <GuideLayout
@@ -47,9 +16,7 @@ const PayeTaxNigeriaGuide: FC = () => (
         publishedDate="2026-04-06"
         modifiedDate="2026-04-06"
         breadcrumbTitle="PAYE Tax Guide"
-        structuredData={buildFaqSchema(
-            faqs.map((f) => ({ question: f.question, answer: f.answer })),
-        )}
+        structuredData={buildFaqSchema(payeGuideFaqs)}
     >
         <h1 className="t-display-2">
             PAYE Tax in Nigeria: Complete Guide for Employees &amp; Employers
@@ -343,30 +310,7 @@ const PayeTaxNigeriaGuide: FC = () => (
         />
 
         <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
-        <div className="mt-6">
-            <Accordion
-                type="single"
-                collapsible
-                className="w-full rounded-2xl bg-muted p-1 dark:bg-muted/50"
-            >
-                {faqs.map((item) => (
-                    <div className="group" key={item.id}>
-                        <AccordionItem
-                            value={item.id}
-                            className="rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:bg-card data-[state=open]:shadow-sm dark:data-[state=open]:bg-muted"
-                        >
-                            <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
-                                {item.question}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <p className="text-base">{item.answer}</p>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
-                    </div>
-                ))}
-            </Accordion>
-        </div>
+        <FaqAccordion items={payeGuideFaqs} className="mt-6" />
 
         <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">
