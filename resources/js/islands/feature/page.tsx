@@ -12,14 +12,9 @@ import {
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { FC, RefObject } from 'react';
 
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
 import DashboardIncomeExpenseChart from '@/components/dashboard/dashboard-income-expense-chart';
 import InvoiceOverviewCard from '@/components/dashboard/invoice-overview-card';
+import FaqSection from '@/components/faq';
 import { gsap, prefersReducedMotion, ScrollTrigger, setupMotion } from '@/lib/motion';
 import { formatCurrency } from '@/lib/utils';
 
@@ -840,36 +835,10 @@ const FeaturePage: FC<FeaturePageProps> = ({
 
             {/* FAQs */}
             {feature.faqs.length > 0 && (
-                <section className="border-t border-border bg-muted/20">
-                    <div className="mx-auto w-full max-w-3xl px-4 py-16 md:px-6 md:py-24">
-                        <div className="text-center">
-                            <span className="t-eyebrow text-muted-foreground">
-                                Questions
-                            </span>
-                            <h2 className="t-display-2 mt-3 text-foreground">
-                                <em>Answers</em>, before you ask
-                            </h2>
-                            <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
-                                Everything you need to know about {feature.title.toLowerCase()} on Claryeo.
-                            </p>
-                        </div>
-                        <Accordion type="single" collapsible className="mt-10">
-                            {feature.faqs.map((faq, index) => (
-                                <AccordionItem
-                                    key={faq.question}
-                                    value={`faq-${index}`}
-                                >
-                                    <AccordionTrigger className="text-left text-base font-medium text-foreground">
-                                        {faq.question}
-                                    </AccordionTrigger>
-                                    <AccordionContent className="text-muted-foreground">
-                                        {faq.answer}
-                                    </AccordionContent>
-                                </AccordionItem>
-                            ))}
-                        </Accordion>
-                    </div>
-                </section>
+                <FaqSection
+                    items={feature.faqs}
+                    description={`Everything you need to know about ${feature.title.toLowerCase()} on Claryeo.`}
+                />
             )}
 
             {/* Final CTA */}

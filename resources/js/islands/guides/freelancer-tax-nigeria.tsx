@@ -1,42 +1,11 @@
 import type { FC } from 'react';
 
+import { FaqAccordion } from '@/components/faq';
 import GuideCta from '@/components/guide-cta';
 import GuideLayout from '@/components/guide-layout';
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
+import { freelancerGuideFaqs } from '@/lib/faqs';
 import { buildFaqSchema } from '@/lib/structured-data';
 
-const faqs = [
-    {
-        id: 'free-faq-1',
-        question: 'Do freelancers need to register with a tax authority?',
-        answer: 'Yes. All individuals earning income in Nigeria are required to register with their State Internal Revenue Service (SIRS) and obtain a Tax Identification Number (TIN). This applies whether you freelance full-time or as a side hustle alongside employment.',
-    },
-    {
-        id: 'free-faq-2',
-        question: 'Can freelancers claim expenses to reduce tax?',
-        answer: 'Yes. Freelancers can deduct expenses that are wholly and exclusively incurred for business purposes. This includes equipment, software subscriptions, internet costs, co-working space fees, professional development, and travel for business. Keep receipts and records of all expenses.',
-    },
-    {
-        id: 'free-faq-3',
-        question: 'Should I register a company as a freelancer?',
-        answer: 'It depends on your income level and goals. Operating as a sole proprietor means you pay PIT (up to 25%). Registering a limited liability company means profits are subject to CIT instead. Small companies with turnover under ₦50M pay 0% CIT, which can be advantageous. However, companies have additional compliance requirements (annual returns, audit requirements, etc.).',
-    },
-    {
-        id: 'free-faq-4',
-        question: 'What if I earn income from foreign clients?',
-        answer: 'Nigerian residents are taxed on worldwide income. Income earned from foreign clients is taxable in Nigeria. However, you may be able to claim relief under double taxation agreements (DTAs) Nigeria has with certain countries, to avoid being taxed twice on the same income.',
-    },
-    {
-        id: 'free-faq-5',
-        question: 'How often should freelancers pay tax?',
-        answer: 'Freelancers under direct assessment should file an annual return by March 31st of the following year. However, you may be required to make advance payments (provisional tax) based on your estimated income for the year. Setting aside a percentage of each invoice for tax is a good practice.',
-    },
-];
 
 const FreelancerTaxGuide: FC = () => (
     <GuideLayout
@@ -47,9 +16,7 @@ const FreelancerTaxGuide: FC = () => (
         publishedDate="2026-04-06"
         modifiedDate="2026-04-06"
         breadcrumbTitle="Freelancer Tax Guide"
-        structuredData={buildFaqSchema(
-            faqs.map((f) => ({ question: f.question, answer: f.answer })),
-        )}
+        structuredData={buildFaqSchema(freelancerGuideFaqs)}
     >
         <h1 className="t-display-2">
             How Freelancers Pay Tax in Nigeria
@@ -349,30 +316,7 @@ const FreelancerTaxGuide: FC = () => (
         </ul>
 
         <h2 className="t-display-3 mt-10">Frequently Asked Questions</h2>
-        <div className="mt-6">
-            <Accordion
-                type="single"
-                collapsible
-                className="w-full rounded-2xl bg-muted p-1 dark:bg-muted/50"
-            >
-                {faqs.map((item) => (
-                    <div className="group" key={item.id}>
-                        <AccordionItem
-                            value={item.id}
-                            className="rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:bg-card data-[state=open]:shadow-sm dark:data-[state=open]:bg-muted"
-                        >
-                            <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
-                                {item.question}
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <p className="text-base">{item.answer}</p>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
-                    </div>
-                ))}
-            </Accordion>
-        </div>
+        <FaqAccordion items={freelancerGuideFaqs} className="mt-6" />
 
         <h2 className="t-display-3 mt-10">Related Guides</h2>
         <ul className="mt-4 space-y-2 text-base">

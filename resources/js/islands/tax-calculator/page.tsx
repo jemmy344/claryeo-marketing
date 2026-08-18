@@ -13,6 +13,7 @@ import {
 import type { AnchorHTMLAttributes, Dispatch, FC, SetStateAction } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import FaqSection from '@/components/faq';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -37,8 +38,9 @@ import {
     type MoneyLineItem,
     type RowTone,
 } from '@/lib/tax-calculator-v2';
+import { taxCalculatorFaqs } from '@/lib/faqs';
 import { cn, formatCurrency } from '@/lib/utils';
-import TaxCalculatorFaqs from './components/tax-calculator-faqs';
+
 import TaxEducationContent from './components/tax-education-content';
 
 /**
@@ -2528,7 +2530,10 @@ const TaxCalculatorPage: FC = () => {
 
             <TaxEducationContent />
 
-            <TaxCalculatorFaqs />
+            <FaqSection
+                items={taxCalculatorFaqs}
+                description="Common questions about tax calculation in Nigeria."
+            />
 
             <section className="mx-auto mt-16 mb-16 max-w-4xl px-4 text-center">
                 <div className="rounded-2xl border border-border bg-muted/30 p-8 md:p-12">

@@ -2,7 +2,8 @@ import type { FC } from 'react';
 
 import BusinessBalanceSpotlight from '@/components/landing/business-balance-spotlight';
 import ContentSection from '@/components/landing/content-section';
-import LandingFAQs from '@/components/landing/landing-faqs';
+import FaqSection from '@/components/faq';
+import { landingFaqs } from '@/lib/faqs';
 import LandingFinalCta from '@/components/landing/landing-final-cta';
 import LandingHero from '@/components/landing/landing-hero';
 import LandingPricing from '@/components/landing/landing-pricing';
@@ -111,7 +112,21 @@ const Landing: FC<LandingProps> = ({ plans = [], waitlistMode = false }) => {
 
             {!waitlistMode && plans.length > 0 && <LandingPricing plans={plans} />}
 
-            <LandingFAQs />
+            <FaqSection
+                id="faq"
+                items={landingFaqs}
+                description="Everything you need to know about invoicing, bank sync and tax on Claryeo."
+            >
+                <p className="mt-6 text-center text-muted-foreground">
+                    Can't find what you're looking for? Contact our{' '}
+                    <a
+                        href="mailto:hello@claryeo.com"
+                        className="font-medium text-primary hover:underline"
+                    >
+                        customer support team
+                    </a>
+                </p>
+            </FaqSection>
 
             <LandingFinalCta
                 getStartedUrl={getStartedUrl}
