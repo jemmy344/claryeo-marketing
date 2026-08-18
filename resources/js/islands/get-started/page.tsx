@@ -153,7 +153,7 @@ const GetStarted: FC<GetStartedProps> = ({
         <>
             <div className="relative overflow-hidden">
                 <div className="bg-gradient-primary pointer-events-none absolute -top-20 left-0 h-96 w-96 rounded-full opacity-10 blur-3xl" />
-                <div className="pointer-events-none absolute top-24 right-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+                <div className="pointer-events-none absolute top-24 right-0 h-80 w-80 rounded-full bg-violet-bright/10 blur-3xl" />
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-120 bg-linear-to-b from-background via-background/95 to-transparent" />
 
                 <div className="relative z-10 mx-auto max-w-[1180px] px-4 py-12 md:px-0 md:py-16">

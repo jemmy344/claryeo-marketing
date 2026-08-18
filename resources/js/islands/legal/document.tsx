@@ -159,7 +159,7 @@ const LegalDocumentPage: FC<LegalDocumentPageProps> = ({
                         <p className="t-eyebrow text-muted-foreground">
                             Legal Document
                         </p>
-                        <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+                        <h1 className="t-display-2 mt-3 text-foreground">
                             {title}
                         </h1>
                         <div className="mt-5 flex flex-wrap gap-2">
@@ -259,11 +259,10 @@ const LegalDocumentPage: FC<LegalDocumentPageProps> = ({
                         <div className="min-w-0">
                             <article
                                 className={cn(
-                                    'prose prose-neutral dark:prose-invert max-w-none rounded-2xl border border-border bg-card px-5 py-6 shadow-sm sm:px-8 sm:py-8 lg:px-10',
-                                    'prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-foreground',
-                                    'prose-h1:mt-2 prose-h1:mb-4 prose-h1:text-3xl prose-h1:font-semibold prose-h1:tracking-tight sm:prose-h1:text-4xl',
-                                    'prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-2xl prose-h2:font-semibold prose-h2:tracking-tight prose-h2:border-b prose-h2:border-border prose-h2:pb-2 prose-h2:first:mt-0',
-                                    'prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-lg prose-h3:font-semibold prose-h3:tracking-tight',
+                                    'prose-claryeo rounded-2xl border border-border bg-card px-5 py-6 shadow-sm sm:px-8 sm:py-8 lg:px-10',
+                                    'prose-h1:mt-2 prose-h1:mb-4 prose-h1:text-3xl sm:prose-h1:text-4xl',
+                                    'prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-2xl prose-h2:border-b prose-h2:border-border prose-h2:pb-2 prose-h2:first:mt-0',
+                                    'prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-lg',
                                     'prose-p:my-5 prose-p:leading-8 prose-p:text-foreground/90',
                                     'prose-ul:mt-4 prose-ul:mb-7 prose-ul:list-disc prose-ul:pl-6',
                                     'prose-ol:mt-4 prose-ol:mb-7 prose-ol:list-decimal prose-ol:pl-6',

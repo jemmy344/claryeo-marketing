@@ -1,0 +1,27 @@
+{{#
+    The site's closing CTA. Pass the copy in:
+
+        {{ partial:cta heading="Read the next guide" body="..." }}
+
+    React pages render <SiteCta> directly instead (landing, feature detail,
+    guides) since their copy is built from page props. The markup below is the
+    no-JS / pre-hydration fallback; the site-cta island replaces it with the
+    animated atmosphere version, same arrangement as the nav in partials/shell.
+#}}
+<div
+    data-island="site-cta"
+    data-props="{{ cta_props }}"
+    data-heading="{{ heading }}"
+    data-body="{{ body }}"
+    data-eyebrow="{{ eyebrow }}"
+    data-variant="{{ variant }}"
+>
+    <section class="bg-linear-to-b from-ink-raised to-ink">
+        <div class="mx-auto flex w-full max-w-[1180px] flex-col items-center px-4 py-16 text-center md:py-20">
+            <span class="t-eyebrow text-mist">{{ eyebrow ?? "Ready when you are" }}</span>
+            <h2 class="t-display-2 mt-4 max-w-2xl text-paper">{{ heading }}</h2>
+            {{ if body }}<p class="t-lead mt-5 max-w-lg text-mist">{{ body }}</p>{{ /if }}
+            <a href="{{ primary_cta:href }}" class="mt-9 inline-flex items-center rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink shadow-lg">{{ primary_cta:label }}</a>
+        </div>
+    </section>
+</div>

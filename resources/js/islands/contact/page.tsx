@@ -118,8 +118,8 @@ const Contact: FC<ContactProps> = ({
         <>
             <section className="relative overflow-hidden border-b border-border/60 bg-primary/[0.06]">
                 <div className="pointer-events-none absolute inset-0">
-                    <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-                    <div className="absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
+                    <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-violet-bright/10 blur-3xl" />
+                    <div className="absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-violet-bright/10 blur-3xl" />
                 </div>
 
                 <div className="relative mx-auto grid w-full max-w-[1180px] items-start gap-12 px-4 py-16 md:px-6 md:py-24 lg:grid-cols-[1fr_27rem] lg:gap-16">

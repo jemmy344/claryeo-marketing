@@ -15,6 +15,7 @@ import type { FC, RefObject } from 'react';
 import DashboardIncomeExpenseChart from '@/components/dashboard/dashboard-income-expense-chart';
 import InvoiceOverviewCard from '@/components/dashboard/invoice-overview-card';
 import FaqSection from '@/components/faq';
+import SiteCta from '@/components/site-cta';
 import { gsap, prefersReducedMotion, ScrollTrigger, setupMotion } from '@/lib/motion';
 import { formatCurrency } from '@/lib/utils';
 
@@ -841,33 +842,12 @@ const FeaturePage: FC<FeaturePageProps> = ({
                 />
             )}
 
-            {/* Final CTA */}
-            <section className="border-t border-border bg-primary/10 py-16 transition-colors duration-300 dark:bg-primary-surface">
-                <div className="mx-auto max-w-[1180px] px-4 text-center md:px-0">
-                    <h2 className="t-display-2 text-foreground">
-                        Ready to put {feature.title.toLowerCase()} to work?
-                    </h2>
-                    <p className="mx-auto mt-2 max-w-lg text-muted-foreground">
-                        Invoicing, expenses, and tax in one place, with AI across
-                        the app. Get set up in minutes.
-                    </p>
-                    <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                        <a
-                            href={cta.href}
-                            className="bg-gradient-primary inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
-                        >
-                            {cta.label}
-                            <ArrowUpRight className="size-4" />
-                        </a>
-                        <a
-                            href="/features"
-                            className="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-                        >
-                            Explore all features
-                        </a>
-                    </div>
-                </div>
-            </section>
+            <SiteCta
+                heading={`Ready to put ${feature.title.toLowerCase()} to work?`}
+                body="Invoicing, expenses, and tax in one place, with AI across the app. Get set up in minutes."
+                primary={cta}
+                secondary={{ label: 'Explore all features', href: '/features' }}
+            />
         </div>
     );
 };

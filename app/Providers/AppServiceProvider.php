@@ -105,6 +105,19 @@ class AppServiceProvider extends ServiceProvider
             'UTF-8'
         ));
 
+        // JSON props for the closing-CTA island (partials/cta). Copy is passed
+        // as data attributes by the partial; only the links come from here.
+        View::share('cta_props', htmlspecialchars(
+            (string) json_encode([
+                'primary' => $primaryCta,
+                'secondary' => $waitlistMode
+                    ? null
+                    : ['label' => 'Join the waitlist', 'href' => '/waitlist'],
+            ]),
+            ENT_QUOTES,
+            'UTF-8'
+        ));
+
         // Arrays for the server-rendered Antlers footer + nav fallback.
         View::share('nav_primary', $primaryLinks);
         View::share('footer_groups', $this->footerGroups($nav['footer'] ?? [], $waitlistMode));

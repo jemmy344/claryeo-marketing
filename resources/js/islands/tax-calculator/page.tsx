@@ -794,7 +794,7 @@ const TaxCalculatorPage: FC = () => {
             <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
                 <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
                     <div>
-                        <h1 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                        <h1 className="t-display-3 text-foreground">
                             Tax calculator
                         </h1>
                         <p className="mt-2 text-sm text-muted-foreground">
@@ -809,8 +809,8 @@ const TaxCalculatorPage: FC = () => {
                 </div>
 
                 <div className="relative overflow-hidden rounded-[2rem] border border-border bg-card text-card-foreground shadow-2xl">
-                    <div className="pointer-events-none absolute -top-24 -left-12 size-72 rounded-full bg-primary/10 blur-3xl" />
-                    <div className="pointer-events-none absolute right-0 -bottom-24 size-72 rounded-full bg-primary/8 blur-3xl" />
+                    <div className="pointer-events-none absolute -top-24 -left-12 size-72 rounded-full bg-violet-bright/10 blur-3xl" />
+                    <div className="pointer-events-none absolute right-0 -bottom-24 size-72 rounded-full bg-dawn/8 blur-3xl" />
 
                     <div className="relative grid lg:grid-cols-[380px_1fr]">
                         <aside className="border-b border-border bg-muted/20 p-6 lg:border-r lg:border-b-0 lg:p-8">
@@ -819,7 +819,7 @@ const TaxCalculatorPage: FC = () => {
                                     <Calculator className="size-5" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-semibold">
+                                    <h2 className="t-ui-title-lg">
                                         Pay calculator
                                     </h2>
                                     <p className="text-xs text-muted-foreground">
@@ -2105,7 +2105,7 @@ const TaxCalculatorPage: FC = () => {
                         <section className="p-6 lg:p-8">
                             <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
                                 <div>
-                                    <h2 className="text-3xl font-semibold tracking-tight">
+                                    <h2 className="t-display-3">
                                         Summary
                                     </h2>
                                     <p className="mt-2 text-sm text-muted-foreground">
@@ -2535,29 +2535,6 @@ const TaxCalculatorPage: FC = () => {
                 description="Common questions about tax calculation in Nigeria."
             />
 
-            <section className="mx-auto mt-16 mb-16 max-w-4xl px-4 text-center">
-                <div className="rounded-2xl border border-border bg-muted/30 p-8 md:p-12">
-                    <h2 className="text-2xl font-bold md:text-3xl">
-                        Stop estimating. Start tracking.
-                    </h2>
-                    <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-                        Claryeo automatically calculates your tax from your
-                        invoices and expenses, so you always know what you owe,
-                        without the guesswork.
-                    </p>
-                    <div className="mt-6 flex flex-wrap justify-center gap-3">
-                        <Button
-                            asChild
-                            className="bg-gradient-primary text-primary-foreground hover:opacity-90"
-                        >
-                            <Link href="/waitlist">
-                                Join the waitlist
-                                <ArrowUpRight className="size-4" />
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            </section>
         </>
     );
 };

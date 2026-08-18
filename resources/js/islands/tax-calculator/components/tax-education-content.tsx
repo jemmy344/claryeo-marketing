@@ -3,7 +3,7 @@ import type { FC } from 'react';
 const TaxEducationContent: FC = () => (
     <div className="mx-auto mt-16 max-w-4xl space-y-12 px-4 text-foreground">
         <section>
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="t-display-3">
                 Understanding Nigerian Tax
             </h2>
             <p className="t-body mt-4 text-muted-foreground">
@@ -31,7 +31,7 @@ const TaxEducationContent: FC = () => (
         </section>
 
         <section>
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="t-display-3">
                 PAYE Tax Bands in Nigeria (2026)
             </h2>
             <p className="t-body mt-4 text-muted-foreground">
@@ -96,7 +96,7 @@ const TaxEducationContent: FC = () => (
         </section>
 
         <section>
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="t-display-3">
                 Company Income Tax (CIT) Rates
             </h2>
             <p className="t-body mt-4 text-muted-foreground">
@@ -156,7 +156,7 @@ const TaxEducationContent: FC = () => (
         </section>
 
         <section>
-            <h2 className="text-2xl font-bold md:text-3xl">
+            <h2 className="t-display-3">
                 Tax Relief &amp; Deductions
             </h2>
             <p className="t-body mt-4 text-muted-foreground">

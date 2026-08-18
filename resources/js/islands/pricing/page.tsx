@@ -67,7 +67,7 @@ const PricingPage: FC<PricingPageProps> = ({
 
             <section className="py-14 transition-colors duration-300 md:py-20">
                 <div className="mx-auto max-w-[1180px] px-4 md:px-0">
-                    <h2 className="text-center text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+                    <h2 className="t-display-3 text-center text-foreground">
                         Detailed comparison
                     </h2>
                     <p className="mx-auto mt-2 max-w-2xl text-center text-muted-foreground">

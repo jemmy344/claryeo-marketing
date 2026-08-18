@@ -41,6 +41,7 @@ const registry = {
     'get-started': () => import('./islands/get-started/page'),
     'legal-document': () => import('./islands/legal/document'),
     'legal-versions': () => import('./islands/legal/versions'),
+    'site-cta': () => import('./components/site-cta'),
 } as unknown as Record<string, IslandLoader>;
 
 function mountIslands(): void {
@@ -68,8 +69,21 @@ function mountIslands(): void {
             }
         }
 
-        if (el.dataset.theme) {
-            props.theme = el.dataset.theme;
+        // Remaining data attributes become props too, so a template can hand
+        // over a string without composing JSON server-side (the shell's
+        // data-theme, the copy on partials/cta). They win over data-props,
+        // which is the shared blob; an empty attribute is ignored.
+        for (const [key, value] of Object.entries(el.dataset)) {
+            if (
+                !value ||
+                key === 'island' ||
+                key === 'props' ||
+                key === 'mounted'
+            ) {
+                continue;
+            }
+
+            props[key] = value;
         }
 
         // Claimed before the await so a second mountIslands() pass can't
