@@ -1,7 +1,7 @@
 import { animate, stagger } from 'animejs';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
 import { useLayoutEffect, useRef, useState } from 'react';
-import type { FC, FormEvent } from 'react';
+import type { FC, SubmitEvent } from 'react';
 
 import AtmosphereCanvas from '@/components/landing/atmosphere-canvas';
 import { prefersReducedMotion } from '@/lib/motion';
@@ -44,9 +44,16 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
         };
     }, []);
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+    // Grouped as you type. A native number input can't render separators, so
+    // this stays a text input with a numeric keypad and formats on change.
+    const handleIncomeChange = (raw: string): void => {
+        const digits = raw.replace(/\D/g, '').slice(0, 12);
+        setIncome(digits === '' ? '' : Number(digits).toLocaleString('en-NG'));
+    };
+
+    const handleSubmit = (e: SubmitEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        const trimmed = income.replace(/[^0-9]/g, '');
+        const trimmed = income.replace(/\D/g, '');
         window.location.href = trimmed
             ? `/tax-calculator?income=${trimmed}`
             : '/tax-calculator';
@@ -109,11 +116,12 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
                     <input
                         type="text"
                         inputMode="numeric"
+                        autoComplete="off"
                         value={income}
-                        onChange={(e) => setIncome(e.target.value)}
+                        onChange={(e) => handleIncomeChange(e.target.value)}
                         placeholder="What did you earn this year?"
                         aria-label="Estimated yearly income"
-                        className="min-w-0 flex-1 bg-transparent text-sm text-paper placeholder:text-mist/70 focus:outline-none"
+                        className="min-w-0 flex-1 bg-transparent text-sm tabular-nums text-paper placeholder:text-mist/70 focus:outline-none"
                     />
                     <button
                         type="submit"

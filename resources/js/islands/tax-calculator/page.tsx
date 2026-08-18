@@ -250,6 +250,22 @@ const TaxCalculatorPage: FC = () => {
     const [reportError, setReportError] = useState<string | null>(null);
     const [reportFormOpen, setReportFormOpen] = useState(false);
 
+    // The landing hero hands the year's earnings over as ?income=500000, so the
+    // estimate the visitor asked for is already on screen when the page opens.
+    const seededIncome = ((): string | null => {
+        const raw = new URLSearchParams(window.location.search).get('income');
+
+        if (raw === null) {
+            return null;
+        }
+
+        const parsed = Number.parseFloat(raw.replace(/[^\d.]/g, ''));
+
+        return Number.isFinite(parsed) && parsed > 0
+            ? formatCurrencyInputValue(String(parsed))
+            : null;
+    })();
+
     const [mode, setMode] = useState<CalculatorMode>('employee_paye');
     const [taxYearKey, setTaxYearKey] = useState(defaultTaxYearProfile.key);
     const [businessType, setBusinessType] =
@@ -271,9 +287,9 @@ const TaxCalculatorPage: FC = () => {
         useState<EntryMode>('single');
 
     const [employeeSingleEarningAmount, setEmployeeSingleEarningAmount] =
-        useState(formatCurrencyInputValue('60000'));
+        useState(seededIncome ?? formatCurrencyInputValue('60000'));
     const [employeeSingleEarningFrequency, setEmployeeSingleEarningFrequency] =
-        useState<AmountFrequency>('monthly');
+        useState<AmountFrequency>(seededIncome !== null ? 'annually' : 'monthly');
     const [employeeSingleEarningTaxable, setEmployeeSingleEarningTaxable] =
         useState(true);
 
@@ -322,9 +338,9 @@ const TaxCalculatorPage: FC = () => {
         useState<EntryMode>('single');
 
     const [businessSingleEarningAmount, setBusinessSingleEarningAmount] =
-        useState(formatCurrencyInputValue('60000'));
+        useState(seededIncome ?? formatCurrencyInputValue('60000'));
     const [businessSingleEarningFrequency, setBusinessSingleEarningFrequency] =
-        useState<AmountFrequency>('monthly');
+        useState<AmountFrequency>(seededIncome !== null ? 'annually' : 'monthly');
 
     const [businessSingleDeductionAmount, setBusinessSingleDeductionAmount] =
         useState(formatCurrencyInputValue('0'));
