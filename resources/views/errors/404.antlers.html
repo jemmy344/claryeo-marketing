@@ -1,1 +1,19 @@
-<p>404 Page not found.</p>
+{{#
+Wrapped by layout.antlers.html (which supplies the shell), so no partial:shell here.
+#}}
+<section class="mx-auto max-w-xl px-6 py-24 text-center md:py-32">
+    <p class="t-eyebrow text-muted-foreground">Error 404</p>
+    <h1 class="t-display-2 mt-3 text-foreground">This page has moved on</h1>
+    <p class="t-lead mt-4 text-muted-foreground">
+        The link is broken or the page no longer exists. The journal and the guides are still where you left them.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/" class="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted">Back to home</a>
+        <a href="/blog" class="rounded-full border border-border bg-background px-6 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted">Read the journal</a>
+    </div>
+</section>
+
+{{ partial:cta
+    heading="While you are here"
+    body="Invoicing, expenses and tax-ready summaries in one place, built for Nigerian businesses."
+}}

@@ -69,7 +69,7 @@ const PricingProPlanCard: FC<PricingProPlanCardProps> = ({
                 >
                     {plan.name}
                 </h3>
-                <p className="mt-6 flex items-end gap-2 text-5xl font-bold tracking-tight text-foreground md:text-6xl">
+                <p className="t-figure-display mt-6 flex items-end gap-2 text-5xl text-foreground md:text-6xl">
                     {priceValue}
                     <span className="pb-2 text-sm font-medium text-muted-foreground">
                         per {priceCadence ?? 'month'}

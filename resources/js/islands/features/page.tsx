@@ -77,19 +77,6 @@ const Features: FC<FeaturesProps> = ({ features = [] }) => (
                 ))}
             </div>
         </section>
-
-        {/* Closing line */}
-        <section className="border-t border-border bg-muted/20 py-12 transition-colors duration-300 md:py-16">
-            <div className="mx-auto max-w-3xl px-4 text-center md:px-6">
-                <p className="t-display-3 text-balance text-foreground">
-                    Smart tools and simple flows so you can focus on your
-                    business.
-                </p>
-                <p className="t-eyebrow mt-3 text-muted-foreground">
-                    Nigeria first · More regions coming soon
-                </p>
-            </div>
-        </section>
     </div>
 );
 

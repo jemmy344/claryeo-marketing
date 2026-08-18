@@ -4,7 +4,6 @@ import BusinessBalanceSpotlight from '@/components/landing/business-balance-spot
 import ContentSection from '@/components/landing/content-section';
 import FaqSection from '@/components/faq';
 import { landingFaqs } from '@/lib/faqs';
-import LandingFinalCta from '@/components/landing/landing-final-cta';
 import LandingHero from '@/components/landing/landing-hero';
 import LandingPricing from '@/components/landing/landing-pricing';
 import LandingTestimonials from '@/components/landing/landing-testimonials';
@@ -12,6 +11,7 @@ import ProductBento from '@/components/landing/product-bento';
 import ReconciliationRing from '@/components/landing/reconciliation-ring';
 import ReconciliationSpotlight from '@/components/landing/reconciliation-spotlight';
 import ReportsSpotlight from '@/components/landing/reports-spotlight';
+import SiteCta from '@/components/site-cta';
 import type { PlanCatalogItem } from '@/types/plan-catalog';
 
 const STEPS = [
@@ -114,24 +114,42 @@ const Landing: FC<LandingProps> = ({ plans = [], waitlistMode = false }) => {
 
             <FaqSection
                 id="faq"
+                tone="ink"
                 items={landingFaqs}
                 description="Everything you need to know about invoicing, bank sync and tax on Claryeo."
             >
-                <p className="mt-6 text-center text-muted-foreground">
+                <p className="mt-6 text-center text-mist">
                     Can't find what you're looking for? Contact our{' '}
                     <a
                         href="mailto:hello@claryeo.com"
-                        className="font-medium text-primary hover:underline"
+                        className="font-medium text-paper hover:underline"
                     >
                         customer support team
                     </a>
                 </p>
             </FaqSection>
 
-            <LandingFinalCta
-                getStartedUrl={getStartedUrl}
-                waitlistUrl={waitlistUrl}
-                waitlistMode={waitlistMode}
+            <SiteCta
+                size="bookend"
+                heading={
+                    <>
+                        <em>Close</em> the books.
+                        <br />
+                        Open your evening.
+                    </>
+                }
+                body="Invoicing, expenses, and tax in one place, with bank sync and payment matching doing the admin, so you don't have to."
+                primary={{
+                    label: waitlistMode
+                        ? 'Join the waitlist'
+                        : 'Get started free',
+                    href: waitlistMode ? waitlistUrl : getStartedUrl,
+                }}
+                secondary={
+                    waitlistMode
+                        ? null
+                        : { label: 'Join the waitlist', href: waitlistUrl }
+                }
             />
         </div>
     );
