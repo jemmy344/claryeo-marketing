@@ -25,6 +25,7 @@ type ContactProps = {
 
 const PHONE = '+234 704 351 9121';
 const MESSAGE_MAX = 1000;
+const ASK_EMAIL = 'hello@claryeo.com';
 
 const CHANNELS = [
     {
@@ -92,20 +93,23 @@ const Contact: FC<ContactProps> = ({
     const [message, setMessage] = useState('');
     // Its own state, not the form's: both boxes are on screen at once, so
     // sharing one value let the FAQ box silently overwrite an address the
-    // user had already typed into the form above. Carrying over is meant to
-    // be one-way, and only on submit.
+    // user had already typed into the form above.
     const [faqEmail, setFaqEmail] = useState('');
 
-    // FAQ email box: jump back to the form with the address carried over.
-    const startMessage = (event: FormEvent<HTMLFormElement>): void => {
-        event.preventDefault();
+    // FAQ email box: hand the question straight to the visitor's mail client.
+    // Their typed address rides along in the body, since the From: their client
+    // sends from is not necessarily the one they want the reply on.
+    // encodeURIComponent, not URLSearchParams: the latter encodes spaces as "+",
+    // which mail clients paste literally into the subject line.
+    const askHref = ((): string => {
+        const query = [`subject=${encodeURIComponent('Question for Claryeo')}`];
+
         if (faqEmail) {
-            setEmail(faqEmail);
+            query.push(`body=${encodeURIComponent(`\n\nReply to: ${faqEmail}`)}`);
         }
-        const field = document.getElementById('message');
-        field?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        field?.focus({ preventScroll: true });
-    };
+
+        return `mailto:${ASK_EMAIL}?${query.join('&')}`;
+    })();
 
     const onSubmit = async (
         event: FormEvent<HTMLFormElement>,
@@ -387,12 +391,10 @@ const Contact: FC<ContactProps> = ({
                             email and we will answer it.
                         </p>
 
-                        {/* ponytail: no second endpoint — this hands off to the
-                            form above with the email already filled in. */}
-                        <form
-                            onSubmit={startMessage}
-                            className="mt-6 flex max-w-md items-center gap-3"
-                        >
+                        {/* ponytail: no second endpoint. Ask opens the visitor's
+                            own mail client, so the reply thread lives in their
+                            inbox rather than a form they cannot follow up on. */}
+                        <div className="mt-6 flex max-w-md items-center gap-3">
                             <WithIcon icon={Mail} className="flex-1">
                                 <Input
                                     type="email"
@@ -405,12 +407,12 @@ const Contact: FC<ContactProps> = ({
                                 />
                             </WithIcon>
                             <Button
-                                type="submit"
+                                asChild
                                 className="bg-gradient-primary h-11 shrink-0 rounded-full px-6 text-sm font-medium text-primary-foreground"
                             >
-                                Ask
+                                <a href={askHref}>Ask</a>
                             </Button>
-                        </form>
+                        </div>
                     </div>
 
                     <Accordion type="single" collapsible className="w-full">
