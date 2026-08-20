@@ -26,8 +26,16 @@ class TaxCalculatorController extends Controller
      */
     public function report(Request $request): JsonResponse
     {
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'max:255'],
+            'consent_contact' => ['required', 'accepted'],
+            'consent_marketing' => ['nullable', 'boolean'],
+            'document_type' => ['nullable', 'string', 'max:255'],
+            'payload' => ['required', 'array'],
+        ]);
+
         $payload = [
-            ...$request->all(),
+            ...$validated,
             ...CaptureUtmParameters::resolve($request),
             'client_ip' => $request->ip(),
             'client_user_agent' => $request->userAgent(),

@@ -47,17 +47,32 @@ class TaxCalculatorTest extends TestCase
             && $request['client_ip'] !== null);
     }
 
+    public function test_report_validates_input_locally_before_calling_internal_api(): void
+    {
+        Http::fake();
+
+        $this->postJson('/tax-calculator/report', [])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['email', 'consent_contact', 'payload']);
+
+        Http::assertNothingSent();
+    }
+
     public function test_report_relays_validation_errors(): void
     {
         Http::fake([
             'web.test/api/internal/tax-calculator/report' => Http::response([
                 'message' => 'Invalid.',
-                'errors' => ['consent_contact' => ['Please confirm.']],
+                'errors' => ['payload' => ['Malformed payload.']],
             ], 422),
         ]);
 
-        $this->postJson('/tax-calculator/report', ['email' => 'ada@example.com'])
+        $this->postJson('/tax-calculator/report', [
+            'email' => 'ada@example.com',
+            'consent_contact' => true,
+            'payload' => ['calculator_mode' => 'employee_paye'],
+        ])
             ->assertStatus(422)
-            ->assertJsonPath('errors.consent_contact.0', 'Please confirm.');
+            ->assertJsonPath('errors.payload.0', 'Malformed payload.');
     }
 }
