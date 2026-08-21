@@ -30,8 +30,8 @@ Route::post('blog/{id}/view', BlogViewController::class)
 // Blog index + category filter. Individual posts (/blog/{slug}) are served
 // natively by the Statamic `blog` collection route (template: blog/show).
 Route::view('blog', 'blog.index', [
-    'title' => 'Blog | Claryeo',
-    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses.',
+    'title' => 'Blog: Invoicing & Tax Guides for Nigerian Business | Claryeo',
+    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses. Written for the 2026 tax rules.',
     'activeCategory' => null,
 ])->name('blog');
 
@@ -49,8 +49,8 @@ Route::get('blog/category/{category}', function (string $category) {
 })->name('blog.category');
 
 Route::view('about', 'about', [
-    'title' => 'About | Claryeo',
-    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
+    'title' => 'About Claryeo: Business Finance Tools for Nigeria',
+    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses, starting in Nigeria.",
 ])->name('about');
 
 // Guides index. Individual guides (/guides/{slug}) are served natively by the
