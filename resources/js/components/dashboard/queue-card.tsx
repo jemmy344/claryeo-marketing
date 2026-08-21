@@ -144,30 +144,36 @@ const QueueCard: FC<QueueCardProps> = ({ credit, onOpenMatchScreen, onSetAside, 
                         {!!credit.otherCandidates?.length && (
                             <button
                                 type="button"
+                                aria-expanded={showOtherCandidates}
+                                aria-controls={`other-candidates-${credit.id}`}
                                 onClick={() => setShowOtherCandidates((v) => !v)}
-                                className="mt-2 flex items-center gap-1 text-xs font-medium text-secondary-foreground"
+                                className="mt-2 flex items-center gap-1 rounded-xs text-xs font-medium text-secondary-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                             >
                                 See {credit.otherCandidates.length} other possible match
                                 {credit.otherCandidates.length > 1 ? 'es' : ''}
                                 <ChevronDown
+                                    aria-hidden="true"
                                     className={cn('size-3.5 transition-transform', showOtherCandidates && 'rotate-180')}
                                 />
                             </button>
                         )}
-                        {showOtherCandidates &&
-                            credit.otherCandidates?.map((candidate) => (
-                                <div
-                                    key={candidate.invoiceId}
-                                    className="mt-2 flex flex-wrap items-center justify-between gap-2 rounded-md bg-card p-2 text-sm"
-                                >
-                                    <span>
-                                        {candidate.invoiceNumber} · {candidate.clientName} · {naira(candidate.amountDue)}
-                                    </span>
-                                    <Button size="sm" variant="outline">
-                                        Match this one
-                                    </Button>
-                                </div>
-                            ))}
+                        {showOtherCandidates && (
+                            <div id={`other-candidates-${credit.id}`} className="mt-2 space-y-2">
+                                {credit.otherCandidates?.map((candidate) => (
+                                    <div
+                                        key={candidate.invoiceId}
+                                        className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-card p-2 text-sm"
+                                    >
+                                        <span>
+                                            {candidate.invoiceNumber} · {candidate.clientName} · {naira(candidate.amountDue)}
+                                        </span>
+                                        <Button size="sm" variant="outline">
+                                            Match this one
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <div className="mt-3 flex flex-col gap-2 sm:flex-row">
