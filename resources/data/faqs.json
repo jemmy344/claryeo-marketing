@@ -1,0 +1,176 @@
+{
+    "landing": [
+        {
+            "question": "How do I create and send invoices?",
+            "answer": "Create professional invoices in minutes. Add your clients, line items, and due dates. Send invoices by email or download as PDF. Track status so you know when they’re viewed or paid."
+        },
+        {
+            "question": "How does payment matching work?",
+            "answer": "Every credit that lands in your synced account is checked against your open invoices by amount, reference and timing. Direct matches are one click to confirm; nothing is marked paid without you saying so."
+        },
+        {
+            "question": "Can I track expenses and receipts?",
+            "answer": "Yes. Categorize and track every business expense in one place. Attach receipts, tag by category, and see totals by period. Your data stays private and is ready for tax time."
+        },
+        {
+            "question": "How does transaction sync work?",
+            "answer": "Connect your bank once and your transaction (data) syncs automatically. No manual entry or statement uploads. Transactions flow in so you spend less time on data entry and more on your business."
+        },
+        {
+            "question": "What is realtime account tracking?",
+            "answer": "Realtime tracking and analysis shows your cash flow, balances, and business health as they update. Make decisions with current data, not last month’s, so you’re always in the know."
+        },
+        {
+            "question": "What tax summaries does Claryeo provide?",
+            "answer": "Claryeo gives you PIT (Personal Income Tax), CIT (Corporate Income Tax), and VAT breakdowns by period. In Nigeria we align with FIRS so you get tax-ready summaries. Rolling out in more regions soon."
+        },
+        {
+            "question": "Can I use Claryeo outside Nigeria?",
+            "answer": "Claryeo is built for freelancers and businesses everywhere. We’re rolling out in Nigeria first; more regions will follow."
+        },
+        {
+            "question": "What reports can I export?",
+            "answer": "Get profit & loss, cash flow, and expense summaries. Export to PDF or CSV for your records or your accountant. Reports are generated from your invoices and expenses."
+        }
+    ],
+    "contact": [
+        {
+            "question": "How quickly will I hear back?",
+            "answer": "Most messages get a reply within one business day. Anything sent over the weekend is answered first thing Monday."
+        },
+        {
+            "question": "I have a billing or account question.",
+            "answer": "Include the email address on the account in your message and we can look it up straight away. No ticket number needed."
+        },
+        {
+            "question": "Can I see Claryeo before I sign up?",
+            "answer": "Yes. Ask for a walkthrough in the message box and we will send you a time that fits, or a short recorded tour if that is easier."
+        },
+        {
+            "question": "Do you answer tax questions?",
+            "answer": "We can explain how Claryeo calculates PIT, CIT and VAT for Nigeria. For advice on your specific filing, talk to your accountant."
+        }
+    ],
+    "taxCalculator": [
+        {
+            "question": "How is PAYE calculated in Nigeria?",
+            "answer": "PAYE (Pay-As-You-Earn) is calculated by first deducting the Consolidated Relief Allowance (CRA) and other eligible reliefs from your gross income to arrive at taxable income. The taxable income is then applied across progressive tax bands ranging from 0% on the first ₦800,000 up to 25% on income above ₦50,000,000. Your employer deducts and remits PAYE monthly on your behalf."
+        },
+        {
+            "question": "What is Consolidated Relief Allowance (CRA)?",
+            "answer": "The CRA is a tax relief available to all Nigerian taxpayers. It is calculated as the higher of ₦200,000 or 1% of your gross income, plus 20% of your gross income. This amount is deducted from your gross income before applying tax bands, effectively reducing how much tax you pay."
+        },
+        {
+            "question": "What is the CIT rate for small companies in Nigeria?",
+            "answer": "Small companies with annual turnover of ₦50,000,000 or less and fixed assets of ₦250,000,000 or less pay 0% CIT. Medium companies (turnover between ₦50M and ₦100M) pay 20%, while large companies (turnover above ₦100M) pay 30%. Professional service companies do not qualify for the small company 0% exemption."
+        },
+        {
+            "question": "Do freelancers pay PAYE or CIT in Nigeria?",
+            "answer": "Freelancers and self-employed individuals pay Personal Income Tax (PIT) using the same progressive bands as PAYE employees. However, unlike employees whose tax is deducted by employers, freelancers must file and pay directly with their state tax authority. If you register a limited liability company, your business profits are subject to CIT instead."
+        },
+        {
+            "question": "When are tax returns due in Nigeria?",
+            "answer": "For individuals (including freelancers), the annual tax return is due by March 31st of the following year. Companies must file their CIT returns within 6 months of their accounting year-end (or 18 months for newly incorporated companies filing for the first time). Late filing attracts penalties and interest charges."
+        },
+        {
+            "question": "What deductions can I claim to reduce my tax?",
+            "answer": "You can claim the Consolidated Relief Allowance (CRA), pension contributions (typically 8% of basic, housing, and transport), National Housing Fund (2.5% of basic salary), life insurance premiums, and the National Health Insurance Scheme (NHIS) contributions. For businesses, allowable deductions include operating expenses, depreciation, and capital allowances on qualifying assets."
+        },
+        {
+            "question": "What is the current VAT rate in Nigeria?",
+            "answer": "The current VAT rate in Nigeria is 7.5%, introduced in February 2020 (up from the previous 5%). VAT applies to most goods and services, though certain items like basic food, medical supplies, and educational materials are VAT-exempt. Businesses with annual turnover above ₦25 million must register for VAT."
+        },
+        {
+            "question": "Am I exempt from PAYE if I earn minimum wage?",
+            "answer": "Yes. Employees earning at or below the national minimum wage of ₦70,000 per month (₦840,000 annually) are exempt from PAYE. This exemption was introduced to reduce the tax burden on low-income earners in Nigeria."
+        }
+    ],
+    "payeGuide": [
+        {
+            "question": "Who is required to pay PAYE in Nigeria?",
+            "answer": "Every employee in Nigeria earning above the national minimum wage of ₦70,000 per month (₦840,000 annually) is subject to PAYE. Employers are responsible for deducting and remitting PAYE on behalf of their employees to the relevant State Internal Revenue Service (SIRS)."
+        },
+        {
+            "question": "How is the Consolidated Relief Allowance calculated?",
+            "answer": "The CRA is the higher of ₦200,000 or 1% of gross income, plus 20% of gross income. For example, if your gross annual income is ₦5,000,000: CRA = max(₦200,000, ₦50,000) + ₦1,000,000 = ₦1,200,000. This reduces your taxable income before tax bands are applied."
+        },
+        {
+            "question": "What happens if my employer does not deduct PAYE?",
+            "answer": "Employers who fail to deduct and remit PAYE face penalties under the Personal Income Tax Act (PITA). As an employee, you may also be held liable if your employer fails to remit. It is advisable to confirm with your employer that PAYE is being properly deducted and remitted."
+        },
+        {
+            "question": "Can I get a PAYE refund if I overpaid?",
+            "answer": "Yes. If you have overpaid PAYE (for example, due to not claiming all eligible reliefs), you can apply for a refund through your State Internal Revenue Service. You will need to provide your tax returns and evidence of overpayment."
+        },
+        {
+            "question": "Is PAYE the same as Personal Income Tax?",
+            "answer": "PAYE is a method of collecting Personal Income Tax (PIT), not a separate tax. It applies specifically to employees whose employers deduct tax at source. Self-employed individuals pay PIT through direct assessment instead of PAYE."
+        }
+    ],
+    "freelancerGuide": [
+        {
+            "question": "Do freelancers need to register with a tax authority?",
+            "answer": "Yes. All individuals earning income in Nigeria are required to register with their State Internal Revenue Service (SIRS) and obtain a Tax Identification Number (TIN). This applies whether you freelance full-time or as a side hustle alongside employment."
+        },
+        {
+            "question": "Can freelancers claim expenses to reduce tax?",
+            "answer": "Yes. Freelancers can deduct expenses that are wholly and exclusively incurred for business purposes. This includes equipment, software subscriptions, internet costs, co-working space fees, professional development, and travel for business. Keep receipts and records of all expenses."
+        },
+        {
+            "question": "Should I register a company as a freelancer?",
+            "answer": "It depends on your income level and goals. Operating as a sole proprietor means you pay PIT (up to 25%). Registering a limited liability company means profits are subject to CIT instead. Small companies with turnover under ₦50M pay 0% CIT, which can be advantageous. However, companies have additional compliance requirements (annual returns, audit requirements, etc.)."
+        },
+        {
+            "question": "What if I earn income from foreign clients?",
+            "answer": "Nigerian residents are taxed on worldwide income. Income earned from foreign clients is taxable in Nigeria. However, you may be able to claim relief under double taxation agreements (DTAs) Nigeria has with certain countries, to avoid being taxed twice on the same income."
+        },
+        {
+            "question": "How often should freelancers pay tax?",
+            "answer": "Freelancers under direct assessment should file an annual return by March 31st of the following year. However, you may be required to make advance payments (provisional tax) based on your estimated income for the year. Setting aside a percentage of each invoice for tax is a good practice."
+        }
+    ],
+    "invoiceGuide": [
+        {
+            "question": "Is it mandatory to issue invoices in Nigeria?",
+            "answer": "While there is no general legal requirement for all businesses to issue invoices, VAT-registered businesses must issue VAT invoices for all taxable supplies. Additionally, invoices serve as essential business records for tax filing, auditing, and dispute resolution. It is strongly recommended that all businesses issue invoices for every transaction."
+        },
+        {
+            "question": "What is the difference between an invoice and a receipt?",
+            "answer": "An invoice is a request for payment sent before or at the time of delivery. A receipt is proof that payment has been received. Invoices are issued by the seller to the buyer as a bill, while receipts are issued after the buyer has paid. For tax purposes, both documents serve different roles: invoices track revenue owed, and receipts confirm income received."
+        },
+        {
+            "question": "Do I need to include VAT on my invoices?",
+            "answer": "Only if you are VAT-registered (annual turnover above ₦25 million). VAT-registered businesses must show VAT as a separate line item at 7.5% of the taxable amount. Non-VAT-registered businesses should not charge or show VAT on their invoices."
+        },
+        {
+            "question": "What currency should invoices be in?",
+            "answer": "Invoices in Nigeria are typically issued in Nigerian Naira (₦ / NGN). However, if you work with international clients, you can issue invoices in foreign currencies (USD, GBP, EUR, etc.). For tax purposes, foreign currency income must be converted to Naira using the CBN exchange rate at the date of the transaction."
+        },
+        {
+            "question": "How long should I keep copies of invoices?",
+            "answer": "Nigerian tax law requires businesses to keep financial records for at least 6 years. This includes copies of all invoices (both sent and received), receipts, bank statements, and expense records. Digital copies are acceptable as long as they are legible and properly backed up."
+        }
+    ],
+    "smallBusinessGuide": [
+        {
+            "question": "What is the minimum turnover for CIT in Nigeria?",
+            "answer": "All registered companies in Nigeria are required to file CIT returns regardless of turnover. However, small companies with annual turnover of ₦50 million or less (and fixed assets of ₦250 million or less) benefit from a 0% CIT rate, meaning they owe no CIT even though they must still file."
+        },
+        {
+            "question": "Do I need to register for VAT?",
+            "answer": "Yes. Businesses with annual turnover above ₦25 million are required to register for VAT with the Federal Inland Revenue Service (FIRS). VAT-registered businesses must charge 7.5% VAT on taxable goods and services, file monthly VAT returns, and remit the VAT collected."
+        },
+        {
+            "question": "How do I get a Tax Identification Number (TIN)?",
+            "answer": "You can obtain a TIN by registering with the Federal Inland Revenue Service (FIRS) for companies, or the State Internal Revenue Service (SIRS) for individuals. Registration can be done online through the FIRS e-Tax platform or at a local tax office. You will need your CAC registration documents, utility bill, and valid ID."
+        },
+        {
+            "question": "What expenses can my business deduct?",
+            "answer": "Nigerian tax law allows businesses to deduct expenses that are \"wholly, exclusively, necessarily, and reasonably\" incurred for business purposes. Common deductions include rent, salaries, utilities, professional fees, marketing costs, depreciation (capital allowances), and bad debts. Personal expenses, capital expenditure (except through capital allowances), and entertainment costs are generally not deductible."
+        },
+        {
+            "question": "What is the Development Levy?",
+            "answer": "The Development Levy is a 4% surcharge on the assessable profits of certain companies. It was introduced to fund national development projects. Small companies that qualify for the 0% CIT rate are generally exempt from the Development Levy."
+        }
+    ]
+}
