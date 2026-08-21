@@ -1,0 +1,7 @@
+title: Glossary
+route: '/glossary/{slug}'
+template: glossary/show
+date: false
+sort_by: title
+sort_dir: asc
+default_publish_state: true

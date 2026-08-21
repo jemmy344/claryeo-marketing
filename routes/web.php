@@ -59,6 +59,13 @@ Route::view('guides', 'guides.index', [
     'meta_description' => 'Long-form guides on PAYE, freelancer tax, small business tax (CIT and VAT), and invoicing in Nigeria. Written for the 2026 tax rules.',
 ])->name('guides');
 
+// Glossary index. Individual terms (/glossary/{slug}) are served natively by
+// the Statamic `glossary` collection route (template: glossary/show).
+Route::view('glossary', 'glossary.index', [
+    'title' => 'Nigerian Tax Glossary: PAYE, CIT, VAT & WHT | Claryeo',
+    'meta_description' => 'Plain-English definitions of Nigerian tax terms: PAYE, PIT, CIT, VAT, WHT, TIN, rent relief and more, each with a worked example on the 2026 rules.',
+])->name('glossary');
+
 Route::get('get-started', GetStartedController::class)->middleware('waitlist.redirect')->name('get-started');
 
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
@@ -103,7 +110,7 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
 | robots.txt that only invites crawlers in production.
 */
 Route::get('sitemap.xml', function () {
-    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog', '/guides'];
+    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog', '/guides', '/glossary'];
 
     foreach (array_keys((array) config('feature_pages', [])) as $slug) {
         $urls[] = '/features/'.$slug;

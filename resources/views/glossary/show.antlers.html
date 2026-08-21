@@ -1,0 +1,78 @@
+{{#
+    Single glossary term. Rendered by the Statamic `glossary` collection.
+    The definition leads the page as a standalone 40-60 word answer, which is
+    the passage search snippets and AI answers extract.
+#}}
+<div class="mx-auto max-w-3xl px-4 py-10 md:px-0 md:py-14">
+    <nav class="t-label text-muted-foreground" aria-label="Breadcrumb">
+        <a href="/" class="transition-colors hover:text-primary">Home</a>
+        <span class="text-border">/</span>
+        <a href="/glossary" class="transition-colors hover:text-primary">Glossary</a>
+    </nav>
+
+    <header class="mt-8">
+        <h1 class="t-display-2 text-foreground">{{ title }}</h1>
+        <p class="t-lead mt-5 text-muted-foreground">{{ definition }}</p>
+    </header>
+
+    {{ if content }}
+        <div class="prose-claryeo mt-10">
+            {{ content }}
+        </div>
+    {{ /if }}
+
+    <section class="mt-14 border-t border-border pt-6">
+        <h2 class="t-eyebrow text-muted-foreground">More Nigerian tax terms</h2>
+        <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            {{# slug:isnt drops the current term in the query. An `unless` inside the
+                loop cannot: the loop shadows `slug` with the looped entry's own. #}}
+            {{ collection:glossary slug:isnt="{slug}" }}
+                <li><a href="{{ url }}" class="text-muted-foreground transition-colors hover:text-primary">{{ title }}</a></li>
+            {{ /collection:glossary }}
+        </ul>
+    </section>
+</div>
+
+{{ partial:cta
+    heading="Tax that works itself out"
+    body="Claryeo turns your invoices and expenses into export-ready PIT, CIT and VAT summaries."
+}}
+
+{{# DefinedTerm in a glossary, plus a one-question FAQPage: "what is X" is
+    exactly how these pages are queried. #}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "DefinedTerm",
+            "name": {{ title | to_json }},
+            "description": {{ definition | to_json }},
+            "url": "{{ permalink }}",
+            "inDefinedTermSet": {
+                "@type": "DefinedTermSet",
+                "name": "Claryeo Nigerian tax glossary",
+                "url": "{{ site_root }}/glossary"
+            }
+        },
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {
+                    "@type": "Question",
+                    "name": "What is {{ title }}?",
+                    "acceptedAnswer": { "@type": "Answer", "text": {{ definition | to_json }} }
+                }
+            ]
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site_root }}" },
+                { "@type": "ListItem", "position": 2, "name": "Glossary", "item": "{{ site_root }}/glossary" },
+                { "@type": "ListItem", "position": 3, "name": {{ title | to_json }}, "item": "{{ permalink }}" }
+            ]
+        }
+    ]
+}
+</script>
