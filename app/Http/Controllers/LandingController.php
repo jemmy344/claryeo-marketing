@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\MainApi;
+use App\Support\Faqs;
 use Illuminate\Contracts\View\View;
 
 class LandingController extends Controller
@@ -21,6 +22,9 @@ class LandingController extends Controller
             'title' => 'Claryeo | Invoicing, Bank Sync & Tax for Nigerian Freelancers',
             'meta_description' => 'Sync your bank, match payments to invoices, and know your PIT, CIT and VAT, automatically. Built for Nigerian freelancers and small businesses.',
             'nav_theme' => 'dark',
+            // Server-rendered fallback content + FAQPage schema (see landing.antlers.html).
+            // The hero CTA uses the shared primary_cta from AppServiceProvider::boot().
+            'faqs' => Faqs::get('landing'),
             'island_props' => htmlspecialchars(
                 (string) json_encode([
                     'plans' => $pricing['plans'] ?? [],

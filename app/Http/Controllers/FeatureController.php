@@ -38,8 +38,10 @@ class FeatureController extends Controller
             ->all();
 
         return view('features', [
-            'title' => 'Features | Claryeo',
+            'title' => 'Features: Invoicing, Bank Sync & Tax Software | Claryeo',
             'meta_description' => 'Invoicing, bank sync, tax & reports, and an AI assistant: everything you need to run your business, in one place.',
+            // Raw array for the server-rendered fallback markup; JSON blob for the island.
+            'features' => $features,
             'island_props' => htmlspecialchars(
                 (string) json_encode(['features' => $features]),
                 ENT_QUOTES,
@@ -82,6 +84,9 @@ class FeatureController extends Controller
         return view('feature', [
             'title' => $feature['title'].' | Claryeo',
             'meta_description' => $feature['heroParagraph'],
+            // Raw array for the server-rendered fallback markup; JSON blob for the island.
+            'feature' => $feature,
+            'cta' => $cta,
             'island_props' => htmlspecialchars(
                 (string) json_encode([
                     'feature' => $feature,

@@ -1,9 +1,43 @@
 {{ partial:shell }}
-    <div data-island="tax-calculator"></div>
+    {{# Server-rendered fallback replaced on hydration. Hero copy duplicated
+        from islands/tax-calculator/page.tsx; the FAQ comes from the shared
+        bank (resources/data/faqs.json). #}}
+    <div data-island="tax-calculator">
+        <section class="mx-auto max-w-3xl px-4 py-14 md:px-6">
+            <h1 class="t-display-2 text-foreground">Nigerian tax calculator</h1>
+            <p class="t-lead mt-3 text-muted-foreground">Realtime PAYE and business tax estimates as you type, on the 2026 Nigerian tax bands. Enter your income to see your tax, your take-home pay and the reliefs applied.</p>
 
-    <p class="mx-auto max-w-3xl px-6 pb-16 text-center text-xs text-muted-foreground">
+            <h2 class="t-display-3 mt-12 text-foreground">Frequently asked questions</h2>
+            <div class="mt-4 divide-y divide-border">
+                {{ faqs }}
+                    <details class="py-3">
+                        <summary class="cursor-pointer font-medium text-foreground">{{ question }}</summary>
+                        <p class="t-body mt-2 text-muted-foreground">{{ answer }}</p>
+                    </details>
+                {{ /faqs }}
+            </div>
+        </section>
+    </div>
+
+    <p class="mx-auto max-w-3xl px-6 pb-16 pt-10 text-center text-xs text-muted-foreground">
         Estimates are for guidance only and do not constitute tax advice. Figures are based on current Nigerian tax rules and may change.
     </p>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {{ faqs }}
+            {
+                "@type": "Question",
+                "name": {{ question | to_json }},
+                "acceptedAnswer": { "@type": "Answer", "text": {{ answer | to_json }} }
+            }{{ unless last }},{{ /unless }}
+            {{ /faqs }}
+        ]
+    }
+    </script>
 
     {{ partial:cta
         heading="Stop estimating. Start tracking."

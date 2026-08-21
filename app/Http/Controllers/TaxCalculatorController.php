@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\CaptureUtmParameters;
 use App\Services\MainApi;
+use App\Support\Faqs;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,10 @@ class TaxCalculatorController extends Controller
     public function show(): View
     {
         return view('tax-calculator', [
-            'title' => 'Nigerian tax calculator | Claryeo',
-            'meta_description' => 'Estimate your Nigerian PAYE or business tax in seconds, then email yourself the full breakdown.',
+            'title' => 'Nigerian Tax Calculator 2026: PAYE, PIT & CIT | Claryeo',
+            'meta_description' => 'Estimate your Nigerian PAYE or business tax in seconds on the 2026 tax bands, then email yourself the full breakdown. Free, no signup.',
+            // Server-rendered fallback content + FAQPage schema.
+            'faqs' => Faqs::get('taxCalculator'),
         ]);
     }
 
