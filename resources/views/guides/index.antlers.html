@@ -1,0 +1,27 @@
+{{ partial:shell }}
+    <div class="mx-auto max-w-3xl px-4 py-14 md:px-0">
+        <p class="t-eyebrow text-muted-foreground">Guides</p>
+        <h1 class="t-display-1 mt-3 text-foreground">Nigerian tax and invoicing, explained</h1>
+        <p class="t-lead mt-5 text-muted-foreground">Long-form guides on PAYE, freelancer tax, small business tax and invoicing, written for the 2026 Nigerian tax rules.</p>
+
+        <ul class="mt-12 divide-y divide-border border-t border-border">
+            {{ collection:guides sort="date:asc" }}
+                <li class="py-6">
+                    <h2 class="t-display-4 text-foreground">
+                        <a href="{{ url }}" class="transition-colors hover:text-primary">{{ title }}</a>
+                    </h2>
+                    <p class="t-body mt-2 text-muted-foreground">{{ description }}</p>
+                    <p class="mt-2 text-sm text-muted-foreground">
+                        Updated {{ if updated_at }}{{ updated_at format="F Y" }}{{ else }}{{ date format="F Y" }}{{ /if }}
+                        {{ if reading_time }}<span class="text-border">·</span> {{ reading_time }}{{ /if }}
+                    </p>
+                </li>
+            {{ /collection:guides }}
+        </ul>
+    </div>
+
+    {{ partial:cta
+        heading="Take control of your finances with Claryeo"
+        body="Invoicing, expenses and tax-ready summaries, built for Nigerian businesses."
+    }}
+{{ /partial:shell }}

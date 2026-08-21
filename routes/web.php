@@ -4,7 +4,6 @@ use App\Http\Controllers\BlogViewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
-use App\Http\Controllers\GuideController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
@@ -18,8 +17,6 @@ Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')
 
 Route::get('features', [FeatureController::class, 'index'])->name('features');
 Route::get('features/{slug}', [FeatureController::class, 'show'])->name('features.show');
-
-Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 
 // Records a session-deduped view for the "Top Reads" ranking. Hit by a small
 // client-side beacon on the post page; a distinct path from Statamic's native
@@ -53,6 +50,13 @@ Route::view('about', 'about', [
     'title' => 'About | Claryeo',
     'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
 ])->name('about');
+
+// Guides index. Individual guides (/guides/{slug}) are served natively by the
+// Statamic `guides` collection route (template: guides/show).
+Route::view('guides', 'guides.index', [
+    'title' => 'Nigerian Tax & Invoicing Guides (2026) | Claryeo',
+    'meta_description' => 'Long-form guides on PAYE, freelancer tax, small business tax (CIT and VAT), and invoicing in Nigeria. Written for the 2026 tax rules.',
+])->name('guides');
 
 Route::get('get-started', GetStartedController::class)->middleware('waitlist.redirect')->name('get-started');
 
@@ -92,7 +96,7 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
 | robots.txt that only invites crawlers in production.
 */
 Route::get('sitemap.xml', function () {
-    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog'];
+    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog', '/guides'];
 
     foreach (array_keys((array) config('feature_pages', [])) as $slug) {
         $urls[] = '/features/'.$slug;
@@ -100,10 +104,6 @@ Route::get('sitemap.xml', function () {
 
     foreach (array_keys((array) config('marketing.blog_categories', [])) as $category) {
         $urls[] = '/blog/category/'.$category;
-    }
-
-    foreach (array_keys((array) config('guides', [])) as $slug) {
-        $urls[] = '/guides/'.$slug;
     }
 
     foreach (['privacy', 'terms', 'cookies'] as $slug) {

@@ -1,0 +1,6 @@
+title: Guides
+route: '/guides/{slug}'
+template: guides/show
+date: true
+sort_dir: desc
+default_publish_state: true
