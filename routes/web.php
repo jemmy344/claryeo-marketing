@@ -11,6 +11,7 @@ use App\Http\Controllers\TaxCalculatorController;
 use App\Http\Controllers\WaitlistController;
 use App\Support\SalaryPages;
 use Illuminate\Support\Facades\Route;
+use Statamic\Facades\Entry;
 
 Route::get('/', LandingController::class)->name('home');
 
@@ -139,6 +140,63 @@ Route::get('sitemap.xml', function () {
         ->view('sitemap', ['urls' => array_map(fn (string $path): string => url($path), $urls)])
         ->header('Content-Type', 'application/xml');
 })->name('sitemap');
+
+/*
+| llms.txt (llmstxt.org): a plain-markdown site overview for AI assistants and
+| agents. Non-Google engines (ChatGPT, Claude, Perplexity) parse it. Built from
+| the same configs and collections as the sitemap so the two can't drift.
+*/
+Route::get('llms.txt', function () {
+    $lines = [
+        '# Claryeo',
+        '',
+        '> Invoicing, bank sync, expenses and tax software for Nigerian freelancers and small businesses. Sync your bank, match payments to invoices, and know your PIT, CIT and VAT automatically, using the 2026 Nigeria Tax Act rules. Rolling out in Nigeria first.',
+        '',
+        '## Product',
+        '- [Features]('.url('/features').'): invoicing & receipts, bank sync, tax reports, AI assistant',
+    ];
+
+    foreach ((array) config('feature_pages', []) as $slug => $page) {
+        $lines[] = '- ['.($page['title'] ?? $slug).']('.url('/features/'.$slug).')';
+    }
+
+    $lines[] = '- [Nigerian tax calculator]('.url('/tax-calculator').'): free PIT/PAYE and small-business tax calculator on the 2026 bands';
+    $lines[] = '';
+    $lines[] = '## Tax by salary';
+    $lines[] = 'PAYE, take-home pay and the band-by-band breakdown for common Nigerian salaries, on the 2026 bands.';
+
+    foreach (SalaryPages::all() as $page) {
+        $lines[] = '- [Tax on '.$page['label'].' a month]('.url('/tax-calculator/'.$page['slug']).'): '
+            .($page['is_exempt']
+                ? 'no PAYE due'
+                : $page['monthly_tax_label'].'/month PAYE, '.$page['monthly_net_label'].' take-home, '.$page['effective_rate_label'].' effective rate');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Guides';
+
+    foreach (Entry::query()->where('collection', 'guides')->where('published', true)->get() as $guide) {
+        $lines[] = '- ['.$guide->get('title').']('.$guide->absoluteUrl().'): '.$guide->get('description');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Glossary';
+    $lines[] = 'Plain-English definitions of Nigerian tax terms, each with a worked example.';
+
+    foreach (Entry::query()->where('collection', 'glossary')->where('published', true)->get() as $term) {
+        $lines[] = '- ['.$term->get('title').']('.$term->absoluteUrl().'): '.$term->get('definition');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Resources';
+    $lines[] = '- [Blog]('.url('/blog').'): practical guides on invoicing, VAT, bank sync and Nigerian tax';
+    $lines[] = '- [All guides]('.url('/guides').')';
+    $lines[] = '- [Glossary]('.url('/glossary').')';
+    $lines[] = '- [About]('.url('/about').')';
+    $lines[] = '- [Contact]('.url('/contact').')';
+
+    return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain; charset=UTF-8');
+})->name('llms');
 
 Route::get('robots.txt', function () {
     $lines = app()->environment('production')
