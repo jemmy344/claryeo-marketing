@@ -11,6 +11,13 @@
     <header class="mt-8 max-w-3xl">
         <p class="t-label text-muted-foreground">
             {{ date format="d M Y" }}
+            {{# Freshness signal: AI engines and Search weight a visible update date.
+                Both sides go through the format modifier: `format="..."` is a tag
+                parameter, not an expression, so it is ignored inside an if and the
+                comparison would be true for every post that has an updated_at. #}}
+            {{ if updated_at && (updated_at | format("Y-m-d")) != (date | format("Y-m-d")) }}
+                <span class="text-border">·</span> Updated {{ updated_at format="d M Y" }}
+            {{ /if }}
             <span class="text-border">·</span> {{ author }}
             {{ if categories }}
                 <span class="text-border">·</span>
@@ -207,4 +214,26 @@
             if (section) section.classList.add('hidden');
         }
     })();
+</script>
+
+{{#
+    BlogPosting structured data. Article schema is how AI engines and Search
+    attribute a post to its author and date; dateModified is the freshness
+    signal. Publisher points at the Organization node declared on the home page.
+#}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": {{ title | to_json }},
+    "description": {{ excerpt | to_json }},
+    "datePublished": "{{ date format="c" }}",
+    "dateModified": "{{ if updated_at }}{{ updated_at format="c" }}{{ else }}{{ date format="c" }}{{ /if }}",
+    "author": { "@type": "Person", "name": {{ author | to_json }} },
+    {{# Self-describing publisher: the Organization node itself only exists on the
+        home page, and Google does not resolve an @id across documents. #}}
+    "publisher": { "@type": "Organization", "@id": "{{ site_root }}/#organization", "name": "Claryeo", "url": "{{ site_root }}" },
+    "mainEntityOfPage": "{{ permalink }}"{{ if hero_image }},
+    "image": "{{ if hero_image | starts_with('/') }}{{ site_root }}{{ /if }}{{ hero_image }}"{{ /if }}
+}
 </script>
