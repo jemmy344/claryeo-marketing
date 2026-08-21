@@ -7,13 +7,15 @@
     "build": "vite build",
     "dev": "vite",
     "watch": "vite",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate:salary-pages": "tsx scripts/generate-salary-pages.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.6",
+    "@types/node": "^26.2.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
@@ -21,6 +23,7 @@
     "husky": "^9.1.7",
     "laravel-vite-plugin": "^3.1",
     "tailwindcss": "^4.0.6",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3",
     "vite": "^8.0.0"
   },
@@ -38,6 +41,7 @@
     "framer-motion": "^12.40.0",
     "gsap": "^3.15.0",
     "lucide-react": "^0.475.0",
+    "posthog-js": "^1.418.6",
     "radix-ui": "^1.4.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
