@@ -36,6 +36,20 @@ return [
     ],
 
     /*
+    | Analytics. Injected server-side via the Antlers shell because the Docker
+    | assets stage receives no VITE_* vars, so import.meta.env keys are empty
+    | in production bundles. GA4 property is shared with the main Claryeo app.
+    */
+    'ga4' => [
+        'measurement_id' => env('GA4_MEASUREMENT_ID'),
+    ],
+
+    'posthog' => [
+        'key' => env('POSTHOG_KEY'),
+        'host' => env('POSTHOG_HOST', 'https://eu.i.posthog.com'),
+    ],
+
+    /*
     | The main Claryeo Laravel app's internal API. The marketing site reaches it
     | over Railway private networking (web.railway.internal) and authenticates
     | with a shared secret. All dynamic data (pricing, legal, lead capture) flows
