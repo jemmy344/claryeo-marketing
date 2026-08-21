@@ -30,14 +30,6 @@ const registry = {
     landing: () => import('./islands/landing/page'),
     features: () => import('./islands/features/page'),
     feature: () => import('./islands/feature/page'),
-    'guide-paye-tax-nigeria': () =>
-        import('./islands/guides/paye-tax-nigeria'),
-    'guide-small-business-tax-nigeria': () =>
-        import('./islands/guides/small-business-tax-nigeria'),
-    'guide-freelancer-tax-nigeria': () =>
-        import('./islands/guides/freelancer-tax-nigeria'),
-    'guide-invoice-guide-nigeria': () =>
-        import('./islands/guides/invoice-guide-nigeria'),
     'get-started': () => import('./islands/get-started/page'),
     'legal-document': () => import('./islands/legal/document'),
     'legal-versions': () => import('./islands/legal/versions'),

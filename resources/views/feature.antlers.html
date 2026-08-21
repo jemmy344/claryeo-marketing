@@ -1,3 +1,65 @@
 {{ partial:shell }}
-    <div data-island="feature" data-props="{{ island_props | raw }}"></div>
+    {{# Server-rendered fallback so crawlers (and no-JS visitors) get the full
+        page content; the island replaces it on hydration. Copy comes from the
+        same config/feature_pages.php entry the island receives, so there is
+        no duplication to drift. #}}
+    <div data-island="feature" data-props="{{ island_props | raw }}">
+        <div class="mx-auto max-w-[1180px] px-4 py-14 md:px-0">
+            <p class="t-eyebrow text-muted-foreground">{{ feature:eyebrow }}</p>
+            <h1 class="t-display-2 mt-3 text-foreground">{{ feature:tagline }}</h1>
+            <p class="t-lead mt-4 max-w-2xl text-muted-foreground">{{ feature:heroParagraph }}</p>
+
+            <dl class="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
+                {{ feature:highlights }}
+                    <div>
+                        <dt class="text-sm text-muted-foreground">{{ label }}</dt>
+                        <dd class="t-display-4 text-foreground">{{ value }}</dd>
+                    </div>
+                {{ /feature:highlights }}
+            </dl>
+
+            {{ feature:sections }}
+                <section class="mt-14 max-w-3xl">
+                    <h2 class="t-display-3 text-foreground">{{ heading }}</h2>
+                    <p class="t-body mt-3 text-muted-foreground">{{ body }}</p>
+                    <ul class="mt-4 space-y-2 text-muted-foreground">
+                        {{ bullets }}
+                            <li class="flex gap-3"><span class="mt-2 size-1.5 shrink-0 rounded-full bg-primary"></span>{{ value }}</li>
+                        {{ /bullets }}
+                    </ul>
+                </section>
+            {{ /feature:sections }}
+
+            <section class="mt-14 max-w-3xl">
+                <h2 class="t-display-3 text-foreground">Frequently asked questions</h2>
+                <div class="mt-4 divide-y divide-border">
+                    {{ feature:faqs }}
+                        <details class="py-3">
+                            <summary class="cursor-pointer font-medium text-foreground">{{ question }}</summary>
+                            <p class="t-body mt-2 text-muted-foreground">{{ answer }}</p>
+                        </details>
+                    {{ /feature:faqs }}
+                </div>
+            </section>
+
+            <p class="mt-14"><a href="{{ cta:href }}" class="bg-gradient-primary rounded-full px-6 py-3 text-sm font-medium text-primary-foreground">{{ cta:label }}</a></p>
+        </div>
+    </div>
+
+    {{# FAQPage structured data from the same config faqs. #}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {{ feature:faqs }}
+            {
+                "@type": "Question",
+                "name": {{ question | to_json }},
+                "acceptedAnswer": { "@type": "Answer", "text": {{ answer | to_json }} }
+            }{{ unless last }},{{ /unless }}
+            {{ /feature:faqs }}
+        ]
+    }
+    </script>
 {{ /partial:shell }}

@@ -4,16 +4,60 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ title ?? site:name }}</title>
+        {{# Statamic entries can override the SERP title without changing the H1. #}}
+        <title>{{ (seo_title ?? title ?? site:name) | sanitize }}</title>
         <meta name="csrf-token" content="{{ csrf_token }}">
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/favicon.svg">
-        {{ if meta_description }}<meta name="description" content="{{ meta_description }}">{{ /if }}
-        {{ if canonical_url }}<link rel="canonical" href="{{ canonical_url }}">{{ /if }}
+        {{# Statamic entries carry the description under their own blueprint handle:
+            excerpt (blog), description (guides), definition (glossary). Every value
+            below goes through | sanitize because Antlers does not escape, and a
+            title or excerpt containing a double quote would truncate the attribute. #}}
+        {{ page_description = meta_description ?? excerpt ?? description ?? definition }}
+        {{ if page_description }}<meta name="description" content="{{ page_description | sanitize }}">{{ /if }}
+        <link rel="canonical" href="{{ canonical_url ?? page_url }}">
+        <meta property="og:site_name" content="Claryeo">
+        {{# Entry pages pass og_type="article" through layout.antlers.html. #}}
+        <meta property="og:type" content="{{ og_type ?? 'website' }}">
+        <meta property="og:title" content="{{ (title ?? site:name) | sanitize }}">
+        {{ if page_description }}<meta property="og:description" content="{{ page_description | sanitize }}">{{ /if }}
+        <meta property="og:url" content="{{ canonical_url ?? page_url }}">
+        {{# A post's own hero image beats the site card. hero_image is free text,
+            so host-relative paths get the site root prefixed. #}}
+        {{ if hero_image }}
+        <meta property="og:image" content="{{ if hero_image | starts_with('/') }}{{ site_root }}{{ /if }}{{ hero_image | sanitize }}">
+        <meta name="twitter:card" content="summary_large_image">
+        {{ elseif og_image }}
+        <meta property="og:image" content="{{ og_image }}">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta name="twitter:card" content="summary_large_image">
+        {{ else }}
+        <meta name="twitter:card" content="summary">
+        {{ /if }}
+        <meta name="twitter:site" content="@claryeoofficial">
+        <meta name="twitter:title" content="{{ (title ?? site:name) | sanitize }}">
+        {{ if page_description }}<meta name="twitter:description" content="{{ page_description | sanitize }}">{{ /if }}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,700&family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&display=swap" rel="stylesheet">
+        {{# Analytics: server-injected because the Docker assets stage gets no
+            VITE_* vars. GA4 loads directly; PostHog config is handed to
+            site.js via meta tags. Both are inert when the env keys are unset. #}}
+        {{ if ga4_id }}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga4_id }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', '{{ ga4_id }}');
+        </script>
+        {{ /if }}
+        {{ if posthog_key }}
+        <meta name="ph-key" content="{{ posthog_key }}">
+        <meta name="ph-host" content="{{ posthog_host }}">
+        {{ /if }}
         {{# Apply the saved light/dark/system theme before first paint to avoid a flash. #}}
         <script src="/theme-init.js"></script>
         {{ vite_react_refresh | raw }}

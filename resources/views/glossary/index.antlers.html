@@ -1,0 +1,23 @@
+{{ partial:shell }}
+    <div class="mx-auto max-w-3xl px-4 py-14 md:px-0">
+        <p class="t-eyebrow text-muted-foreground">Glossary</p>
+        <h1 class="t-display-1 mt-3 text-foreground">Nigerian tax terms, in plain English</h1>
+        <p class="t-lead mt-5 text-muted-foreground">PAYE, CIT, VAT, WHT and the rest, each with a worked Naira example and where it stands under the 2026 rules.</p>
+
+        <dl class="mt-12 divide-y divide-border border-t border-border">
+            {{ collection:glossary }}
+                <div class="py-6">
+                    <dt class="t-display-4 text-foreground">
+                        <a href="{{ url }}" class="transition-colors hover:text-primary">{{ title }}</a>
+                    </dt>
+                    <dd class="t-body mt-2 text-muted-foreground">{{ definition }}</dd>
+                </div>
+            {{ /collection:glossary }}
+        </dl>
+    </div>
+
+    {{ partial:cta
+        heading="Tax that works itself out"
+        body="Claryeo turns your invoices and expenses into export-ready PIT, CIT and VAT summaries."
+    }}
+{{ /partial:shell }}

@@ -84,6 +84,30 @@ class AppServiceProvider extends ServiceProvider
         // Statamic's {{ vite }} tag doesn't emit it. Empty string in prod.
         View::share('vite_react_refresh', (string) Vite::reactRefresh());
 
+        // SEO defaults: self-canonical (pages can override with canonical_url)
+        // and a site-wide OG image once public/og.png exists (1200x630).
+        // page_url is resolved per render, not here: boot() runs before the
+        // route is dispatched under some runtimes (and only once per worker
+        // under any persistent one), which would freeze every canonical to
+        // whichever URL booted the app.
+        View::composer('*', static function ($view): void {
+            $request = request();
+            $page = $request->query('page');
+
+            // Paginated lists must self-canonicalise per page, or pages 2..n
+            // tell Google to drop them in favour of page 1.
+            $view->with('page_url', is_scalar($page) && (string) $page !== '' && (string) $page !== '1'
+                ? $request->url().'?page='.rawurlencode((string) $page)
+                : $request->url());
+        });
+        View::share('site_root', url('/'));
+        View::share('og_image', file_exists(public_path('og.png')) ? url('/og.png') : null);
+
+        // Analytics config for the shell; server-injected (see config/services.php).
+        View::share('ga4_id', config('services.ga4.measurement_id'));
+        View::share('posthog_key', config('services.posthog.key'));
+        View::share('posthog_host', config('services.posthog.host'));
+
         View::share('claryeo_app_url', $appUrl);
         View::share('waitlist_mode', $waitlistMode);
         View::share('primary_cta', $primaryCta);

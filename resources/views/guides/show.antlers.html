@@ -1,0 +1,85 @@
+{{#
+    Single guide. Rendered by the Statamic `guides` collection (the entry is in
+    scope) and wrapped by layout.antlers.html. Server-rendered on purpose: these
+    are the pages AI crawlers cite, and they do not execute JavaScript.
+#}}
+<div class="mx-auto max-w-3xl px-4 py-10 md:px-0 md:py-14">
+    <nav class="t-label text-muted-foreground" aria-label="Breadcrumb">
+        <a href="/" class="transition-colors hover:text-primary">Home</a>
+        <span class="text-border">/</span>
+        <a href="/guides" class="transition-colors hover:text-primary">Guides</a>
+    </nav>
+
+    <header class="mt-8">
+        <h1 class="t-display-2 text-foreground">{{ title }}</h1>
+        <p class="mt-2 text-sm text-muted-foreground">
+            Updated {{ if updated_at }}{{ updated_at format="F Y" }}{{ else }}{{ date format="F Y" }}{{ /if }}
+            {{ if reading_time }}<span class="text-border">·</span> {{ reading_time }}{{ /if }}
+        </p>
+        {{ if description }}
+            <p class="t-lead mt-6 text-muted-foreground">{{ description }}</p>
+        {{ /if }}
+    </header>
+
+    <div class="prose-claryeo mt-8">
+        {{ content }}
+    </div>
+
+    {{ if faq_key }}
+        <h2 class="t-display-3 mt-12 text-foreground">Frequently Asked Questions</h2>
+        <div class="mt-4 divide-y divide-border">
+            {{ faqs :key="faq_key" }}
+                <details class="py-3">
+                    <summary class="cursor-pointer font-medium text-foreground">{{ question }}</summary>
+                    <p class="t-body mt-2 text-muted-foreground">{{ answer }}</p>
+                </details>
+            {{ /faqs }}
+        </div>
+    {{ /if }}
+</div>
+
+{{ partial:cta
+    heading="Take control of your finances with Claryeo"
+    body="Invoicing, expenses and tax-ready summaries, built for Nigerian businesses."
+}}
+
+{{# Article + Breadcrumb (+ FAQPage when the entry names a faq set). #}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "Article",
+            "headline": {{ title | to_json }},
+            "description": {{ description | to_json }},
+            "datePublished": "{{ date format="c" }}",
+            "dateModified": "{{ if updated_at }}{{ updated_at format="c" }}{{ else }}{{ date format="c" }}{{ /if }}",
+            "author": { "@type": "Organization", "name": "Claryeo" },
+            {{# Self-describing publisher: the Organization node itself only exists on
+                the home page, and Google does not resolve an @id across documents. #}}
+            "publisher": { "@type": "Organization", "@id": "{{ site_root }}/#organization", "name": "Claryeo", "url": "{{ site_root }}" },
+            "mainEntityOfPage": "{{ permalink }}"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site_root }}" },
+                { "@type": "ListItem", "position": 2, "name": "Guides", "item": "{{ site_root }}/guides" },
+                { "@type": "ListItem", "position": 3, "name": {{ title | to_json }}, "item": "{{ permalink }}" }
+            ]
+        }{{ if faq_key }},
+        {
+            "@type": "FAQPage",
+            "mainEntity": [
+                {{ faqs :key="faq_key" }}
+                {
+                    "@type": "Question",
+                    "name": {{ question | to_json }},
+                    "acceptedAnswer": { "@type": "Answer", "text": {{ answer | to_json }} }
+                }{{ unless last }},{{ /unless }}
+                {{ /faqs }}
+            ]
+        }{{ /if }}
+    ]
+}
+</script>

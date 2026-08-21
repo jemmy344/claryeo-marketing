@@ -4,13 +4,14 @@ use App\Http\Controllers\BlogViewController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\GetStartedController;
-use App\Http\Controllers\GuideController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TaxCalculatorController;
 use App\Http\Controllers\WaitlistController;
+use App\Support\SalaryPages;
 use Illuminate\Support\Facades\Route;
+use Statamic\Facades\Entry;
 
 Route::get('/', LandingController::class)->name('home');
 
@@ -18,8 +19,6 @@ Route::get('pricing', PricingController::class)->middleware('waitlist.redirect')
 
 Route::get('features', [FeatureController::class, 'index'])->name('features');
 Route::get('features/{slug}', [FeatureController::class, 'show'])->name('features.show');
-
-Route::get('guides/{slug}', [GuideController::class, 'show'])->name('guides.show');
 
 // Records a session-deduped view for the "Top Reads" ranking. Hit by a small
 // client-side beacon on the post page; a distinct path from Statamic's native
@@ -31,8 +30,8 @@ Route::post('blog/{id}/view', BlogViewController::class)
 // Blog index + category filter. Individual posts (/blog/{slug}) are served
 // natively by the Statamic `blog` collection route (template: blog/show).
 Route::view('blog', 'blog.index', [
-    'title' => 'Blog | Claryeo',
-    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses.',
+    'title' => 'Blog: Invoicing & Tax Guides for Nigerian Business | Claryeo',
+    'meta_description' => 'Practical guides on invoicing, expenses, bank sync, and Nigerian tax for freelancers and small businesses. Written for the 2026 tax rules.',
     'activeCategory' => null,
 ])->name('blog');
 
@@ -50,14 +49,34 @@ Route::get('blog/category/{category}', function (string $category) {
 })->name('blog.category');
 
 Route::view('about', 'about', [
-    'title' => 'About | Claryeo',
-    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses everywhere.",
+    'title' => 'About Claryeo: Business Finance Tools for Nigeria',
+    'meta_description' => "Learn about Claryeo's mission to simplify invoicing, expenses, and tax for freelancers and small businesses, starting in Nigeria.",
 ])->name('about');
+
+// Guides index. Individual guides (/guides/{slug}) are served natively by the
+// Statamic `guides` collection route (template: guides/show).
+Route::view('guides', 'guides.index', [
+    'title' => 'Nigerian Tax & Invoicing Guides (2026) | Claryeo',
+    'meta_description' => 'Long-form guides on PAYE, freelancer tax, small business tax (CIT and VAT), and invoicing in Nigeria. Written for the 2026 tax rules.',
+])->name('guides');
+
+// Glossary index. Individual terms (/glossary/{slug}) are served natively by
+// the Statamic `glossary` collection route (template: glossary/show).
+Route::view('glossary', 'glossary.index', [
+    'title' => 'Nigerian Tax Glossary: PAYE, CIT, VAT & WHT | Claryeo',
+    'meta_description' => 'Plain-English definitions of Nigerian tax terms: PAYE, PIT, CIT, VAT, WHT, TIN, rent relief and more, each with a worked example on the 2026 rules.',
+])->name('glossary');
 
 Route::get('get-started', GetStartedController::class)->middleware('waitlist.redirect')->name('get-started');
 
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
 Route::post('tax-calculator/report', [TaxCalculatorController::class, 'report'])->middleware('throttle:6,1')->name('taxCalculator.report.store');
+
+// Precomputed "tax on ₦X salary" pages (see scripts/generate-salary-pages.ts).
+// Constrained to the generated slugs so unknown values 404 rather than render.
+Route::get('tax-calculator/{slug}', [TaxCalculatorController::class, 'salary'])
+    ->where('slug', implode('|', SalaryPages::slugs()) ?: 'none')
+    ->name('taxCalculator.salary');
 
 Route::get('contact', [ContactController::class, 'show'])->name('contact');
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
@@ -92,7 +111,7 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
 | robots.txt that only invites crawlers in production.
 */
 Route::get('sitemap.xml', function () {
-    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog'];
+    $urls = ['/', '/features', '/about', '/tax-calculator', '/contact', '/blog', '/guides', '/glossary'];
 
     foreach (array_keys((array) config('feature_pages', [])) as $slug) {
         $urls[] = '/features/'.$slug;
@@ -102,8 +121,8 @@ Route::get('sitemap.xml', function () {
         $urls[] = '/blog/category/'.$category;
     }
 
-    foreach (array_keys((array) config('guides', [])) as $slug) {
-        $urls[] = '/guides/'.$slug;
+    foreach (SalaryPages::slugs() as $slug) {
+        $urls[] = '/tax-calculator/'.$slug;
     }
 
     foreach (['privacy', 'terms', 'cookies'] as $slug) {
@@ -121,6 +140,63 @@ Route::get('sitemap.xml', function () {
         ->view('sitemap', ['urls' => array_map(fn (string $path): string => url($path), $urls)])
         ->header('Content-Type', 'application/xml');
 })->name('sitemap');
+
+/*
+| llms.txt (llmstxt.org): a plain-markdown site overview for AI assistants and
+| agents. Non-Google engines (ChatGPT, Claude, Perplexity) parse it. Built from
+| the same configs and collections as the sitemap so the two can't drift.
+*/
+Route::get('llms.txt', function () {
+    $lines = [
+        '# Claryeo',
+        '',
+        '> Invoicing, bank sync, expenses and tax software for Nigerian freelancers and small businesses. Sync your bank, match payments to invoices, and know your PIT, CIT and VAT automatically, using the 2026 Nigeria Tax Act rules. Rolling out in Nigeria first.',
+        '',
+        '## Product',
+        '- [Features]('.url('/features').'): invoicing & receipts, bank sync, tax reports, AI assistant',
+    ];
+
+    foreach ((array) config('feature_pages', []) as $slug => $page) {
+        $lines[] = '- ['.($page['title'] ?? $slug).']('.url('/features/'.$slug).')';
+    }
+
+    $lines[] = '- [Nigerian tax calculator]('.url('/tax-calculator').'): free PIT/PAYE and small-business tax calculator on the 2026 bands';
+    $lines[] = '';
+    $lines[] = '## Tax by salary';
+    $lines[] = 'PAYE, take-home pay and the band-by-band breakdown for common Nigerian salaries, on the 2026 bands.';
+
+    foreach (SalaryPages::all() as $page) {
+        $lines[] = '- [Tax on '.$page['label'].' a month]('.url('/tax-calculator/'.$page['slug']).'): '
+            .($page['is_exempt']
+                ? 'no PAYE due'
+                : $page['monthly_tax_label'].'/month PAYE, '.$page['monthly_net_label'].' take-home, '.$page['effective_rate_label'].' effective rate');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Guides';
+
+    foreach (Entry::query()->where('collection', 'guides')->where('published', true)->get() as $guide) {
+        $lines[] = '- ['.$guide->get('title').']('.$guide->absoluteUrl().'): '.$guide->get('description');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Glossary';
+    $lines[] = 'Plain-English definitions of Nigerian tax terms, each with a worked example.';
+
+    foreach (Entry::query()->where('collection', 'glossary')->where('published', true)->get() as $term) {
+        $lines[] = '- ['.$term->get('title').']('.$term->absoluteUrl().'): '.$term->get('definition');
+    }
+
+    $lines[] = '';
+    $lines[] = '## Resources';
+    $lines[] = '- [Blog]('.url('/blog').'): practical guides on invoicing, VAT, bank sync and Nigerian tax';
+    $lines[] = '- [All guides]('.url('/guides').')';
+    $lines[] = '- [Glossary]('.url('/glossary').')';
+    $lines[] = '- [About]('.url('/about').')';
+    $lines[] = '- [Contact]('.url('/contact').')';
+
+    return response(implode("\n", $lines)."\n")->header('Content-Type', 'text/plain; charset=UTF-8');
+})->name('llms');
 
 Route::get('robots.txt', function () {
     $lines = app()->environment('production')

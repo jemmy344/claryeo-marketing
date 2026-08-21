@@ -1,3 +1,111 @@
 {{ partial:shell }}
-    <div data-island="landing" data-props="{{ island_props | raw }}"></div>
+    {{# Server-rendered fallback: the hero, section headings and FAQ so crawlers
+        (and AI crawlers, which do not run JS) see the page's substance. The
+        island replaces all of it on hydration. Copy is duplicated from
+        islands/landing/page.tsx + components/landing/landing-hero.tsx -- keep
+        the two in sync when the hero or section headings change. #}}
+    <div data-island="landing" data-props="{{ island_props | raw }}">
+        <section class="bg-ink px-4 py-20 text-center">
+            <div class="mx-auto max-w-[1180px]">
+                <span class="t-eyebrow text-mist">Rolling out in Nigeria · FIRS-ready</span>
+                <h1 class="t-display-hero mx-auto mt-6 max-w-3xl text-paper"><em>Run</em> the business. Skip the books.</h1>
+                <p class="t-lead mx-auto mt-6 max-w-lg text-mist">Claryeo syncs your bank, matches your payments, and works out your tax, automatically. Built for freelancers and small businesses.</p>
+                <p class="mt-8"><a href="{{ primary_cta:href }}" class="rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink">{{ primary_cta:label }}</a></p>
+                <dl class="mt-10 flex flex-wrap justify-center gap-8 text-mist">
+                    <div><dt class="text-sm">Invoices &amp; receipts</dt><dd class="t-display-4 text-paper">Unlimited</dd></div>
+                    <div><dt class="text-sm">Bank sync</dt><dd class="t-display-4 text-paper">Automatic</dd></div>
+                    <div><dt class="text-sm">Realtime tracking</dt><dd class="t-display-4 text-paper">Always on</dd></div>
+                </dl>
+            </div>
+        </section>
+
+        <section class="bg-ink px-4 py-16">
+            <div class="mx-auto max-w-[1180px]">
+                <h2 class="t-display-2 text-paper"><em>The</em> admin, actually handled</h2>
+                <p class="t-body mt-3 max-w-2xl text-mist">Invoicing and receipts, automatic bank sync, payment matching, expense tracking, and export-ready PIT, CIT and VAT summaries, in one place.</p>
+            </div>
+        </section>
+
+        <section class="bg-ink px-4 py-16">
+            <div class="mx-auto max-w-[1180px]">
+                <h2 class="t-display-2 text-paper"><em>Three</em> steps in</h2>
+                <ol class="mt-8 grid gap-8 md:grid-cols-3">
+                    <li><span class="t-mono text-sm text-dawn">01</span><h3 class="t-display-4 mt-3 text-paper">Sign up</h3><p class="mt-2 text-sm text-mist">Create your account and set your business type.</p></li>
+                    <li><span class="t-mono text-sm text-dawn">02</span><h3 class="t-display-4 mt-3 text-paper">Run your business</h3><p class="mt-2 text-sm text-mist">Send invoices, log expenses, and let bank sync and payment matching handle the rest.</p></li>
+                    <li><span class="t-mono text-sm text-dawn">03</span><h3 class="t-display-4 mt-3 text-paper">Track &amp; export</h3><p class="mt-2 text-sm text-mist">Bank transactions sync automatically. Export tax-ready reports when you need them.</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="bg-ink px-4 py-16">
+            <div class="mx-auto max-w-[1180px]">
+                <h2 class="t-display-2 text-paper">Frequently asked questions</h2>
+                <div class="mt-6 divide-y divide-ink-border">
+                    {{ faqs }}
+                        <details class="py-3">
+                            <summary class="cursor-pointer font-medium text-paper">{{ question }}</summary>
+                            <p class="t-body mt-2 text-mist">{{ answer }}</p>
+                        </details>
+                    {{ /faqs }}
+                </div>
+            </div>
+        </section>
+    </div>
+
+    {{# FAQPage schema from the same faq bank (resources/data/faqs.json). #}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {{ faqs }}
+            {
+                "@type": "Question",
+                "name": {{ question | to_json }},
+                "acceptedAnswer": { "@type": "Answer", "text": {{ answer | to_json }} }
+            }{{ unless last }},{{ /unless }}
+            {{ /faqs }}
+        ]
+    }
+    </script>
+
+    {{# Structured data for the home page. Google parses JSON-LD anywhere in
+        the document, so keeping it here avoids threading a head slot through
+        the shell partial. Node ids are built from site_root (not page_url) so
+        they match the publisher references on posts and guides exactly. #}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "{{ site_root }}/#organization",
+                "name": "Claryeo",
+                "url": "{{ site_root }}",
+                "logo": "{{ og_image ?? site_root }}",
+                "sameAs": [
+                    "https://x.com/claryeoofficial",
+                    "https://www.linkedin.com/company/claryeo/",
+                    "https://instagram.com/claryeoofficial"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "{{ site_root }}/#website",
+                "name": "Claryeo",
+                "url": "{{ site_root }}",
+                "publisher": { "@id": "{{ site_root }}/#organization" }
+            },
+            {
+                "@type": "SoftwareApplication",
+                "name": "Claryeo",
+                "url": "{{ site_root }}",
+                "applicationCategory": "FinanceApplication",
+                "operatingSystem": "Web",
+                "description": {{ meta_description | to_json }},
+                "publisher": { "@id": "{{ site_root }}/#organization" }
+            }
+        ]
+    }
+    </script>
 {{ /partial:shell }}

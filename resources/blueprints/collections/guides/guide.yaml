@@ -1,0 +1,43 @@
+title: Guide
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              display: Title
+              instructions: 'The on-page H1. The SEO title is set separately below.'
+          -
+            handle: seo_title
+            field:
+              type: text
+              display: 'SEO title'
+              instructions: 'Used in <title> and social previews. Aim for 50-60 characters.'
+          -
+            handle: description
+            field:
+              type: textarea
+              display: Description
+              instructions: 'Meta description and page lead. 150-160 characters.'
+          -
+            handle: content
+            field:
+              type: markdown
+              display: Content
+              required: true
+  sidebar:
+    display: Sidebar
+    sections:
+      -
+        fields:
+          -
+            handle: faq_key
+            field:
+              type: text
+              display: 'FAQ key'
+              instructions: 'Key in resources/data/faqs.json (e.g. payeGuide) to render the FAQ block and FAQPage schema.'

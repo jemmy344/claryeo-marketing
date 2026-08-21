@@ -15,8 +15,8 @@ class WaitlistController extends Controller
     public function show(): View
     {
         return view('waitlist', [
-            'title' => 'Join the waitlist | Claryeo',
-            'meta_description' => 'Be the first to know when Claryeo launches.',
+            'title' => 'Join the Claryeo Waitlist: Invoicing & Tax for Nigeria',
+            'meta_description' => 'Be first to know when Claryeo launches: invoicing, bank sync, expenses and automatic PIT, CIT and VAT for Nigerian freelancers and small businesses.',
         ]);
     }
 

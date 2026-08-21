@@ -34,6 +34,7 @@ return [
             [
                 'title' => 'Guides',
                 'links' => [
+                    ['label' => 'All guides', 'href' => '/guides'],
                     ['label' => 'PAYE tax in Nigeria', 'href' => '/guides/paye-tax-nigeria'],
                     ['label' => 'Small business tax', 'href' => '/guides/small-business-tax-nigeria'],
                     ['label' => 'Freelancer tax', 'href' => '/guides/freelancer-tax-nigeria'],
@@ -63,6 +64,7 @@ return [
         ]],
         ['group' => 'Resources', 'items' => [
             ['title' => 'Blog', 'href' => '/blog'],
+            ['title' => 'Guides', 'href' => '/guides'],
             ['title' => 'Tax calculator', 'href' => '/tax-calculator'],
             ['title' => 'PAYE Tax Guide', 'href' => '/guides/paye-tax-nigeria'],
             ['title' => 'Business Tax Guide', 'href' => '/guides/small-business-tax-nigeria'],

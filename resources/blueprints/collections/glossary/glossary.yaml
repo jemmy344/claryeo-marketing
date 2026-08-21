@@ -1,0 +1,27 @@
+title: 'Glossary term'
+tabs:
+  main:
+    display: Main
+    sections:
+      -
+        fields:
+          -
+            handle: title
+            field:
+              type: text
+              required: true
+              display: Term
+              instructions: 'The term as people search for it, e.g. "Withholding Tax (WHT)".'
+          -
+            handle: definition
+            field:
+              type: textarea
+              required: true
+              display: Definition
+              instructions: 'One direct 40-60 word answer. This is the passage AI engines and featured snippets extract, so lead with the answer.'
+          -
+            handle: content
+            field:
+              type: markdown
+              display: 'Detail'
+              instructions: 'Worked example, who it applies to, and the current-law position.'

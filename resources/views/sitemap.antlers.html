@@ -6,4 +6,13 @@
 {{ collection:blog }}
     <url><loc>{{ permalink }}</loc>{{ if updated_at }}<lastmod>{{ updated_at format="Y-m-d" }}</lastmod>{{ /if }}</url>
 {{ /collection:blog }}
+{{# The /guides and /glossary index URLs come through {{ urls }} with every other
+    static page: {{ config:app:url }} is not in scope for a plain Laravel-rendered
+    view, so it resolved to an empty string and emitted a relative <loc>. #}}
+{{ collection:guides }}
+    <url><loc>{{ permalink }}</loc>{{ if updated_at }}<lastmod>{{ updated_at format="Y-m-d" }}</lastmod>{{ /if }}</url>
+{{ /collection:guides }}
+{{ collection:glossary }}
+    <url><loc>{{ permalink }}</loc>{{ if updated_at }}<lastmod>{{ updated_at format="Y-m-d" }}</lastmod>{{ /if }}</url>
+{{ /collection:glossary }}
 </urlset>

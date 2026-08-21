@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Middleware\CaptureUtmParameters;
 use App\Services\MainApi;
+use App\Support\Faqs;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,8 +16,10 @@ class ContactController extends Controller
     public function show(): View
     {
         return view('contact', [
-            'title' => 'Contact | Claryeo',
-            'meta_description' => 'Get in touch with the Claryeo team.',
+            'title' => 'Contact the Claryeo Team | Invoicing & Tax Support',
+            'meta_description' => 'Questions about invoicing, bank sync, or Nigerian tax in Claryeo? Message the team and get a reply within one business day.',
+            // Server-rendered fallback content + FAQPage schema.
+            'faqs' => Faqs::get('contact'),
         ]);
     }
 
