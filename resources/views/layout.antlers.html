@@ -1,1 +1,4 @@
-{{ partial:shell }}{{ template_content }}{{ /partial:shell }}
+{{# Wrapper for every Statamic collection entry (blog, guides, glossary). They
+    are all long-form articles, so the shell gets og:type="article" here rather
+    than each template having to reach into the head. #}}
+{{ partial:shell og_type="article" }}{{ template_content }}{{ /partial:shell }}
