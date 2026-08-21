@@ -20,6 +20,7 @@ const BillingIntervalToggle: FC<BillingIntervalToggleProps> = ({
     <div className="flex justify-center">
         <button
             type="button"
+            aria-pressed={value === 'monthly'}
             onClick={() => onChange('monthly')}
             className={cn(
                 'rounded-lg px-4 py-3 text-sm font-semibold transition-all',
@@ -33,6 +34,7 @@ const BillingIntervalToggle: FC<BillingIntervalToggleProps> = ({
         </button>
         <button
             type="button"
+            aria-pressed={value === 'annual'}
             onClick={() => onChange('annual')}
             className={cn(
                 'rounded-lg px-4 py-3 text-sm font-semibold transition-all',
