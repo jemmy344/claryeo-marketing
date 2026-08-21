@@ -9,6 +9,7 @@ use App\Http\Controllers\LegalController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\TaxCalculatorController;
 use App\Http\Controllers\WaitlistController;
+use App\Support\SalaryPages;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', LandingController::class)->name('home');
@@ -63,6 +64,12 @@ Route::get('get-started', GetStartedController::class)->middleware('waitlist.red
 Route::get('tax-calculator', [TaxCalculatorController::class, 'show'])->name('taxCalculator');
 Route::post('tax-calculator/report', [TaxCalculatorController::class, 'report'])->middleware('throttle:6,1')->name('taxCalculator.report.store');
 
+// Precomputed "tax on ₦X salary" pages (see scripts/generate-salary-pages.ts).
+// Constrained to the generated slugs so unknown values 404 rather than render.
+Route::get('tax-calculator/{slug}', [TaxCalculatorController::class, 'salary'])
+    ->where('slug', implode('|', SalaryPages::slugs()) ?: 'none')
+    ->name('taxCalculator.salary');
+
 Route::get('contact', [ContactController::class, 'show'])->name('contact');
 Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
 Route::view('contact/thank-you', 'contact.thank-you', ['title' => 'Thank you | Claryeo'])->name('contact.thank-you');
@@ -104,6 +111,10 @@ Route::get('sitemap.xml', function () {
 
     foreach (array_keys((array) config('marketing.blog_categories', [])) as $category) {
         $urls[] = '/blog/category/'.$category;
+    }
+
+    foreach (SalaryPages::slugs() as $slug) {
+        $urls[] = '/tax-calculator/'.$slug;
     }
 
     foreach (['privacy', 'terms', 'cookies'] as $slug) {

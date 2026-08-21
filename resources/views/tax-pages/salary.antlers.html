@@ -1,0 +1,148 @@
+{{#
+    "Tax on ₦X monthly salary in Nigeria" page. Fully server-rendered: the
+    answer is the point, so it must be in the HTML for search and AI crawlers.
+    Figures come from resources/data/salary_pages.json (see App\Support\SalaryPages).
+#}}
+{{ partial:shell }}
+    <div class="mx-auto max-w-3xl px-4 py-10 md:px-0 md:py-14">
+        <nav class="t-label text-muted-foreground" aria-label="Breadcrumb">
+            <a href="/" class="transition-colors hover:text-primary">Home</a>
+            <span class="text-border">/</span>
+            <a href="/tax-calculator" class="transition-colors hover:text-primary">Tax calculator</a>
+        </nav>
+
+        <h1 class="t-display-2 mt-8 text-foreground">Tax on a {{ page:label }} monthly salary in Nigeria</h1>
+        <p class="mt-2 text-sm text-muted-foreground">Calculated on the {{ page:tax_year }} bands (Nigeria Tax Act)</p>
+
+        {{# Answer first: the three numbers the searcher came for. #}}
+        <dl class="mt-8 grid gap-4 rounded-xl border border-border bg-muted/30 p-6 sm:grid-cols-3">
+            <div>
+                <dt class="text-sm text-muted-foreground">PAYE per month</dt>
+                <dd class="t-display-3 mt-1 text-foreground">{{ page:monthly_tax_label }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-muted-foreground">Take-home per month</dt>
+                <dd class="t-display-3 mt-1 text-foreground">{{ page:monthly_net_label }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm text-muted-foreground">Effective tax rate</dt>
+                <dd class="t-display-3 mt-1 text-foreground">{{ page:effective_rate_label }}</dd>
+            </div>
+        </dl>
+
+        <div class="prose-claryeo mt-10">
+            {{ if page:is_exempt }}
+                {{ if page:is_minimum_wage_exempt }}
+                    <p>A gross salary of <strong>{{ page:monthly_gross_label }} a month</strong> ({{ page:annual_gross_label }} a year) pays <strong>no PAYE</strong> in Nigeria. Gross emolument at or below the annual minimum wage of {{ page:minimum_wage_annual_label }} is exempt from PAYE outright, so your take-home is your full {{ page:monthly_gross_label }}.</p>
+                {{ else }}
+                    <p>A gross salary of <strong>{{ page:monthly_gross_label }} a month</strong> ({{ page:annual_gross_label }} a year) pays <strong>no PAYE</strong> in Nigeria: after reliefs your taxable income of {{ page:annual_taxable_label }} sits inside the 0% band, which covers the first {{ page:zero_band_label }} of taxable income. Your take-home is your full {{ page:monthly_gross_label }}.</p>
+                {{ /if }}
+            {{ else }}
+                <p>A gross salary of <strong>{{ page:monthly_gross_label }} a month</strong> ({{ page:annual_gross_label }} a year) attracts <strong>{{ page:monthly_tax_label }} of PAYE per month</strong>, or {{ page:annual_tax_label }} for the year. That leaves {{ page:monthly_net_label }} take-home each month, an effective tax rate of {{ page:effective_rate_label }} across your whole income.</p>
+                <p>The effective rate is lower than the top band you reach, because Nigeria's PAYE is progressive: each slice of income is taxed at its own rate rather than your whole salary being taxed at one.</p>
+            {{ /if }}
+
+            <h2>How the {{ page:tax_year }} bands apply to {{ page:annual_gross_label }}</h2>
+            {{ if page:bands }}
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>Band</th><th>Rate</th><th>Income taxed here</th><th>Tax</th></tr>
+                        </thead>
+                        <tbody>
+                            {{ page:bands }}
+                                <tr>
+                                    <td>{{ scope }}</td>
+                                    <td>{{ rate }}</td>
+                                    <td>{{ taxable_label }}</td>
+                                    <td>{{ tax_label }}</td>
+                                </tr>
+                            {{ /page:bands }}
+                            <tr>
+                                <td><strong>Total</strong></td>
+                                <td></td>
+                                <td><strong>{{ page:annual_taxable_label }}</strong></td>
+                                <td><strong>{{ page:annual_tax_label }}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {{ else }}
+                {{ if page:is_minimum_wage_exempt }}
+                    <p>No band applies: the salary is at or below the annual minimum wage of {{ page:minimum_wage_annual_label }}, so it is exempt from PAYE before the bands are reached.</p>
+                {{ else }}
+                    <p>No band applies: taxable income of {{ page:annual_taxable_label }} sits within the 0% band, which covers the first {{ page:zero_band_label }}.</p>
+                {{ /if }}
+            {{ /if }}
+
+            <h2>The annual picture</h2>
+            <ul>
+                <li>Gross salary: <strong>{{ page:annual_gross_label }}</strong> a year</li>
+                <li>Taxable income: <strong>{{ page:annual_taxable_label }}</strong> (after any reliefs claimed)</li>
+                <li>PAYE due: <strong>{{ page:annual_tax_label }}</strong></li>
+                <li>Net pay: <strong>{{ page:annual_net_label }}</strong></li>
+            </ul>
+            <p>These figures assume no rent relief and no pension, NHF or NHIS deductions. Claiming rent relief (20% of annual rent paid, capped at ₦500,000) or pension contributions lowers your taxable income and your tax. <a href="/tax-calculator">Use the calculator</a> to add yours.</p>
+
+            <h2>How this is worked out</h2>
+            <p>Your employer deducts PAYE monthly and remits it to your State Internal Revenue Service by the 10th of the following month. The mechanics, reliefs and filing deadlines are covered in our <a href="/guides/paye-tax-nigeria">complete PAYE guide</a>. If you are self-employed rather than salaried, see <a href="/guides/freelancer-tax-nigeria">how freelancers pay tax in Nigeria</a>.</p>
+        </div>
+
+        <div class="my-10 rounded-xl border border-primary/20 bg-primary/5 p-6 md:p-8">
+            <h2 class="t-ui-title-lg text-foreground">Not exactly {{ page:label }}?</h2>
+            <p class="mt-2 text-sm text-muted-foreground">Enter your real income, rent and pension in the free calculator for a breakdown that matches your payslip.</p>
+            <p class="mt-4"><a href="/tax-calculator" class="bg-gradient-primary inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90">Open the tax calculator</a></p>
+        </div>
+
+        <nav class="mt-10 flex justify-between gap-4 border-t border-border pt-6 text-sm">
+            {{ if page:prev }}
+                <a href="/tax-calculator/{{ page:prev }}" class="text-primary hover:underline">&larr; Tax on {{ page:prev_label }}</a>
+            {{ else }}<span></span>{{ /if }}
+            {{ if page:next }}
+                <a href="/tax-calculator/{{ page:next }}" class="text-primary hover:underline">Tax on {{ page:next_label }} &rarr;</a>
+            {{ /if }}
+        </nav>
+
+        <section class="mt-10 border-t border-border pt-6">
+            <h2 class="t-eyebrow text-muted-foreground">Tax by salary</h2>
+            <ul class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                {{ all_pages }}
+                    <li><a href="/tax-calculator/{{ slug }}" class="text-muted-foreground transition-colors hover:text-primary">{{ label }}</a></li>
+                {{ /all_pages }}
+            </ul>
+        </section>
+    </div>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How much tax do I pay on a {{ page:label }} monthly salary in Nigeria?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "{{ if page:is_exempt }}A {{ page:label }} monthly salary pays no PAYE in Nigeria under the {{ page:tax_year }} rules{{ if page:is_minimum_wage_exempt }}, because gross emolument at or below the annual minimum wage of {{ page:minimum_wage_annual_label }} is exempt outright{{ else }}, because taxable income after reliefs falls inside the 0% band covering the first {{ page:zero_band_label }}{{ /if }}.{{ else }}PAYE on a {{ page:label }} monthly salary in Nigeria is {{ page:monthly_tax_label }} per month ({{ page:annual_tax_label }} per year) under the {{ page:tax_year }} bands, before any rent relief or pension deductions.{{ /if }}"
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the take-home pay on {{ page:label }} a month in Nigeria?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Take-home pay on a {{ page:label }} monthly gross salary is {{ page:monthly_net_label }} per month, or {{ page:annual_net_label }} per year, after PAYE of {{ page:annual_tax_label }}."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is the effective tax rate on {{ page:label }} a month?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "The effective tax rate is {{ page:effective_rate_label }} of gross income. Nigeria's PAYE is progressive, so each slice of income is taxed at its own band rate rather than the whole salary being taxed at the top rate reached."
+                }
+            }
+        ]
+    }
+    </script>
+{{ /partial:shell }}

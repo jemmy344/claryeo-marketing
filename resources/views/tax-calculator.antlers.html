@@ -19,6 +19,21 @@
         </section>
     </div>
 
+    {{# Hub for the precomputed salary pages; outside the island div so it
+        survives hydration and keeps those pages internally linked. #}}
+    <section class="mx-auto max-w-3xl px-4 pb-4 md:px-6">
+        <h2 class="t-display-3 text-foreground">Tax by salary</h2>
+        <p class="t-body mt-2 text-muted-foreground">Worked examples on the 2026 bands, with the full band-by-band breakdown for each.</p>
+        <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+            {{ salary_pages }}
+                <li>
+                    <a href="/tax-calculator/{{ slug }}" class="text-sm text-primary hover:underline">Tax on {{ label }} a month</a>
+                    <span class="text-sm text-muted-foreground">{{ if is_exempt }} &mdash; no PAYE due{{ else }} &mdash; {{ monthly_tax_label }}/mo{{ /if }}</span>
+                </li>
+            {{ /salary_pages }}
+        </ul>
+    </section>
+
     <p class="mx-auto max-w-3xl px-6 pb-16 pt-10 text-center text-xs text-muted-foreground">
         Estimates are for guidance only and do not constitute tax advice. Figures are based on current Nigerian tax rules and may change.
     </p>
