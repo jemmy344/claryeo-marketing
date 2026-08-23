@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AddSecurityHeaders;
 use App\Http\Middleware\CaptureUtmParameters;
 use App\Http\Middleware\RedirectIfWaitlistMode;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
 
         $middleware->web(append: [
+            AddSecurityHeaders::class,
             CaptureUtmParameters::class,
         ]);
 
