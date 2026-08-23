@@ -1240,6 +1240,7 @@ const TaxCalculatorPage: FC = () => {
                                                             type="button"
                                                             variant="outline"
                                                             size="icon-sm"
+                                                            aria-label={`Remove ${item.label.trim() || 'line item'}`}
                                                             className="shrink-0 border-border"
                                                             onClick={() => {
                                                                 if (
@@ -1714,6 +1715,7 @@ const TaxCalculatorPage: FC = () => {
                                                             type="button"
                                                             variant="outline"
                                                             size="icon-sm"
+                                                            aria-label={`Remove ${item.label.trim() || 'line item'}`}
                                                             className="shrink-0 border-border"
                                                             onClick={() => {
                                                                 if (
@@ -2257,6 +2259,8 @@ const TaxCalculatorPage: FC = () => {
                                             >
                                                 <button
                                                     type="button"
+                                                    aria-expanded={isOpen}
+                                                    aria-controls={`desktop-group-${group.key}`}
                                                     className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
                                                     onClick={() =>
                                                         setOpenGroups(
@@ -2281,7 +2285,7 @@ const TaxCalculatorPage: FC = () => {
                                                 </button>
 
                                                 {isOpen && (
-                                                    <div className="space-y-1 p-2">
+                                                    <div id={`desktop-group-${group.key}`} className="space-y-1 p-2">
                                                         {group.rows.map(
                                                             (row) => (
                                                                 <div
@@ -2381,6 +2385,8 @@ const TaxCalculatorPage: FC = () => {
                                         >
                                             <button
                                                 type="button"
+                                                aria-expanded={isOpen}
+                                                aria-controls={`mobile-group-${group.key}`}
                                                 className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
                                                 onClick={() =>
                                                     setOpenGroups(
@@ -2403,7 +2409,7 @@ const TaxCalculatorPage: FC = () => {
                                             </button>
 
                                             {isOpen && (
-                                                <div className="space-y-1 p-2">
+                                                <div id={`mobile-group-${group.key}`} className="space-y-1 p-2">
                                                     {group.rows.map((row) => (
                                                         <div
                                                             key={row.key}
