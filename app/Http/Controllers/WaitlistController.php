@@ -31,6 +31,7 @@ class WaitlistController extends Controller
             'name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:32'],
+            'source' => ['nullable', 'string', 'max:255'],
         ]);
 
         $payload = [
