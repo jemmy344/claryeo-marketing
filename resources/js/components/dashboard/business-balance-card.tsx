@@ -127,6 +127,7 @@ function EyeToggle({
         <button
             type="button"
             onClick={onToggle}
+            aria-pressed={visible}
             className="group relative shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label={visible ? 'Hide balance' : 'Show balance'}
         >
