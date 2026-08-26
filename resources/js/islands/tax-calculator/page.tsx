@@ -1240,6 +1240,7 @@ const TaxCalculatorPage: FC = () => {
                                                             type="button"
                                                             variant="outline"
                                                             size="icon-sm"
+                                                            aria-label={`Remove ${item.label ? `"${item.label}"` : 'earning line'}`}
                                                             className="shrink-0 border-border"
                                                             onClick={() => {
                                                                 if (
@@ -1714,6 +1715,7 @@ const TaxCalculatorPage: FC = () => {
                                                             type="button"
                                                             variant="outline"
                                                             size="icon-sm"
+                                                            aria-label={`Remove ${item.label ? `"${item.label}"` : 'deduction line'}`}
                                                             className="shrink-0 border-border"
                                                             onClick={() => {
                                                                 if (
@@ -2257,6 +2259,7 @@ const TaxCalculatorPage: FC = () => {
                                             >
                                                 <button
                                                     type="button"
+                                                    aria-expanded={isOpen}
                                                     className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
                                                     onClick={() =>
                                                         setOpenGroups(
@@ -2381,6 +2384,7 @@ const TaxCalculatorPage: FC = () => {
                                         >
                                             <button
                                                 type="button"
+                                                aria-expanded={isOpen}
                                                 className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
                                                 onClick={() =>
                                                     setOpenGroups(
