@@ -6,6 +6,7 @@ use App\Services\PostViews;
 use Illuminate\View\View;
 use Statamic\Entries\Entry as EntryItem;
 use Statamic\Facades\Entry;
+use Statamic\Stache\Query\EntryQueryBuilder;
 
 class BlogIndexComposer
 {
@@ -102,15 +103,18 @@ class BlogIndexComposer
      */
     private function recentBlogEntries(): array
     {
-        $entries = [];
+        // Performance optimization: Use Statamic query builder to filter published
+        // entries and order by date at the Stache repository layer instead of fetching
+        // all collection items and performing manual PHP loop filtering & usort sorting.
+        /** @var EntryQueryBuilder $query */
+        $query = Entry::query();
 
-        foreach (Entry::whereCollection('blog') as $entry) {
-            if ($entry instanceof EntryItem && $entry->published()) {
-                $entries[] = $entry;
-            }
-        }
-
-        usort($entries, fn (EntryItem $a, EntryItem $b): int => $b->date() <=> $a->date());
+        /** @var list<EntryItem> $entries */
+        $entries = $query->where('collection', 'blog')
+            ->where('published', true)
+            ->orderBy('date', 'desc')
+            ->get()
+            ->all();
 
         return $entries;
     }
