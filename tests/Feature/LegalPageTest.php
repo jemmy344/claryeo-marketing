@@ -92,4 +92,14 @@ class LegalPageTest extends TestCase
 
         $this->get('/privacy')->assertNotFound();
     }
+
+    public function test_invalid_version_format_returns_not_found_without_hitting_api(): void
+    {
+        Http::fake();
+
+        $this->get('/privacy/..%2F..%2Fadmin')->assertNotFound();
+        $this->get('/privacy/invalid@version')->assertNotFound();
+
+        Http::assertNothingSent();
+    }
 }
