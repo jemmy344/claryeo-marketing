@@ -1,0 +1,3 @@
+## 2026-03-30 - Statamic Entry Querying Performance
+**Learning:** Using `Entry::whereCollection('blog')` loads all entries in the collection into PHP memory, requiring manual loops to filter published entries and `usort` to order by date. Using Statamic's query builder (`Entry::query()`) with `.where('collection', 'blog')`, `.where('published', true)`, and `.orderBy('date', 'desc')` leverages Stache index queries to perform filtering and sorting natively before materializing entries into memory.
+**Action:** Always use `Entry::query()` for collection querying, filtering, and ordering instead of `Entry::whereCollection()` with in-memory array manipulation.
