@@ -45,4 +45,10 @@ class FeaturePageTest extends TestCase
     {
         $this->get('/features/does-not-exist')->assertNotFound();
     }
+
+    public function test_dot_notation_config_traversal_is_not_found(): void
+    {
+        $this->get('/features/invoicing.highlights')->assertNotFound();
+        $this->get('/features/invoicing.faqs.0')->assertNotFound();
+    }
 }

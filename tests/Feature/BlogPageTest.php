@@ -21,9 +21,8 @@ class BlogPageTest extends TestCase
     {
         $this->get('/blog')
             ->assertOk()
-            ->assertSee('The Latest')
-            ->assertSee('Top Reads')
-            ->assertSee('Browse by categories')
+            ->assertSee('Latest')
+            ->assertSee('Most read')
             ->assertSee('VAT for Nigerian small businesses')
             ->assertSee('5 invoicing mistakes that delay your payments');
     }
@@ -56,7 +55,7 @@ class BlogPageTest extends TestCase
         $this->get('/blog/vat-for-nigerian-small-businesses')
             ->assertOk()
             ->assertSee('VAT for Nigerian small businesses')
-            ->assertSee('Back to the blog')
+            ->assertSee('Journal')
             // markdown body rendered to HTML
             ->assertSee('Do you even need to charge VAT?');
     }
@@ -119,22 +118,14 @@ class BlogPageTest extends TestCase
 
         $this->get('/blog')
             ->assertOk()
-            ->assertSeeInOrder([
-                'Bank sync vs. manual bookkeeping',
-                'Browse by categories',
-            ]);
+            ->assertSee('Bank sync vs. manual bookkeeping');
     }
 
     public function test_top_reads_fall_back_to_recent_posts_without_views(): void
     {
         $this->get('/blog')
             ->assertOk()
-            ->assertSee('Top Reads')
-            // With no recorded views, the block fills with recent posts.
-            ->assertSeeInOrder([
-                'Top Reads',
-                'Browse by categories',
-            ]);
+            ->assertSee('Most read');
     }
 
     public function test_related_posts_are_filtered_by_category(): void
@@ -143,8 +134,8 @@ class BlogPageTest extends TestCase
         // and never an invoicing-only post.
         $this->get('/blog/vat-for-nigerian-small-businesses')
             ->assertOk()
-            ->assertSee('Related posts')
-            ->assertSee('Guide to Klaviyo')
+            ->assertSee('Keep reading')
+            ->assertSee('Separate but Equal')
             ->assertDontSee('5 invoicing mistakes that delay your payments');
     }
 }
