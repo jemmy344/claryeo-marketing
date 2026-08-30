@@ -61,6 +61,16 @@ class FormProxyTest extends TestCase
             && $request->hasHeader('X-Internal-Token', 'secret'));
     }
 
+    public function test_waitlist_store_validates_source_field(): void
+    {
+        $this->postJson('/waitlist', [
+            'email' => 'wait@example.com',
+            'source' => str_repeat('a', 256),
+        ])
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['source']);
+    }
+
     public function test_get_started_renders_island_with_plans_and_app_handoff(): void
     {
         Http::fake([

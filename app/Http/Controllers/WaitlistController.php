@@ -27,10 +27,12 @@ class WaitlistController extends Controller
     {
         // Mirrors the main app's waitlist validation so a bad submission is
         // rejected here rather than round-tripping for a 422.
+        // Validate `source` to prevent unvalidated or oversized input forwarding.
         $request->validate([
             'name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'phone' => ['nullable', 'string', 'max:32'],
+            'source' => ['nullable', 'string', 'max:255'],
         ]);
 
         $payload = [
