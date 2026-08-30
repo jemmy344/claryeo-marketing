@@ -127,7 +127,7 @@ function EyeToggle({
         <button
             type="button"
             onClick={onToggle}
-            className="group relative shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="group relative shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             aria-label={visible ? 'Hide balance' : 'Show balance'}
         >
             <span className="relative block h-4 w-4 overflow-hidden">
