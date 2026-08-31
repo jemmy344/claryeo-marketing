@@ -17,13 +17,17 @@ const BillingIntervalToggle: FC<BillingIntervalToggleProps> = ({
     savePercent,
     compact = false,
 }) => (
-    <div className="flex justify-center">
+    <div
+        role="group"
+        aria-label="Billing interval"
+        className="flex justify-center"
+    >
         <button
             type="button"
             aria-pressed={value === 'monthly'}
             onClick={() => onChange('monthly')}
             className={cn(
-                'rounded-lg px-4 py-3 text-sm font-semibold transition-all',
+                'rounded-lg px-4 py-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 compact && 'px-3 py-2 text-xs',
                 value === 'monthly'
                     ? 'bg-card text-foreground shadow-md ring-1 ring-border'
@@ -37,7 +41,7 @@ const BillingIntervalToggle: FC<BillingIntervalToggleProps> = ({
             aria-pressed={value === 'annual'}
             onClick={() => onChange('annual')}
             className={cn(
-                'rounded-lg px-4 py-3 text-sm font-semibold transition-all',
+                'rounded-lg px-4 py-3 text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                 compact && 'px-3 py-2 text-xs',
                 value === 'annual'
                     ? 'bg-card text-foreground shadow-md ring-1 ring-border'

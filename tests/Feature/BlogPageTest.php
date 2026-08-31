@@ -21,9 +21,8 @@ class BlogPageTest extends TestCase
     {
         $this->get('/blog')
             ->assertOk()
-            ->assertSee('The Latest')
-            ->assertSee('Top Reads')
-            ->assertSee('Browse by categories')
+            ->assertSee('Latest')
+            ->assertSee('Most read')
             ->assertSee('VAT for Nigerian small businesses')
             ->assertSee('5 invoicing mistakes that delay your payments');
     }
@@ -56,7 +55,7 @@ class BlogPageTest extends TestCase
         $this->get('/blog/vat-for-nigerian-small-businesses')
             ->assertOk()
             ->assertSee('VAT for Nigerian small businesses')
-            ->assertSee('Back to the blog')
+            ->assertSee('Journal')
             // markdown body rendered to HTML
             ->assertSee('Do you even need to charge VAT?');
     }
@@ -110,7 +109,7 @@ class BlogPageTest extends TestCase
     public function test_top_reads_are_ranked_by_view_count(): void
     {
         // Give the OLDEST post the most views; without ranking it would never
-        // appear before "Browse by categories" (it would sit in the dated grid).
+        // appear in the Most read section.
         DB::table('post_views')->insert([
             ['entry_id' => 'blog-bank-sync-vs-manual-bookkeeping', 'views' => 100, 'last_viewed_at' => now()],
             ['entry_id' => 'blog-vat-nigerian-small-businesses', 'views' => 50, 'last_viewed_at' => now()],
@@ -120,8 +119,8 @@ class BlogPageTest extends TestCase
         $this->get('/blog')
             ->assertOk()
             ->assertSeeInOrder([
+                'Most read',
                 'Bank sync vs. manual bookkeeping',
-                'Browse by categories',
             ]);
     }
 
@@ -129,11 +128,11 @@ class BlogPageTest extends TestCase
     {
         $this->get('/blog')
             ->assertOk()
-            ->assertSee('Top Reads')
+            ->assertSee('Most read')
             // With no recorded views, the block fills with recent posts.
             ->assertSeeInOrder([
-                'Top Reads',
-                'Browse by categories',
+                'Most read',
+                'Search posts',
             ]);
     }
 
@@ -143,8 +142,8 @@ class BlogPageTest extends TestCase
         // and never an invoicing-only post.
         $this->get('/blog/vat-for-nigerian-small-businesses')
             ->assertOk()
-            ->assertSee('Related posts')
-            ->assertSee('Guide to Klaviyo')
+            ->assertSee('Keep reading')
+            ->assertSee('Separate but Equal')
             ->assertDontSee('5 invoicing mistakes that delay your payments');
     }
 }

@@ -28,6 +28,11 @@ class LegalController extends Controller
     {
         abort_unless(isset(self::TITLES[$slug]), Response::HTTP_NOT_FOUND);
 
+        if ($version !== null) {
+            // Defense in depth against path traversal or malicious input forwarding to internal API
+            abort_unless(preg_match('/^[a-zA-Z0-9\.\-]+$/', $version) === 1, Response::HTTP_NOT_FOUND);
+        }
+
         $document = $version !== null
             ? $this->api->legalDocumentVersion($slug, $version)
             : $this->api->legalDocument($slug);

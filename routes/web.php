@@ -12,6 +12,7 @@ use App\Http\Controllers\WaitlistController;
 use App\Support\SalaryPages;
 use Illuminate\Support\Facades\Route;
 use Statamic\Facades\Entry;
+use Statamic\Stache\Query\EntryQueryBuilder;
 
 Route::get('/', LandingController::class)->name('home');
 
@@ -102,6 +103,7 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
 
     Route::get($slug.'/{version}', [LegalController::class, 'show'])
         ->defaults('slug', $slug)
+        ->where('version', '[a-zA-Z0-9\.\-]+')
         ->name($slug.'.version');
 }
 
@@ -175,7 +177,9 @@ Route::get('llms.txt', function () {
     $lines[] = '';
     $lines[] = '## Guides';
 
-    foreach (Entry::query()->where('collection', 'guides')->where('published', true)->get() as $guide) {
+    /** @var EntryQueryBuilder $guidesQuery */
+    $guidesQuery = Entry::query()->where('collection', 'guides');
+    foreach ($guidesQuery->whereStatus('published')->get() as $guide) {
         $lines[] = '- ['.$guide->get('title').']('.$guide->absoluteUrl().'): '.$guide->get('description');
     }
 
@@ -183,7 +187,9 @@ Route::get('llms.txt', function () {
     $lines[] = '## Glossary';
     $lines[] = 'Plain-English definitions of Nigerian tax terms, each with a worked example.';
 
-    foreach (Entry::query()->where('collection', 'glossary')->where('published', true)->get() as $term) {
+    /** @var EntryQueryBuilder $glossaryQuery */
+    $glossaryQuery = Entry::query()->where('collection', 'glossary');
+    foreach ($glossaryQuery->whereStatus('published')->get() as $term) {
         $lines[] = '- ['.$term->get('title').']('.$term->absoluteUrl().'): '.$term->get('definition');
     }
 

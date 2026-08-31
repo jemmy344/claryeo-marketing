@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Middleware\AddSecurityHeaders;
 use App\Http\Middleware\CaptureUtmParameters;
 use App\Http\Middleware\RedirectIfWaitlistMode;
+use App\Http\Middleware\RedirectToCanonicalHost;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -20,8 +22,17 @@ return Application::configure(basePath: dirname(__DIR__))
         // mixed content. Railway's proxy IPs are dynamic, hence trusting all.
         $middleware->trustProxies(at: '*');
 
+        // Prepended so www is redirected before any session or CSRF work is done
+        // for a request that is only going to be thrown away. It lives in the web
+        // group rather than the global stack so it runs *after* trustProxies above
+        // — otherwise the detected scheme is http and it would 301 to an http URL.
+        $middleware->web(prepend: [
+            RedirectToCanonicalHost::class,
+        ]);
+
         $middleware->web(append: [
             CaptureUtmParameters::class,
+            AddSecurityHeaders::class,
         ]);
 
         $middleware->alias([
