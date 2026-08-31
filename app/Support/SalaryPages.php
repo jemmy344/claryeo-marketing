@@ -28,7 +28,7 @@ class SalaryPages
     }
 
     /**
-     * Perform an O(1) hash map lookup for a precomputed salary page by slug.
+     * Find a salary page by its slug using an O(1) hash map lookup.
      *
      * @return array<string, mixed>|null
      */
@@ -49,20 +49,15 @@ class SalaryPages
      */
     public static function slugs(): array
     {
-        $slugs = [];
-
-        foreach (self::all() as $page) {
-            if (is_string($page['slug'] ?? null)) {
-                $slugs[] = $page['slug'];
-            }
+        if (self::$bySlug === null) {
+            self::load();
         }
 
-        return $slugs;
+        return array_keys(self::$bySlug ?? []);
     }
 
     /**
-     * Loads and indexes precomputed salary pages into both a list ($cache) and
-     * a slug-keyed map ($bySlug) for O(1) find lookups.
+     * Load and index salary pages from JSON into both a list and a slug-keyed hash map.
      */
     private static function load(): void
     {
@@ -89,8 +84,9 @@ class SalaryPages
 
         foreach ($decoded as $page) {
             if (is_array($page)) {
+                /** @var array<string, mixed> $page */
                 $pages[] = $page;
-                if (is_string($page['slug'] ?? null)) {
+                if (isset($page['slug']) && is_string($page['slug'])) {
                     $bySlug[$page['slug']] = $page;
                 }
             }
