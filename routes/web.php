@@ -103,6 +103,7 @@ foreach (['privacy', 'terms', 'cookies'] as $slug) {
 
     Route::get($slug.'/{version}', [LegalController::class, 'show'])
         ->defaults('slug', $slug)
+        ->where('version', '[a-zA-Z0-9\.\-]+')
         ->name($slug.'.version');
 }
 
