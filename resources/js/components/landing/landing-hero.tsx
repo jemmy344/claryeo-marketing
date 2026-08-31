@@ -1,18 +1,24 @@
 import { animate, stagger } from 'animejs';
 import { ArrowUp, ArrowUpRight } from 'lucide-react';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { FC, SubmitEvent } from 'react';
 
 import AtmosphereCanvas from '@/components/landing/atmosphere-canvas';
 import { prefersReducedMotion } from '@/lib/motion';
 
-type Stat = { label: string; value: string };
+type Pillar = { word: string; promise: string };
 
-const STATS: Stat[] = [
-    { label: 'Invoices & receipts', value: 'Unlimited' },
-    { label: 'Bank sync', value: 'Automatic' },
-    { label: 'Realtime tracking', value: 'Always on' },
+const PILLARS: Pillar[] = [
+    { word: 'confidence', promise: 'Know where your business stands' },
+    { word: 'clarity', promise: 'Turn your numbers into simple decisions' },
+    { word: 'control', promise: 'Less time on admin, more on growing' },
 ];
+
+// The word sits alone on the second line of a centred headline, so it can
+// grow and shrink freely -- nothing below it moves.
+
+const TYPE_MS = 85;
+const HOLD_TICKS = 20;
 
 type LandingHeroProps = {
     getStartedUrl: string;
@@ -23,6 +29,7 @@ type LandingHeroProps = {
 const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlistMode }) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const [income, setIncome] = useState('');
+    const [typed, setTyped] = useState(PILLARS[0].word);
 
     // Layout effect, not effect: the tween's `from` values must land before
     // the browser paints, or the hero flashes in fully-formed and then
@@ -42,6 +49,36 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
         return () => {
             animation.revert();
         };
+    }, []);
+
+    // One interval drives the whole cycle: type out, linger, erase, next word.
+    // Reduced-motion users keep the first word, permanently.
+    useEffect(() => {
+        if (prefersReducedMotion()) return;
+
+        let index = 0;
+        let chars = PILLARS[0].word.length;
+        let erasing = false;
+        let hold = HOLD_TICKS;
+
+        const id = setInterval(() => {
+            if (!erasing && chars === PILLARS[index].word.length) {
+                if (hold-- > 0) return;
+                erasing = true;
+            }
+
+            chars += erasing ? -1 : 1;
+
+            if (chars === 0) {
+                erasing = false;
+                hold = HOLD_TICKS;
+                index = (index + 1) % PILLARS.length;
+            }
+
+            setTyped(PILLARS[index].word.slice(0, chars));
+        }, TYPE_MS);
+
+        return () => clearInterval(id);
     }, []);
 
     // Grouped as you type. A native number input can't render separators, so
@@ -66,7 +103,7 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
 
             <div
                 ref={rootRef}
-                className="relative mx-auto flex w-full max-w-[1180px] flex-col items-center px-4 pt-20 pb-24 text-center md:px-0 md:pt-28 md:pb-32"
+                className="relative mx-auto flex w-full max-w-295 flex-col items-center px-4 pt-20 pb-24 text-center md:px-0 md:pt-28 md:pb-32"
             >
                 <span
                     data-hero-in
@@ -77,16 +114,22 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
 
                 <h1
                     data-hero-in
-                    className="t-display-hero mt-6 max-w-3xl text-paper"
+                    className="t-display-hero mt-6 max-w-4xl text-paper"
                 >
-                    <em>Run</em> the business.
+                   Less time on admin.
                     <br />
-                    Skip the books.
+                    Run your business with 
+                    <br />
+                    <em className="">
+                    
+                        {typed}</em>
+                    <span aria-hidden className="ml-0.5 animate-pulse font-sans font-light">|</span>
+                    <span className="sr-only">confidence, clarity and control.</span>
                 </h1>
 
-                <p data-hero-in className="t-lead mt-6 max-w-lg text-balance text-mist">
-                    Claryeo syncs your bank, matches your payments, and works out your tax,
-                    automatically. Built for freelancers and small businesses.
+                <p data-hero-in className="t-lead mt-6 max-w-xl text-balance text-mist">
+                    Claryeo syncs your bank, matches your payments and works out your tax,
+                    automatically. You spend less time on admin, and more time on the business.
                 </p>
 
                 <div data-hero-in className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -139,10 +182,10 @@ const LandingHero: FC<LandingHeroProps> = ({ getStartedUrl, waitlistUrl, waitlis
                     data-hero-in
                     className="mt-16 grid w-full max-w-lg grid-cols-3 gap-6 border-t border-paper/10 pt-8"
                 >
-                    {STATS.map((stat) => (
-                        <div key={stat.label} className="text-center">
-                            <div className="t-figure-display text-2xl text-paper">{stat.value}</div>
-                            <div className="mt-1 text-xs text-mist">{stat.label}</div>
+                    {PILLARS.map((pillar) => (
+                        <div key={pillar.word} className="text-center">
+                            <div className="t-display-4 text-paper capitalize">{pillar.word}</div>
+                            <div className="mt-1 text-xs text-balance text-mist">{pillar.promise}</div>
                         </div>
                     ))}
                 </div>

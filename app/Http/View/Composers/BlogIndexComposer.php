@@ -106,13 +106,16 @@ class BlogIndexComposer
      */
     private function recentBlogEntries(): array
     {
+        // Performance optimization: Use Statamic query builder instead of iterating over
+        // all entries in PHP and calling usort(). Query filtering at the Stache store layer
+        // avoids unnecessary object hydrations and in-memory sorting overhead.
         /** @var EntryQueryBuilder $query */
         $query = Entry::query();
 
         /** @var list<EntryItem> */
-        return $query->where('collection', 'blog')
-            ->where('published', true)
-            ->where('date', '<=', now())
+        return $query
+            ->where('collection', 'blog')
+            ->whereStatus('published')
             ->orderBy('date', 'desc')
             ->get()
             ->all();

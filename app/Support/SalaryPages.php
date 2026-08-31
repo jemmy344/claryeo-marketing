@@ -12,28 +12,33 @@ class SalaryPages
     /** @var list<array<string, mixed>>|null */
     private static ?array $cache = null;
 
+    /** @var array<string, array<string, mixed>>|null */
+    private static ?array $bySlug = null;
+
     /**
      * @return list<array<string, mixed>>
      */
     public static function all(): array
     {
-        self::$cache ??= self::load();
+        if (self::$cache === null) {
+            self::load();
+        }
 
-        return self::$cache;
+        return self::$cache ?? [];
     }
 
     /**
+     * Find a salary page by its slug using an O(1) hash map lookup.
+     *
      * @return array<string, mixed>|null
      */
     public static function find(string $slug): ?array
     {
-        foreach (self::all() as $page) {
-            if (($page['slug'] ?? null) === $slug) {
-                return $page;
-            }
+        if (self::$bySlug === null) {
+            self::load();
         }
 
-        return null;
+        return self::$bySlug[$slug] ?? null;
     }
 
     /**
@@ -44,42 +49,50 @@ class SalaryPages
      */
     public static function slugs(): array
     {
-        $slugs = [];
-
-        foreach (self::all() as $page) {
-            if (is_string($page['slug'] ?? null)) {
-                $slugs[] = $page['slug'];
-            }
+        if (self::$bySlug === null) {
+            self::load();
         }
 
-        return $slugs;
+        return array_keys(self::$bySlug ?? []);
     }
 
     /**
-     * @return list<array<string, mixed>>
+     * Load and index salary pages from JSON into both a list and a slug-keyed hash map.
      */
-    private static function load(): array
+    private static function load(): void
     {
         $path = resource_path('data/salary_pages.json');
 
         if (! file_exists($path)) {
-            return [];
+            self::$cache = [];
+            self::$bySlug = [];
+
+            return;
         }
 
         $decoded = json_decode((string) file_get_contents($path), true);
 
         if (! is_array($decoded)) {
-            return [];
+            self::$cache = [];
+            self::$bySlug = [];
+
+            return;
         }
 
         $pages = [];
+        $bySlug = [];
 
         foreach ($decoded as $page) {
             if (is_array($page)) {
+                /** @var array<string, mixed> $page */
                 $pages[] = $page;
+                if (isset($page['slug']) && is_string($page['slug'])) {
+                    $bySlug[$page['slug']] = $page;
+                }
             }
         }
 
-        return $pages;
+        self::$cache = $pages;
+        self::$bySlug = $bySlug;
     }
 }
