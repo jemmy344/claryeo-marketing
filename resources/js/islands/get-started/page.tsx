@@ -374,13 +374,17 @@ const GetStarted: FC<GetStartedProps> = ({
                                                 <button
                                                     key={interval}
                                                     type="button"
+                                                    aria-pressed={
+                                                        billingInterval ===
+                                                        interval
+                                                    }
                                                     onClick={() =>
                                                         setBillingInterval(
                                                             interval,
                                                         )
                                                     }
                                                     className={cn(
-                                                        'flex-1 rounded-full px-4 py-2.5 text-sm font-medium transition-all',
+                                                        'flex-1 rounded-full px-4 py-2.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                                                         billingInterval ===
                                                             interval
                                                             ? isSelfServePlanKey(
