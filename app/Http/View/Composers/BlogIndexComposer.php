@@ -99,6 +99,9 @@ class BlogIndexComposer
     /**
      * All published blog entries, newest first.
      *
+     * Performance optimization: Use Statamic Stache QueryBuilder indexed querying
+     * rather than iterating through all collection entries and sorting in PHP memory.
+     *
      * @return list<EntryItem>
      */
     private function recentBlogEntries(): array
