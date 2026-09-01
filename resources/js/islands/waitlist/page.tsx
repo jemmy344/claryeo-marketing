@@ -200,7 +200,7 @@ const Waitlist: FC<WaitlistProps> = ({
                         )}
                     </Button>
                     <p className="text-xs text-muted-foreground">
-                        No spam. One email when your invite is ready.
+                        We&apos;ll email you when your invite is ready. No spam.
                     </p>
                 </form>
 
