@@ -11,6 +11,7 @@ class SecurityHeadersTest extends TestCase
         $response = $this->get('/');
 
         $response->assertOk();
+        $response->assertHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         $response->assertHeader('X-Frame-Options', 'SAMEORIGIN');
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
         $response->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
