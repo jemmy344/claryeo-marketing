@@ -222,6 +222,12 @@
     body {
         @apply min-h-dvh bg-background text-foreground antialiased;
     }
+
+    /* Island SSR fallbacks: visible to crawlers, hidden from JS browsers until
+       React clears the container on mount. Stops the fallback hero flashing. */
+    .js [data-island] > * {
+        display: none;
+    }
 }
 
 /*
