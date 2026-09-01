@@ -92,6 +92,7 @@ function mountIslands(): void {
             })
             .catch((error: unknown) => {
                 delete el.dataset.mounted;
+                document.documentElement.classList.remove('js');
                 console.error(`[islands] failed to load "${name}"`, error);
             });
     });
