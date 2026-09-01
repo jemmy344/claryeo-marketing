@@ -2260,7 +2260,8 @@ const TaxCalculatorPage: FC = () => {
                                                 <button
                                                     type="button"
                                                     aria-expanded={isOpen}
-                                                    className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
+                                                    aria-controls={`tax-group-${group.key}`}
+                                                    className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                                     onClick={() =>
                                                         setOpenGroups(
                                                             (
@@ -2277,14 +2278,14 @@ const TaxCalculatorPage: FC = () => {
                                                         {group.title}
                                                     </span>
                                                     {isOpen ? (
-                                                        <ChevronUp className="size-4 text-muted-foreground" />
+                                                        <ChevronUp className="size-4 text-muted-foreground" aria-hidden="true" />
                                                     ) : (
-                                                        <ChevronDown className="size-4 text-muted-foreground" />
+                                                        <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
                                                     )}
                                                 </button>
 
                                                 {isOpen && (
-                                                    <div className="space-y-1 p-2">
+                                                    <div id={`tax-group-${group.key}`} role="region" aria-label={group.title} className="space-y-1 p-2">
                                                         {group.rows.map(
                                                             (row) => (
                                                                 <div
@@ -2385,7 +2386,8 @@ const TaxCalculatorPage: FC = () => {
                                             <button
                                                 type="button"
                                                 aria-expanded={isOpen}
-                                                className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left"
+                                                aria-controls={`mobile-tax-group-${group.key}`}
+                                                className="flex w-full items-center justify-between bg-muted/30 px-4 py-3 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                                 onClick={() =>
                                                     setOpenGroups(
                                                         (previousState) => ({
@@ -2400,14 +2402,14 @@ const TaxCalculatorPage: FC = () => {
                                                     {group.title}
                                                 </span>
                                                 {isOpen ? (
-                                                    <ChevronUp className="size-4 text-muted-foreground" />
+                                                    <ChevronUp className="size-4 text-muted-foreground" aria-hidden="true" />
                                                 ) : (
-                                                    <ChevronDown className="size-4 text-muted-foreground" />
+                                                    <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
                                                 )}
                                             </button>
 
                                             {isOpen && (
-                                                <div className="space-y-1 p-2">
+                                                <div id={`mobile-tax-group-${group.key}`} role="region" aria-label={group.title} className="space-y-1 p-2">
                                                     {group.rows.map((row) => (
                                                         <div
                                                             key={row.key}
