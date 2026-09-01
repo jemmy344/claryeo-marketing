@@ -45,11 +45,21 @@ export function periodizeAnnualAmount(annualAmount: number): PeriodizedAmount {
     };
 }
 
+/**
+ * Converts an annual amount to the specified period frequency without
+ * instantiating an intermediate object, preventing garbage collection overhead
+ * during frequent re-renders of summary tables.
+ */
 export function toPeriodAmount(
     annualAmount: number,
     frequency: AmountFrequency,
 ): number {
-    return periodizeAnnualAmount(annualAmount)[frequency];
+    const sanitizedAnnualAmount = Number.isFinite(annualAmount)
+        ? annualAmount
+        : 0;
+    const multiplier = ANNUAL_MULTIPLIERS[frequency];
+
+    return multiplier > 0 ? sanitizedAnnualAmount / multiplier : 0;
 }
 
 export function calculateCalculatorResult(
