@@ -84,6 +84,9 @@ function mountIslands(): void {
 
         void load()
             .then(({ default: Component }) => {
+                // Reveals the container: site.css keeps an un-hydrated island's
+                // children hidden so the SSR fallback can't flash.
+                el.dataset.hydrated = 'true';
                 createRoot(el).render(
                     <StrictMode>
                         <Component {...props} />

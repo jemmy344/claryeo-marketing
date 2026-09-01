@@ -25,7 +25,14 @@ function CollectionBar({ rate }: { rate: number }) {
                     {rate}%
                 </span>
             </div>
-            <div className="h-1.5 w-full overflow-hidden rounded-full bg-border/80 ring-1 ring-border ring-inset">
+            <div
+                role="progressbar"
+                aria-label="Collection rate"
+                aria-valuenow={rate}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                className="h-1.5 w-full overflow-hidden rounded-full bg-border/80 ring-1 ring-border ring-inset"
+            >
                 <div
                     className={cn(
                         'h-full rounded-full transition-all duration-500 ease-out',

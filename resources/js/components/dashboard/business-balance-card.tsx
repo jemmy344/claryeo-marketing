@@ -40,7 +40,14 @@ function CircularProgress({
     const offset = circumference - (percentage / 100) * circumference;
 
     return (
-        <div className="flex shrink-0 items-center gap-2">
+        <div
+            role="progressbar"
+            aria-label={labelTitle ?? label}
+            aria-valuenow={percentage}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="flex shrink-0 items-center gap-2"
+        >
             <div
                 className="relative shrink-0"
                 style={{ width: size, height: size }}
