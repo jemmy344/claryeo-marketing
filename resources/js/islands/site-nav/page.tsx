@@ -166,9 +166,10 @@ const SiteNav: FC<SiteNavProps> = ({
             <button
                 type="button"
                 aria-expanded={openMenu === key}
+                aria-controls={`nav-menu-${key}`}
                 onClick={() => setOpenMenu((v) => (v === key ? null : key))}
                 className={cn(
-                    'flex items-center gap-1 text-sm transition-colors',
+                    'flex items-center gap-1 text-sm transition-colors rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     isDark
                         ? openMenu === key
                             ? 'text-paper'
@@ -254,8 +255,10 @@ const SiteNav: FC<SiteNavProps> = ({
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-nav-menu"
                         className={cn(
-                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden',
+                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:hidden',
                             isDark
                                 ? 'border-paper/15 bg-paper/5 text-paper hover:bg-paper/10'
                                 : 'border-border/60 bg-muted/40 text-foreground hover:bg-muted/70',
@@ -273,6 +276,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Features mega-menu */}
             {openMenu === 'features' && featureItems.length > 0 && (
                 <div
+                    id="nav-menu-features"
+                    role="region"
+                    aria-label="Features navigation"
                     className={panelClass}
                     onMouseEnter={() => open('features')}
                     onMouseLeave={scheduleClose}
@@ -326,6 +332,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Resources mega-menu */}
             {openMenu === 'resources' && columns.length > 0 && (
                 <div
+                    id="nav-menu-resources"
+                    role="region"
+                    aria-label="Resources navigation"
                     className={panelClass}
                     onMouseEnter={() => open('resources')}
                     onMouseLeave={scheduleClose}
@@ -400,6 +409,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Mobile sheet */}
             {mobileOpen && (
                 <div
+                    id="mobile-nav-menu"
+                    role="region"
+                    aria-label="Mobile navigation"
                     className={cn(
                         'absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b px-4 pb-8 shadow-2xl md:hidden',
                         isDark
