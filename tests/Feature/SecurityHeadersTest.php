@@ -18,5 +18,6 @@ class SecurityHeadersTest extends TestCase
         $response->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
         $response->assertHeader('Cross-Origin-Opener-Policy', 'same-origin');
         $response->assertHeader('X-Permitted-Cross-Domain-Policies', 'none');
+        $response->assertHeader('X-XSS-Protection', '1; mode=block');
     }
 }
