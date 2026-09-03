@@ -54,7 +54,11 @@ class BlogIndexComposer
         // Cold-start fallback: top up with the most recent posts, skipping the
         // single newest (shown by "The Latest") and anything already chosen.
         if (count($entries) < $limit) {
-            $recent = $this->recentBlogEntries();
+            $needed = $limit - count($entries);
+            // Performance optimization: Limit the query to only as many entries as could
+            // possibly be needed (needed count + 1 for skipping newest + already seen count)
+            // to avoid hydrating the entire blog collection in memory.
+            $recent = $this->recentBlogEntries($needed + count($seen) + 1);
             $newestId = ($recent[0] ?? null)?->id();
 
             foreach ($recent as $entry) {
@@ -97,18 +101,17 @@ class BlogIndexComposer
     }
 
     /**
-     * All published blog entries, newest first.
+     * Recent published blog entries, newest first.
      *
-     * Performance optimization: Use Statamic Stache QueryBuilder indexed querying
-     * rather than iterating through all collection entries and sorting in PHP memory.
+     * Performance optimization: Apply limit() at the Stache store layer to avoid
+     * hydrating all collection entries in memory when only fallback items are needed.
      *
      * @return list<EntryItem>
      */
-    private function recentBlogEntries(): array
+    private function recentBlogEntries(int $limit): array
     {
-        // Performance optimization: Use Statamic query builder instead of iterating over
-        // all entries in PHP and calling usort(). Query filtering at the Stache store layer
-        // avoids unnecessary object hydrations and in-memory sorting overhead.
+        // Performance optimization: Use Statamic query builder with limit() to restrict
+        // object hydrations and memory overhead at the Stache store level.
         /** @var EntryQueryBuilder $query */
         $query = Entry::query();
 
@@ -117,6 +120,7 @@ class BlogIndexComposer
             ->where('collection', 'blog')
             ->whereStatus('published')
             ->orderBy('date', 'desc')
+            ->limit($limit)
             ->get()
             ->all();
     }
