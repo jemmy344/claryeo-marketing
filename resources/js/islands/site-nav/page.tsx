@@ -166,6 +166,7 @@ const SiteNav: FC<SiteNavProps> = ({
             <button
                 type="button"
                 aria-expanded={openMenu === key}
+                aria-controls={`nav-panel-${key}`}
                 onClick={() => setOpenMenu((v) => (v === key ? null : key))}
                 className={cn(
                     'flex items-center gap-1 text-sm transition-colors',
@@ -254,6 +255,8 @@ const SiteNav: FC<SiteNavProps> = ({
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-nav-sheet"
                         className={cn(
                             'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden',
                             isDark
@@ -273,6 +276,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Features mega-menu */}
             {openMenu === 'features' && featureItems.length > 0 && (
                 <div
+                    id="nav-panel-features"
+                    role="region"
+                    aria-label="Features"
                     className={panelClass}
                     onMouseEnter={() => open('features')}
                     onMouseLeave={scheduleClose}
@@ -326,6 +332,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Resources mega-menu */}
             {openMenu === 'resources' && columns.length > 0 && (
                 <div
+                    id="nav-panel-resources"
+                    role="region"
+                    aria-label="Resources"
                     className={panelClass}
                     onMouseEnter={() => open('resources')}
                     onMouseLeave={scheduleClose}
@@ -400,6 +409,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Mobile sheet */}
             {mobileOpen && (
                 <div
+                    id="mobile-nav-sheet"
+                    role="region"
+                    aria-label="Mobile Navigation"
                     className={cn(
                         'absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b px-4 pb-8 shadow-2xl md:hidden',
                         isDark
