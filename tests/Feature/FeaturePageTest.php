@@ -44,5 +44,6 @@ class FeaturePageTest extends TestCase
     public function test_unknown_feature_is_not_found(): void
     {
         $this->get('/features/does-not-exist')->assertNotFound();
+        $this->get('/features/invoicing.media')->assertNotFound();
     }
 }
