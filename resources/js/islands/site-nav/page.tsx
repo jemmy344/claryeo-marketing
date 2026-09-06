@@ -254,8 +254,10 @@ const SiteNav: FC<SiteNavProps> = ({
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-navigation-menu"
                         className={cn(
-                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden',
+                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                             isDark
                                 ? 'border-paper/15 bg-paper/5 text-paper hover:bg-paper/10'
                                 : 'border-border/60 bg-muted/40 text-foreground hover:bg-muted/70',
@@ -400,6 +402,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Mobile sheet */}
             {mobileOpen && (
                 <div
+                    id="mobile-navigation-menu"
+                    role="region"
+                    aria-label="Mobile navigation"
                     className={cn(
                         'absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b px-4 pb-8 shadow-2xl md:hidden',
                         isDark
