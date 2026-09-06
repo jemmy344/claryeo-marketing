@@ -28,6 +28,9 @@ class CaptureUtmParameters
         'ttclid',
     ];
 
+    /** @var array<string, int>|null */
+    private static ?array $flippedKeys = null;
+
     /**
      * @param  Closure(Request): (Response)  $next
      */
@@ -79,7 +82,11 @@ class CaptureUtmParameters
      */
     private static function extractAndNormalize(array $values): array
     {
-        $tracked = array_intersect_key($values, array_flip(self::ALL_KEYS));
+        // Performance optimization: Cache flipped array of ALL_KEYS in a static property
+        // so array_flip() is not executed on every middleware check and parameter resolution.
+        self::$flippedKeys ??= array_flip(self::ALL_KEYS);
+
+        $tracked = array_intersect_key($values, self::$flippedKeys);
 
         $normalized = [];
 

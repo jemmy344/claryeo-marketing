@@ -32,6 +32,15 @@ function profitPoints(): string {
     }).join(' ');
 }
 
+// Performance optimization: Precompute metrics and SVG polyline points once at module load
+// time for static dataset `MONTHS`. This avoids redundant array reductions, temporary object
+// allocations, and SVG string generation on every component render and scroll animation frame.
+const TOTAL_INCOME = MONTHS.reduce((acc, m) => acc + m.income, 0);
+const TOTAL_EXPENSE = MONTHS.reduce((acc, m) => acc + m.expense, 0);
+const TOTAL_PROFIT = TOTAL_INCOME - TOTAL_EXPENSE;
+const MARGIN = Math.round((TOTAL_PROFIT / TOTAL_INCOME) * 100);
+const PROFIT_POINTS = profitPoints();
+
 /**
  * The last entry in the ledger run: the month closing into a report. Two
  * things track scroll position rather than fading -- the card drifts up as
@@ -68,12 +77,6 @@ const ReportsSpotlight: FC = () => {
         });
     }, []);
 
-    const total = MONTHS.reduce(
-        (acc, m) => ({ income: acc.income + m.income, expense: acc.expense + m.expense }),
-        { income: 0, expense: 0 },
-    );
-    const margin = Math.round(((total.income - total.expense) / total.income) * 100);
-
     return (
         <section
             ref={wrapperRef}
@@ -104,12 +107,12 @@ const ReportsSpotlight: FC = () => {
                             Profit &amp; loss · Mar–Aug
                         </span>
                         <span className="t-mono text-[11px] text-positive">
-                            {margin}% margin
+                            {MARGIN}% margin
                         </span>
                     </div>
 
                     <p className="t-figure-display mt-3 text-paper">
-                        {formatCurrency(total.income - total.expense, 'NGN', { compact: true })}
+                        {formatCurrency(TOTAL_PROFIT, 'NGN', { compact: true })}
                     </p>
                     <p className="mt-1 t-mono text-[11px] text-mist">Profit, six months</p>
 
@@ -144,7 +147,7 @@ const ReportsSpotlight: FC = () => {
                                 <rect ref={sweepRef} x="0" y="0" width="0" height={CHART_H} />
                             </clipPath>
                             <polyline
-                                points={profitPoints()}
+                                points={PROFIT_POINTS}
                                 clipPath={`url(#${clipId})`}
                                 fill="none"
                                 stroke="var(--color-violet-bright)"
