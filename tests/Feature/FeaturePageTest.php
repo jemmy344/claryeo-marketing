@@ -45,4 +45,9 @@ class FeaturePageTest extends TestCase
     {
         $this->get('/features/does-not-exist')->assertNotFound();
     }
+
+    public function test_dot_notation_slug_does_not_traverse_config_keys(): void
+    {
+        $this->get('/features/invoicing.highlights')->assertNotFound();
+    }
 }
