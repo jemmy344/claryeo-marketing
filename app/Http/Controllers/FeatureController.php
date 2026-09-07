@@ -72,7 +72,13 @@ class FeatureController extends Controller
      */
     public function show(string $slug): View
     {
-        $feature = config("feature_pages.{$slug}");
+        /** @var array<string, mixed> $featurePages */
+        $featurePages = Config::array('feature_pages', []);
+
+        // Guard against dot-notation array key traversal via untrusted user input in config lookups
+        abort_unless(array_key_exists($slug, $featurePages), Response::HTTP_NOT_FOUND);
+
+        $feature = $featurePages[$slug];
 
         abort_if(! is_array($feature), Response::HTTP_NOT_FOUND);
         /** @var array{title: string, heroParagraph: string, slug: string} $feature */
