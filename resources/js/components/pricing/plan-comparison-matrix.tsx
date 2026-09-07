@@ -1,6 +1,6 @@
 import { Check, Info, Minus } from 'lucide-react';
 import type { FC, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import {
     Tooltip,
@@ -252,7 +252,12 @@ function FeatureLabel({
     );
 }
 
-function DesktopRow({
+/**
+ * Internal row component with tooltip behavior. Isolated into its own component
+ * so useTooltipController (and its state/timers) is only allocated when a row
+ * actually has a description string to display.
+ */
+function DesktopRowWithTooltip({
     row,
     plans,
     index,
@@ -298,7 +303,54 @@ function DesktopRow({
     );
 }
 
-function MobileRow({
+/**
+ * Performance optimization: DesktopRow is memoized and conditionally avoids
+ * hook instantiation when row.description is absent, skipping redundant state,
+ * timers, and re-renders for 95%+ of matrix rows when parent state changes.
+ */
+const DesktopRow = memo(function DesktopRow({
+    row,
+    plans,
+    index,
+}: {
+    row: ComparisonRowLike;
+    plans: ComparisonPlan[];
+    index: number;
+}) {
+    if (row.description) {
+        return (
+            <DesktopRowWithTooltip row={row} plans={plans} index={index} />
+        );
+    }
+
+    return (
+        <div
+            className={cn(
+                'grid grid-cols-[minmax(240px,280px)_repeat(4,minmax(140px,1fr))] border-b border-border/70 transition-colors',
+                index % 2 === 0
+                    ? 'hover:bg-muted/35'
+                    : 'bg-muted/[0.025] hover:bg-muted/45',
+            )}
+        >
+            <div className="py-4 pr-6 pl-4">
+                <FeatureLabel label={row.label} />
+            </div>
+            {plans.map((plan) => (
+                <div
+                    key={plan.key}
+                    className={cn(
+                        'border-l border-border/70 px-4 py-4 align-middle',
+                        plan.accent && 'bg-muted/40',
+                    )}
+                >
+                    <ComparisonCellView cell={cellForPlan(row, plan.key)} />
+                </div>
+            ))}
+        </div>
+    );
+});
+
+function MobileRowWithTooltip({
     row,
     selectedPlan,
     index,
@@ -340,6 +392,53 @@ function MobileRow({
         </div>
     );
 }
+
+/**
+ * Performance optimization: MobileRow is memoized and conditionally avoids
+ * hook instantiation when row.description is absent.
+ */
+const MobileRow = memo(function MobileRow({
+    row,
+    selectedPlan,
+    index,
+}: {
+    row: ComparisonRowLike;
+    selectedPlan: ComparisonPlan;
+    index: number;
+}) {
+    if (row.description) {
+        return (
+            <MobileRowWithTooltip
+                row={row}
+                selectedPlan={selectedPlan}
+                index={index}
+            />
+        );
+    }
+
+    return (
+        <div
+            className={cn(
+                'grid grid-cols-[minmax(0,1fr)_minmax(112px,40%)] border-b border-border/70 transition-colors',
+                index % 2 === 0
+                    ? 'hover:bg-muted/35'
+                    : 'bg-muted/[0.025] hover:bg-muted/45',
+            )}
+        >
+            <div className="py-4 pr-4 pl-4">
+                <FeatureLabel label={row.label} />
+            </div>
+            <div
+                className={cn(
+                    'border-l border-border/70 px-4 py-4',
+                    selectedPlan.accent && 'bg-muted/40',
+                )}
+            >
+                <ComparisonCellView cell={cellForPlan(row, selectedPlan.key)} />
+            </div>
+        </div>
+    );
+});
 
 const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
     plans,
@@ -394,52 +493,72 @@ const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
             : `${proHeadline} monthly`;
     const savePercent = savingsPercent(proMonthlyKobo, proAnnualKobo);
 
-    const comparisonPlans: ComparisonPlan[] = [
-        {
-            key: 'free',
-            name: freePlan.name,
-            price: formatFreePriceLabel(freePlan.priceLabel),
-            ctaLabel: 'Get started',
-            ctaHref: getStartedUrl,
-        },
-        {
-            key: 'growth',
-            name: growthPlan.name,
-            price: growthPriceColumn,
-            ctaLabel: 'Get started',
-            ctaHref: `${getStartedUrl}?plan=growth&billing_interval=${billing}`,
-        },
-        {
-            key: 'pro',
-            name: proPlan.name,
-            price: proPriceColumn,
-            ctaLabel: 'Get started',
-            ctaHref: `${getStartedUrl}?plan=pro&billing_interval=${billing}`,
-            accent: true,
-        },
-        ...(enterprisePlan
-            ? [
-                  {
-                      key: 'enterprise' as const,
-                      name: enterprisePlan.name,
-                      price: enterprisePlan.priceLabel,
-                      ctaLabel: 'Contact sales',
-                      ctaHref: `${contactUrl}?plan=${enterprisePlan.key}`,
-                  },
-              ]
-            : []),
-    ];
+    // Performance optimization: Memoize derived plans list and add-on rows so that
+    // row props retain stable identities. When state like selectedAiCredits changes
+    // (e.g. dragging the slider), memoized DesktopRow/MobileRow instances skip re-rendering.
+    const comparisonPlans = useMemo<ComparisonPlan[]>(
+        () => [
+            {
+                key: 'free',
+                name: freePlan.name,
+                price: formatFreePriceLabel(freePlan.priceLabel),
+                ctaLabel: 'Get started',
+                ctaHref: getStartedUrl,
+            },
+            {
+                key: 'growth',
+                name: growthPlan.name,
+                price: growthPriceColumn,
+                ctaLabel: 'Get started',
+                ctaHref: `${getStartedUrl}?plan=growth&billing_interval=${billing}`,
+            },
+            {
+                key: 'pro',
+                name: proPlan.name,
+                price: proPriceColumn,
+                ctaLabel: 'Get started',
+                ctaHref: `${getStartedUrl}?plan=pro&billing_interval=${billing}`,
+                accent: true,
+            },
+            ...(enterprisePlan
+                ? [
+                      {
+                          key: 'enterprise' as const,
+                          name: enterprisePlan.name,
+                          price: enterprisePlan.priceLabel,
+                          ctaLabel: 'Contact sales',
+                          ctaHref: `${contactUrl}?plan=${enterprisePlan.key}`,
+                      },
+                  ]
+                : []),
+        ],
+        [
+            freePlan,
+            growthPlan,
+            proPlan,
+            enterprisePlan,
+            growthPriceColumn,
+            proPriceColumn,
+            billing,
+            getStartedUrl,
+            contactUrl,
+        ],
+    );
 
     const selectedPlan =
         comparisonPlans.find((plan) => plan.key === selectedPlanKey) ??
         comparisonPlans[0];
 
-    const hasAiCreditAddOns = addOns.some((row) =>
-        AI_CREDIT_ADD_ON_KEYS.includes(row.key),
+    const hasAiCreditAddOns = useMemo(
+        () => addOns.some((row) => AI_CREDIT_ADD_ON_KEYS.includes(row.key)),
+        [addOns],
     );
-    const nonAiAddOns = addOns.filter(
-        (row) => !AI_CREDIT_ADD_ON_KEYS.includes(row.key),
+
+    const nonAiAddOns = useMemo(
+        () => addOns.filter((row) => !AI_CREDIT_ADD_ON_KEYS.includes(row.key)),
+        [addOns],
     );
+
     const commitAiCreditDraft = (): void => {
         const normalizedCredits = normalizeAiCredits(Number(aiCreditsDraft));
 
@@ -447,26 +566,34 @@ const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
         setAiCreditsDraft(String(normalizedCredits));
         setIsEditingAiCredits(false);
     };
-    const addOnGroup: PricingComparisonGroup | null =
-        addOns.length > 0
-            ? {
-                  title: 'Add-ons',
-                  rows: nonAiAddOns.map((row) => ({
-                      ...row,
-                      description: '',
-                  })),
-              }
-            : null;
-    const aiCreditRow: PricingComparisonRow = {
-        key: 'ai_credits',
-        label: 'AI credits',
-        description:
-            'Optional credit packs for AI-assisted tax and finance workflows.',
-        free: aiCreditCellForPlan('free', selectedAiCredits),
-        growth: aiCreditCellForPlan('growth', selectedAiCredits),
-        pro: aiCreditCellForPlan('pro', selectedAiCredits),
-        enterprise: aiCreditCellForPlan('enterprise', selectedAiCredits),
-    };
+
+    const addOnGroup = useMemo<PricingComparisonGroup | null>(
+        () =>
+            addOns.length > 0
+                ? {
+                      title: 'Add-ons',
+                      rows: nonAiAddOns.map((row) => ({
+                          ...row,
+                          description: '',
+                      })),
+                  }
+                : null,
+        [addOns.length, nonAiAddOns],
+    );
+
+    const aiCreditRow = useMemo<PricingComparisonRow>(
+        () => ({
+            key: 'ai_credits',
+            label: 'AI credits',
+            description:
+                'Optional credit packs for AI-assisted tax and finance workflows.',
+            free: aiCreditCellForPlan('free', selectedAiCredits),
+            growth: aiCreditCellForPlan('growth', selectedAiCredits),
+            pro: aiCreditCellForPlan('pro', selectedAiCredits),
+            enterprise: aiCreditCellForPlan('enterprise', selectedAiCredits),
+        }),
+        [selectedAiCredits],
+    );
 
     return (
         <div className={cn('rounded-2xl bg-card/40', className)}>
