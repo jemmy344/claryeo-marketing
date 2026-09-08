@@ -9,3 +9,7 @@
 ## 2026-08-22 - Accordion headers and icon button accessibility in interactive islands
 **Learning:** Custom collapsible section triggers (such as group summary headers in complex interactive tools) and icon-only action buttons (such as line item removal icons) missing `aria-expanded` and descriptive `aria-label` attributes leave screen reader users unaware of toggle state or button purpose.
 **Action:** Always provide `aria-expanded={isOpen}` on collapsible section trigger buttons and contextual `aria-label` attributes on icon-only buttons.
+
+## 2026-09-08 - Navigation Mega-menu & Drawer Accessibility
+**Learning:** Top-level navigation dropdown buttons and mobile drawer toggles require explicit `aria-controls` attributes referencing the dropdown/drawer container ID along with clear `focus-visible:ring-2` focus indicators. Without them, keyboard users cannot visibly track focus across header items, and screen readers cannot identify which container the menu trigger controls.
+**Action:** Always link navigation dropdown/drawer triggers with `aria-controls={containerId}` and include visible focus rings (`focus-visible:ring-2 focus-visible:ring-ring`).
