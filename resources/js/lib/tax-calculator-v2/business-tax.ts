@@ -46,16 +46,6 @@ function isSmallCompany(
     );
 }
 
-function calculateProgressiveTax(
-    taxableIncome: number,
-    bands: TaxBand[],
-): number {
-    return calculateProgressiveBandAllocations(taxableIncome, bands).reduce(
-        (total, allocation) => total + allocation.taxAmount,
-        0,
-    );
-}
-
 function calculateProgressiveBandAllocations(
     taxableIncome: number,
     bands: TaxBand[],
@@ -152,15 +142,20 @@ export function calculateBusinessTax(
     const qualifiesAsSmallCompany =
         !usesPit && isSmallCompany(turnover, fixedAssets, input);
     const isNonResidentCompany = input.isNonResidentCompany === true;
-    const pit = usesPit
-        ? calculateProgressiveTax(taxableIncome, input.profile.paye.bands)
-        : 0;
+    // Performance optimization: compute progressive band allocations once and sum tax
+    // amounts directly, avoiding redundant calculateProgressiveBandAllocations() calls.
     const pitBandAllocations = usesPit
         ? calculateProgressiveBandAllocations(
               taxableIncome,
               input.profile.paye.bands,
           )
         : [];
+    const pit = usesPit
+        ? pitBandAllocations.reduce(
+              (total, allocation) => total + allocation.taxAmount,
+              0,
+          )
+        : 0;
     const citRate = usesPit
         ? 0
         : qualifiesAsSmallCompany
