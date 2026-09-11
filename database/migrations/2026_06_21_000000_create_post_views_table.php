@@ -12,6 +12,10 @@ return new class extends Migration
             $table->string('entry_id')->primary();
             $table->unsignedBigInteger('views')->default(0);
             $table->timestamp('last_viewed_at')->nullable();
+
+            // Performance optimization: Composite index for PostViews::topIds() queries
+            // ordering by `views DESC, last_viewed_at DESC`. Avoids full table scan & filesort.
+            $table->index(['views', 'last_viewed_at']);
         });
     }
 
