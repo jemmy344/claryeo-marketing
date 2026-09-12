@@ -1,6 +1,6 @@
 import { Check, Info, Minus } from 'lucide-react';
 import type { FC, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, memo, useMemo, useState } from 'react';
 
 import {
     Tooltip,
@@ -252,7 +252,11 @@ function FeatureLabel({
     );
 }
 
-function DesktopRow({
+/**
+ * Memoized desktop table row to prevent re-rendering feature comparison rows
+ * during state updates like AI credit slider dragging.
+ */
+const DesktopRow = memo(function DesktopRow({
     row,
     plans,
     index,
@@ -296,9 +300,13 @@ function DesktopRow({
             ))}
         </div>
     );
-}
+});
 
-function MobileRow({
+/**
+ * Memoized mobile table row to prevent re-rendering feature comparison rows
+ * during state updates like AI credit slider dragging.
+ */
+const MobileRow = memo(function MobileRow({
     row,
     selectedPlan,
     index,
@@ -339,7 +347,7 @@ function MobileRow({
             </div>
         </div>
     );
-}
+});
 
 const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
     plans,
@@ -394,41 +402,57 @@ const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
             : `${proHeadline} monthly`;
     const savePercent = savingsPercent(proMonthlyKobo, proAnnualKobo);
 
-    const comparisonPlans: ComparisonPlan[] = [
-        {
-            key: 'free',
-            name: freePlan.name,
-            price: formatFreePriceLabel(freePlan.priceLabel),
-            ctaLabel: 'Get started',
-            ctaHref: getStartedUrl,
-        },
-        {
-            key: 'growth',
-            name: growthPlan.name,
-            price: growthPriceColumn,
-            ctaLabel: 'Get started',
-            ctaHref: `${getStartedUrl}?plan=growth&billing_interval=${billing}`,
-        },
-        {
-            key: 'pro',
-            name: proPlan.name,
-            price: proPriceColumn,
-            ctaLabel: 'Get started',
-            ctaHref: `${getStartedUrl}?plan=pro&billing_interval=${billing}`,
-            accent: true,
-        },
-        ...(enterprisePlan
-            ? [
-                  {
-                      key: 'enterprise' as const,
-                      name: enterprisePlan.name,
-                      price: enterprisePlan.priceLabel,
-                      ctaLabel: 'Contact sales',
-                      ctaHref: `${contactUrl}?plan=${enterprisePlan.key}`,
-                  },
-              ]
-            : []),
-    ];
+    // Memoize plans array to maintain reference equality across slider adjustments
+    // and prevent unnecessary re-renders of memoized feature rows.
+    const comparisonPlans: ComparisonPlan[] = useMemo(
+        () => [
+            {
+                key: 'free',
+                name: freePlan.name,
+                price: formatFreePriceLabel(freePlan.priceLabel),
+                ctaLabel: 'Get started',
+                ctaHref: getStartedUrl,
+            },
+            {
+                key: 'growth',
+                name: growthPlan.name,
+                price: growthPriceColumn,
+                ctaLabel: 'Get started',
+                ctaHref: `${getStartedUrl}?plan=growth&billing_interval=${billing}`,
+            },
+            {
+                key: 'pro',
+                name: proPlan.name,
+                price: proPriceColumn,
+                ctaLabel: 'Get started',
+                ctaHref: `${getStartedUrl}?plan=pro&billing_interval=${billing}`,
+                accent: true,
+            },
+            ...(enterprisePlan
+                ? [
+                      {
+                          key: 'enterprise' as const,
+                          name: enterprisePlan.name,
+                          price: enterprisePlan.priceLabel,
+                          ctaLabel: 'Contact sales',
+                          ctaHref: `${contactUrl}?plan=${enterprisePlan.key}`,
+                      },
+                  ]
+                : []),
+        ],
+        [
+            freePlan.name,
+            freePlan.priceLabel,
+            getStartedUrl,
+            growthPlan.name,
+            growthPriceColumn,
+            billing,
+            proPlan.name,
+            proPriceColumn,
+            enterprisePlan,
+            contactUrl,
+        ],
+    );
 
     const selectedPlan =
         comparisonPlans.find((plan) => plan.key === selectedPlanKey) ??
