@@ -72,6 +72,11 @@ class FeatureController extends Controller
      */
     public function show(string $slug): View
     {
+        /** @var array<string, mixed> $featurePages */
+        $featurePages = Config::array('feature_pages', []);
+
+        abort_if(! array_key_exists($slug, $featurePages), Response::HTTP_NOT_FOUND);
+
         $feature = config("feature_pages.{$slug}");
 
         abort_if(! is_array($feature), Response::HTTP_NOT_FOUND);
