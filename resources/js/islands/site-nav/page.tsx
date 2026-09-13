@@ -53,8 +53,8 @@ const SiteNav: FC<SiteNavProps> = ({
     const isDark = theme === 'dark';
 
     const linkClass = isDark
-        ? 'text-sm text-paper/80 transition-colors hover:text-paper'
-        : 'text-sm text-muted-foreground transition-colors hover:text-foreground';
+        ? 'rounded-sm text-sm text-paper/80 transition-colors hover:text-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+        : 'rounded-sm text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring';
 
     // In waitlist mode, pricing/get-started links are removed from the menus.
     const hidden = waitlistMode ? ['/pricing', '/get-started'] : [];
@@ -166,9 +166,10 @@ const SiteNav: FC<SiteNavProps> = ({
             <button
                 type="button"
                 aria-expanded={openMenu === key}
+                aria-controls={`${key}-menu`}
                 onClick={() => setOpenMenu((v) => (v === key ? null : key))}
                 className={cn(
-                    'flex items-center gap-1 text-sm transition-colors',
+                    'flex items-center gap-1 rounded-sm text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     isDark
                         ? openMenu === key
                             ? 'text-paper'
@@ -194,7 +195,7 @@ const SiteNav: FC<SiteNavProps> = ({
             <nav className="mx-auto flex h-14 w-full max-w-[1180px] items-center justify-between px-4 md:px-0">
                 <a
                     href="/"
-                    className="flex items-center gap-3 transition-opacity hover:opacity-90"
+                    className="flex items-center gap-3 rounded-md transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 >
                     <img
                         src="/favicon.svg"
@@ -254,8 +255,10 @@ const SiteNav: FC<SiteNavProps> = ({
                         type="button"
                         onClick={() => setMobileOpen((v) => !v)}
                         aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileOpen}
+                        aria-controls="mobile-menu"
                         className={cn(
-                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors md:hidden',
+                            'inline-flex items-center justify-center rounded-full border p-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 md:hidden',
                             isDark
                                 ? 'border-paper/15 bg-paper/5 text-paper hover:bg-paper/10'
                                 : 'border-border/60 bg-muted/40 text-foreground hover:bg-muted/70',
@@ -273,6 +276,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Features mega-menu */}
             {openMenu === 'features' && featureItems.length > 0 && (
                 <div
+                    id="features-menu"
+                    role="region"
+                    aria-label="Features menu"
                     className={panelClass}
                     onMouseEnter={() => open('features')}
                     onMouseLeave={scheduleClose}
@@ -326,6 +332,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Resources mega-menu */}
             {openMenu === 'resources' && columns.length > 0 && (
                 <div
+                    id="resources-menu"
+                    role="region"
+                    aria-label="Resources menu"
                     className={panelClass}
                     onMouseEnter={() => open('resources')}
                     onMouseLeave={scheduleClose}
@@ -400,6 +409,9 @@ const SiteNav: FC<SiteNavProps> = ({
             {/* Mobile sheet */}
             {mobileOpen && (
                 <div
+                    id="mobile-menu"
+                    role="region"
+                    aria-label="Mobile navigation"
                     className={cn(
                         'absolute inset-x-0 top-full max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-b px-4 pb-8 shadow-2xl md:hidden',
                         isDark
