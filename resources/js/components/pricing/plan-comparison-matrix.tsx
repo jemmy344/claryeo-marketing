@@ -1,6 +1,6 @@
 import { Check, Info, Minus } from 'lucide-react';
 import type { FC, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, memo, useState } from 'react';
 
 import {
     Tooltip,
@@ -184,7 +184,17 @@ function aiCreditCellForPlan(
     return { kind: 'text', value: formatNaira(aiCreditPrice(credits)) };
 }
 
-function ComparisonCellView({ cell }: { cell: PlanComparisonCell }) {
+/**
+ * Performance optimization: Memoize row subcomponents (`ComparisonCellView`,
+ * `FeatureLabel`, `DesktopRow`, `MobileRow`) using `memo`. Prevents ~40+
+ * matrix row components from re-rendering on parent state updates (such as
+ * dragging the AI credits slider or changing selected mobile plan).
+ */
+const ComparisonCellView = memo(function ComparisonCellView({
+    cell,
+}: {
+    cell: PlanComparisonCell;
+}) {
     if (cell.kind === 'included') {
         return (
             <span
@@ -208,9 +218,9 @@ function ComparisonCellView({ cell }: { cell: PlanComparisonCell }) {
     }
 
     return <span className="text-sm text-muted-foreground">{cell.value}</span>;
-}
+});
 
-function FeatureLabel({
+const FeatureLabel = memo(function FeatureLabel({
     label,
     description,
     children,
@@ -250,9 +260,9 @@ function FeatureLabel({
             {children}
         </div>
     );
-}
+});
 
-function DesktopRow({
+const DesktopRow = memo(function DesktopRow({
     row,
     plans,
     index,
@@ -296,9 +306,9 @@ function DesktopRow({
             ))}
         </div>
     );
-}
+});
 
-function MobileRow({
+const MobileRow = memo(function MobileRow({
     row,
     selectedPlan,
     index,
@@ -339,7 +349,7 @@ function MobileRow({
             </div>
         </div>
     );
-}
+});
 
 const PlanComparisonMatrix: FC<PlanComparisonMatrixProps> = ({
     plans,
