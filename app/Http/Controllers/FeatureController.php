@@ -72,10 +72,15 @@ class FeatureController extends Controller
      */
     public function show(string $slug): View
     {
-        $feature = config("feature_pages.{$slug}");
+        /** @var array<string, mixed> $featurePages */
+        $featurePages = Config::array('feature_pages', []);
 
-        abort_if(! is_array($feature), Response::HTTP_NOT_FOUND);
+        // Restrict lookup to top-level keys in feature_pages to prevent dot-notation
+        // config key traversal vulnerabilities via untrusted input.
+        abort_unless(array_key_exists($slug, $featurePages) && is_array($featurePages[$slug]), Response::HTTP_NOT_FOUND);
+
         /** @var array{title: string, heroParagraph: string, slug: string} $feature */
+        $feature = $featurePages[$slug];
         $waitlistMode = (bool) config('marketing.waitlist_mode');
         $cta = $waitlistMode
             ? ['label' => 'Join the waitlist', 'href' => '/waitlist']
