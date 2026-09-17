@@ -54,7 +54,9 @@ class BlogIndexComposer
         // Cold-start fallback: top up with the most recent posts, skipping the
         // single newest (shown by "The Latest") and anything already chosen.
         if (count($entries) < $limit) {
-            $recent = $this->recentBlogEntries();
+            // Upper bound of recent entries needed: remaining slots + 1 for skipped newest entry + count of seen entries
+            $needed = ($limit - count($entries)) + 1 + count($seen);
+            $recent = $this->recentBlogEntries($needed);
             $newestId = ($recent[0] ?? null)?->id();
 
             foreach ($recent as $entry) {
@@ -97,14 +99,15 @@ class BlogIndexComposer
     }
 
     /**
-     * All published blog entries, newest first.
+     * Published blog entries, newest first.
      *
      * Performance optimization: Use Statamic Stache QueryBuilder indexed querying
-     * rather than iterating through all collection entries and sorting in PHP memory.
+     * with an optional limit to avoid loading and hydrating all collection entries
+     * into memory when only a small subset of recent posts is needed.
      *
      * @return list<EntryItem>
      */
-    private function recentBlogEntries(): array
+    private function recentBlogEntries(?int $limit = null): array
     {
         // Performance optimization: Use Statamic query builder instead of iterating over
         // all entries in PHP and calling usort(). Query filtering at the Stache store layer
@@ -112,11 +115,17 @@ class BlogIndexComposer
         /** @var EntryQueryBuilder $query */
         $query = Entry::query();
 
-        /** @var list<EntryItem> */
-        return $query
+        $query
             ->where('collection', 'blog')
             ->whereStatus('published')
-            ->orderBy('date', 'desc')
+            ->orderBy('date', 'desc');
+
+        if ($limit !== null) {
+            $query->limit($limit);
+        }
+
+        /** @var list<EntryItem> */
+        return $query
             ->get()
             ->all();
     }
