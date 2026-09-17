@@ -2,6 +2,11 @@ import { Monitor, Moon, Sun } from 'lucide-react';
 import type { FC } from 'react';
 
 import { Button } from '@/components/ui/button';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useAppearance } from '@/hooks/use-appearance';
 import type { Appearance } from '@/hooks/use-appearance';
 
@@ -32,18 +37,25 @@ const AppearanceToggle: FC<AppearanceToggleProps> = ({ className = '' }) => {
 
     return (
         <div className={className}>
-            <Button
-                variant="ghost"
-                size="icon"
-                className="h-9 w-9 rounded-md"
-                title={`Theme: ${current.label}`}
-                onClick={() => updateAppearance(next.value)}
-            >
-                <Icon className="h-5 w-5" />
-                <span className="sr-only">
-                    Theme: {current.label}. Switch to {next.label}.
-                </span>
-            </Button>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 rounded-md"
+                        aria-label={`Theme: ${current.label}. Switch to ${next.label}`}
+                        onClick={() => updateAppearance(next.value)}
+                    >
+                        <Icon className="h-5 w-5" />
+                        <span className="sr-only">
+                            Theme: {current.label}. Switch to {next.label}.
+                        </span>
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                    Theme: {current.label} (Click to switch to {next.label})
+                </TooltipContent>
+            </Tooltip>
         </div>
     );
 };
